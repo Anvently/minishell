@@ -14,6 +14,8 @@ LIBFT		=	libft/libft.a
 
 DEPS		=	$(LIBFT) $(INCLUDES)$(NAME).h $(INCLUDES)libft.h Makefile
 
+STATIC_LINK	=	-Llibft/ -lft -lreadline
+
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g3 -I$(INCLUDES)
 
@@ -23,7 +25,7 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	@echo "\n-----COMPILING $(NAME)-------\n"
-	$(CC) $(CFLAGS) $(OBJS) -Llibft/ -lft -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(STATIC_LINK) -o $(NAME)
 	@echo "Executable has been successfully created."
 
 bonus: $(BONUS_NAME)
