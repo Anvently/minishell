@@ -12,6 +12,8 @@ SRCS		=	$(addprefix $(SRCS_FOLDER),$(SRCS_FILES))
 
 LIBFT		=	libft/libft.a
 
+DEPS		=	$(LIBFT) $(INCLUDES)$(NAME).h $(INCLUDES)libft.h Makefile
+
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g3 -I$(INCLUDES)
 
@@ -26,7 +28,7 @@ $(NAME): $(LIBFT) $(OBJS)
 
 bonus: $(BONUS_NAME)
 
-$(OBJS_FOLDER)%.o: $(SRCS_FOLDER)%.c Makefile $(INCLUDES)libft.h $(INCLUDES)$(NAME).h $(LIBFT)
+$(OBJS_FOLDER)%.o: $(SRCS_FOLDER)%.c $(DEPS)
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
