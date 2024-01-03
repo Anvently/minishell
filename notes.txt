@@ -1,0 +1,35 @@
+1. Check infiles
+	- if infile
+		- open and dup
+		- if old_fd
+			- clear old_fd[0]
+	- if no infile
+		- if old_fd
+			- stdin = old_fd[0]
+			- close(old_fd[0])
+		-else
+			- do nothing
+2. Check outfile
+	- if not last
+		- pipe
+	- if outfile
+		- open and dup
+	- if no outfile
+		- if not last
+			- stdout = fd[1]
+			- close(fd[1])
+		- else
+			- do nothing to stdout
+3. Search command
+	- if builtin
+		- if no pipe && (unset || export)
+			- exec unset/export in parent
+	- if absolute path
+		- exec
+	- search in PATH
+4. Fork
+	- Exec command
+	- If fails
+		- clear old_fd[0]
+5. If pipe after
+	- recursion (old_fd, ...)
