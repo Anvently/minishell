@@ -33,3 +33,16 @@
 		- clear old_fd[0]
 5. If pipe after
 	- recursion (old_fd, ...)
+
+
+Cases :
+	- conditiom =
+		- status = exec
+	- success and next is &&
+		- status = exec
+	- success and next is ||
+		- status is not changed
+	- fail and next is &&
+		- status is not changed
+	- fail and next is ||
+		- stauts = exec

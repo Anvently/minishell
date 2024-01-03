@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/03 15:20:44 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/03 15:37:32 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int	exec_prompt(t_list *pipe_list, char **env)
 		if (pipe->condition == 0 || (!status && pipe->condition == 1)
 			|| (status && pipe->condition == 2))
 			status = exec_pipe(pipe, env, NULL, 0);
-		else if ()
-			status = 0;
 		pipe_list = pipe_list->next;
 	}
-	return (0);
+	return (status);
 }
