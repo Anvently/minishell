@@ -6,7 +6,7 @@ SRCS_FOLDER	=	srcs/
 OBJS_FOLDER	=	objs/
 
 SRCS_FILES	=	main.c error.c prompt.c pipe.c files_utils.c \
-				parse_quote_check.c wildcard.c command_path.c command_check.c
+				parse_quote_check.c metachar.c command_path.c command_check.c
 
 
 OBJS		=	$(addprefix $(OBJS_FOLDER),$(SRCS_FILES:.c=.o))

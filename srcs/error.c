@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 16:09:10 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 17:02:47 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,12 @@ int	error(int err, char *str)
 }
 
 /// @brief
-/// @param err
+/// @param err 1 = parse error near || 2 = ambiguous redirect
 /// @param str
-/// @return
+/// @return ```err```
 int parse_error(int err, char *str)
 {
+	errno = err;
 	if (error == 1)
 		ft_putstr_fd("minishell: XXXXX: ", 2);
 	else if (error == 2)

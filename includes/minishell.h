@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 16:09:18 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 16:41:44 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,9 @@ int		file_redirect(char *path, int fd_out, int o_flag);
 
 bool	command_is_builtin(char *command);
 bool	command_is_path(char *command);
-bool	path_exist(char *path);
 
-/* -------------------------------- WILDCARDS ------------------------------- */
+/* -------------------------------- META-CHARACTERS ------------------------- */
 
-int		check_file_wc(t_list *files);
+int		check_file_meta(t_list *files, char **env);
 
 #endif
