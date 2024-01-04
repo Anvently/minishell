@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 10:53:07 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 13:11:12 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,19 @@
 
 # include <stdbool.h>
 
-/// @brief append_mod : 0 = TRUNC || 1 = APPEND
+/// @brief interperet : 0 = NO || 1 = YES
+typedef struct s_infile {
+	char	*path;
+	bool	interpret_wc;
+	bool	interpret_var;
+}			t_infile;
+
+/// @brief append_mod : 0 = NO || 1 = YES
 typedef struct s_outfile {
 	char	*path;
 	bool	append_mode;
+	bool	interpret_wc;
+	bool	interpret_var;
 }			t_outfile;
 
 /// @brief A pipe is defined as a list of ```t_command``` separated by ```|```.
@@ -30,7 +39,7 @@ typedef struct s_pipe {
 }				t_pipe;
 
 /// @brief A command is defined as such [(< file_in)*n][ cmd][(> file_out)*n]
-/// @param files_in List of string :
+/// @param files_in List of ```t_infile``` structure :
 /// "file1, /usr/customfile, /tmp/here_doc1, ..., ```NULL```"
 /// @note If no file_in given, files_in is ```NULL```
 /// @param files_out List of ```t_outfile``` struct.
@@ -48,9 +57,17 @@ typedef struct s_command {
 
 int	error(int err, char *str);
 
+/* -------------------------------------------------------------------------- */
+/*                              PIPES & COMMANDS                              */
+/* -------------------------------------------------------------------------- */
+
 /* -------------------------------- EXECUTION ------------------------------- */
 
 int	exec_pipe(t_list *commands, char **env, int *old_fd);
 int	exec_prompt(t_list *pipe_list, char **env);
+
+/* ---------------------------------- UTILS --------------------------------- */
+
+void	clear_pipe(int fd);
 
 #endif

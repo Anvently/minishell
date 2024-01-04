@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 11:24:19 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 11:26:55 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 
 static int	handle_files_in(t_list *files_in, int *old_fd);
 static int	handle_file_out(t_list *files_out, int *fd);
+static int	handle_command(t_command *command, int *fd,
+				int *old_fd, char **env);
+int			exec_pipe(t_list *commands, char **env, int *old_fd);
 
 /// @brief 1. Check infiles
 /// 		- if infile
@@ -74,7 +77,8 @@ static int	handle_file_out(t_list *files_out, int *fd)
 /// @return Process id of command if executed. ```-1``` if error. ```0``` if builtin
 /// succeed n in parent. ```negative number``` corresponding to builtin exit status if
 /// failed in parent.
-static int	handle_command(t_command *command, int *fd, int *old_fd, char **env)
+static int	handle_command(t_command *command, int *fd,
+				int *old_fd, char **env)
 {
 	int	status;
 	int	id;
