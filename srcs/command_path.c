@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 14:23:16 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 15:34:37 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,17 +118,8 @@ char	*command_find_path(char *command, char **env)
 	char		**path_strs;
 	char		*path_abs;
 
-	if (command_is_path(command) || !ft_strcmp("", command))
-	{
-		if (!ft_strcmp("", command)
-			|| (path_exist(command, true) && path_is_exec(command, true)))
-			path_abs = ft_strdup(command);
-		else
-			path_abs = ft_strdup("");
-		if (!path_abs)
-			return (alloc_error());
-		return (path_abs);
-	}
+	if (command_is_path(command) || command_is_builtin(command))
+		return (command)
 	path_strs = split_path(env);
 	if (!path_strs)
 		return (NULL);

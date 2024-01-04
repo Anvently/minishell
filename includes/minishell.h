@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 14:40:32 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 16:09:18 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_command {
 /* ---------------------------------- ERROR --------------------------------- */
 
 int		error(int err, char *str);
+int 	parse_error(int err, char *str);
 
 /* -------------------------------------------------------------------------- */
 /*                              PIPES & COMMANDS                              */
@@ -68,8 +69,9 @@ int		file_redirect(char *path, int fd_out, int o_flag);
 
 /* ------------------------------ COMMAND CHECK ----------------------------- */
 
-bool	is_builtin(char *command);
+bool	command_is_builtin(char *command);
 bool	command_is_path(char *command);
+bool	path_exist(char *path);
 
 /* -------------------------------- WILDCARDS ------------------------------- */
 
