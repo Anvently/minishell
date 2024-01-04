@@ -21,16 +21,16 @@
 		- else
 			- do nothing to stdout
 3. Search command
-	- if builtin
-		- if no pipe && (unset || export)
-			- exec unset/export in parent
-	- if absolute path
-		- exec
-	- search in PATH
-4. Fork
-	- Exec command
-	- If fails
-		- clear old_fd[0]
+	- If not absolute path && not builtin
+		- Search in path
+4. if found || bultin
+	- Fork
+	- If builtin
+		- Clear old_fd
+		- Exec bultin
+	- Else
+		- Execve
+	- Clear old_fd
 5. If pipe after
 	- recursion (old_fd, ...)
 

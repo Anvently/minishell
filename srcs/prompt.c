@@ -6,12 +6,13 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/03 16:52:43 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 11:22:50 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
+#include <sys/wait.h>
 
 /// @brief Execute a list of ```t_pipe```. First pipe is always executed.
 /// Following ones are executed depending on the exit status of previous
@@ -24,6 +25,7 @@
 int	exec_prompt(t_list *pipe_list, char **env)
 {
 	int		status;
+	int		id;
 	t_pipe	*pipe;
 
 	status = 0;
@@ -32,7 +34,13 @@ int	exec_prompt(t_list *pipe_list, char **env)
 		pipe = (t_pipe *) pipe_list->content;
 		if (pipe->condition == 0 || (!status && pipe->condition == 1)
 			|| (status && pipe->condition == 2))
-			status = exec_pipe(pipe->commands, env, NULL, 0);
+		{
+			id = exec_pipe(pipe->commands, env, NULL);
+			if (id > 0)
+				waitpid(id, &status, NULL);
+			else
+				status = -id;
+		}
 		pipe_list = pipe_list->next;
 	}
 	return (status);
