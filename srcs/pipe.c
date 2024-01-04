@@ -6,16 +6,17 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 11:26:55 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 14:09:04 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <errno.h>
+#include <fcntl.h>
 
 static int	handle_files_in(t_list *files_in, int *old_fd);
-static int	handle_file_out(t_list *files_out, int *fd);
+static int	handle_files_out(t_list *files_out, int *fd);
 static int	handle_command(t_command *command, int *fd,
 				int *old_fd, char **env);
 int			exec_pipe(t_list *commands, char **env, int *old_fd);
@@ -31,28 +32,31 @@ int			exec_pipe(t_list *commands, char **env, int *old_fd);
 /// 				- close(old_fd[0])
 /// 			-else
 /// 				- do nothing
-/// @param files_in List of string for files' path.
+/// @param files_in List of t_file_rd struct
 /// @param old_fd File descripors of input pipe. ```NULL``` for first command.
 /// @return ```0``` if no error. Else ```errno```.
 static int	handle_files_in(t_list *files_in, int *old_fd)
 {
-	if (files_in)
+	t_file_rd	*file;
+
+	if (!files_in && old_fd)
+		if (dup_and_close(old_fd[0], stdin))
+			return (error(errno, NULL));
+	while (files_in)
 	{
-		// Clear old_fd if not NULL (avoid memory leak)
-		// Open each file and dup stdin
-			// Stop at fist fail.
-		// return (0);
-	}
-	if (old_fd)
-	{
-		// Dup stdin from input pipe.
+		file = (t_file_rd *) files_in->content;
+		if (check_file_wc(files_in))
+			return (errno);
+		if (old_fd)
+			clear_pipe(old_fd[0]);
+		if (file_redirect(file->path, stdin, O_RDONLY))
+			return (errno);
+		files_in = files_in->next;
 	}
 	return (0);
 }
 
 /// @brief 2. Check outfile
-/// 		- if not last
-/// 			- pipe
 /// 		- if outfile
 /// 			- open and dup
 /// 		- if no outfile
@@ -61,12 +65,36 @@ static int	handle_files_in(t_list *files_in, int *old_fd)
 /// 				- close(fd[1])
 /// 			- else
 /// 				- do nothing to stdout
-/// @param files_out
-/// @param fd
-/// @return
-static int	handle_file_out(t_list *files_out, int *fd)
+///			- if not last
+/// 			- pipe
+/// @param files_out List of t_file_rd struct
+/// @param fd File descripors of output pipe. ```NULL``` for last command.
+/// @return ```0``` if no error. Else ```errno```.
+static int	handle_files_out(t_list *files_out, int *fd)
 {
+	t_file_rd	*file;
+	int			o_flag;
 
+	while (files_out)
+	{
+		file = (t_file_rd *) files_out->content;
+		if (check_file_wc(files_out))
+			return (errno);
+		o_flag = O_RDWR | O_TRUNC | O_CREAT;
+		if (file->append_mode)
+			o_flag = O_APPEND | O_RDWR | O_CREAT;
+		if (file_redirect(file->path, stdout, o_flag))
+			return (errno);
+		files_out = files_out->next;
+	}
+	if (fd)
+	{
+		if (pipe(fd))
+			return (error(errno, NULL));
+		if (dup_and_close(fd[1], stdout))
+			return (error(errno, NULL));
+	}
+	return (0);
 }
 
 /// @brief A command is defined as such [(< file_in)*n][ cmd][(> file_out)*n]

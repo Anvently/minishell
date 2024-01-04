@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 09:23:38 by npirard           #+#    #+#             */
-/*   Updated: 2023/12/14 17:41:58 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 14:34:29 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char	**ft_free_strs(char **strings);
 char	***ft_free_strss(char ***strs);
 int		ft_strslen(char **strs);
 int		ft_strsslen(char ***strs);
+int		ft_strschr(char **strs, char *str);
 
 ///---------------------- TYPE CONVERSION -----------------------
 

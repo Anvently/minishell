@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 13:14:01 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/04 14:40:32 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_command {
 
 /* ---------------------------------- ERROR --------------------------------- */
 
-int	error(int err, char *str);
+int		error(int err, char *str);
 
 /* -------------------------------------------------------------------------- */
 /*                              PIPES & COMMANDS                              */
@@ -57,11 +57,22 @@ int	error(int err, char *str);
 
 /* -------------------------------- EXECUTION ------------------------------- */
 
-int	exec_pipe(t_list *commands, char **env, int *old_fd);
-int	exec_prompt(t_list *pipe_list, char **env);
+int		exec_pipe(t_list *commands, char **env, int *old_fd);
+int		exec_prompt(t_list *pipe_list, char **env);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
 void	clear_pipe(int fd);
+int		dup_and_close(int file_fd, int std_fd);
+int		file_redirect(char *path, int fd_out, int o_flag);
+
+/* ------------------------------ COMMAND CHECK ----------------------------- */
+
+bool	is_builtin(char *command);
+bool	command_is_path(char *command);
+
+/* -------------------------------- WILDCARDS ------------------------------- */
+
+int		check_file_wc(t_list *files);
 
 #endif
