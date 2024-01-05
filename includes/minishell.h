@@ -6,14 +6,14 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 14:40:32 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 14:29:00 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdbool.h>
+# include <libft.h>
 
 /// @note interperet : 0 = NO || 1 = YES
 /// @note append_mod : 0 = NO || 1 = YES
@@ -50,6 +50,8 @@ typedef struct s_command {
 /* ---------------------------------- ERROR --------------------------------- */
 
 int		error(int err, char *str);
+int		parse_error(int err, char *str);
+int		builtin_error(int err, char *builtin, char *context);
 
 /* -------------------------------------------------------------------------- */
 /*                              PIPES & COMMANDS                              */
@@ -59,20 +61,32 @@ int		error(int err, char *str);
 
 int		exec_pipe(t_list *commands, char **env, int *old_fd);
 int		exec_prompt(t_list *pipe_list, char **env);
+int		exec_command(t_command *command, int *fd, int *old_fd, char **env);
+int		exec_builtin(t_command *command, char **env);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
 void	clear_pipe(int fd);
 int		dup_and_close(int file_fd, int std_fd);
 int		file_redirect(char *path, int fd_out, int o_flag);
+char	*command_find_path(char *command, char **env);
 
 /* ------------------------------ COMMAND CHECK ----------------------------- */
 
-bool	is_builtin(char *command);
+bool	command_is_builtin(char *command);
 bool	command_is_path(char *command);
 
-/* -------------------------------- WILDCARDS ------------------------------- */
+/* -------------------------------- META-CHARACTERS ------------------------- */
 
-int		check_file_wc(t_list *files);
+char	*get_var_value(char *var, char **env);
+int		expand_wc(char *path, char *dest);
+int		check_file_meta(t_list *files, char **env);
+
+/* -------------------------------------------------------------------------- */
+/*                                  BUILTINs                                  */
+/* -------------------------------------------------------------------------- */
+
+void	builtin_exit(char **argv);
+int		builtin_echo(char **argv);
 
 #endif

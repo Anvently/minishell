@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 14:09:04 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 11:49:11 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <errno.h>
 #include <fcntl.h>
 
-static int	handle_files_in(t_list *files_in, int *old_fd);
-static int	handle_files_out(t_list *files_out, int *fd);
+static int	handle_files_in(t_list *files_in, int *old_fd, char **env);
+static int	handle_files_out(t_list *files_out, int *fd, char **env);
 static int	handle_command(t_command *command, int *fd,
 				int *old_fd, char **env);
 int			exec_pipe(t_list *commands, char **env, int *old_fd);
@@ -35,7 +35,7 @@ int			exec_pipe(t_list *commands, char **env, int *old_fd);
 /// @param files_in List of t_file_rd struct
 /// @param old_fd File descripors of input pipe. ```NULL``` for first command.
 /// @return ```0``` if no error. Else ```errno```.
-static int	handle_files_in(t_list *files_in, int *old_fd)
+static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
 {
 	t_file_rd	*file;
 
@@ -45,7 +45,7 @@ static int	handle_files_in(t_list *files_in, int *old_fd)
 	while (files_in)
 	{
 		file = (t_file_rd *) files_in->content;
-		if (check_file_wc(files_in))
+		if (check_file_meta(files_in, env))
 			return (errno);
 		if (old_fd)
 			clear_pipe(old_fd[0]);
@@ -70,7 +70,7 @@ static int	handle_files_in(t_list *files_in, int *old_fd)
 /// @param files_out List of t_file_rd struct
 /// @param fd File descripors of output pipe. ```NULL``` for last command.
 /// @return ```0``` if no error. Else ```errno```.
-static int	handle_files_out(t_list *files_out, int *fd)
+static int	handle_files_out(t_list *files_out, int *fd, char **env)
 {
 	t_file_rd	*file;
 	int			o_flag;
@@ -78,7 +78,7 @@ static int	handle_files_out(t_list *files_out, int *fd)
 	while (files_out)
 	{
 		file = (t_file_rd *) files_out->content;
-		if (check_file_wc(files_out))
+		if (check_file_meta(files_out, env))
 			return (errno);
 		o_flag = O_RDWR | O_TRUNC | O_CREAT;
 		if (file->append_mode)
@@ -102,35 +102,22 @@ static int	handle_files_out(t_list *files_out, int *fd)
 /// @param fd File descriptors of output pipe. ```NULL``` if last command.
 /// @param old_fd File descriptors of input pipe. ```NULL``` if first command.
 /// @param env
-/// @return Process id of command if executed. ```-1``` if error. ```0``` if builtin
-/// succeed n in parent. ```negative number``` corresponding to builtin exit status if
-/// failed in parent.
+/// @return Process id of command if executed.
+///```-1``` if error.
+/// ```0``` if builtin succeed n in parent or no command was given
+/// (only redirection).
+/// ```< 0``` corresponding to builtin exit status if failed in parent.
 static int	handle_command(t_command *command, int *fd,
 				int *old_fd, char **env)
 {
-	int	status;
 	int	id;
 
-	if (handle_files_in(command->files_in, old_fd)
-		&& handle_file_out(command->files_out, fd))
+	id = 0;
+	if (handle_files_in(command->files_in, old_fd, env)
+		&& handle_file_out(command->files_out, fd, env))
 	{
-		// Search command
-			// If not absolute path && not builtin
-				// Search in path
-		// if found || bultin
-			// If not (!fd && !old_fd && builtin)
-				// fork
-			// Else
-				// id = -2
-			// If bultin
-				/// Clear old_fd
-				// Exec bultin
-				// If id == 0;
-					// Exit (builtin_status)
-				// id = - builtin_status
-			// Else
-				// Execve
-			// Clear old_fd
+		if (command->argv)
+			id = exec_command(command, fd, old_fd, env);
 		return (id);
 	}
 	return (-1);
