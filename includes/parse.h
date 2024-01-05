@@ -6,12 +6,16 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/04 13:23:09 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/05 14:42:01 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_H
 # define PARSE_H
+
+# define QUOTE 3
+# define D_QUOTE 4
+
 
 typedef enum 	e_atom_type
 {
@@ -34,7 +38,7 @@ typedef enum	e_atom_subtype
 	pipeline,
 	double_and,
 	x_or,
-	end_of_line,
+	s_and,
 	none,
 }		t_atom_subtype;
 
@@ -44,7 +48,28 @@ typedef struct s_atom
 	char			*content;
 	t_atom_type		type;
 	t_atom_subtype	subtype;
+	struct s_atom	*next;
 }			t_atom;
+
+
+
+int	quote_check(char *str);
+
+/*-----------------ATOMS--------------------*/
+void	free_atom(t_atom *atom);
+void	free_atom_list(t_atom *pt);
+t_atom	*create_atom(char *str, int type, int subtype);
+int		merge_atom(t_atom **a1, t_atom **a2, t_atom_type type, t_atom_subtype subtype);
+t_atom	*atom_last(t_atom *pt);
+void	atom_addback(t_atom **pt, t_atom *atom);
+t_atom	*parse_by_atom(char *line);
+void	trim_quotes(t_atom **pt);
+void	print_atom(t_atom *atom);
+
+/*---------------ATOMS CHECK------------------*/
+int	check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt);
+
+
 
 
 
