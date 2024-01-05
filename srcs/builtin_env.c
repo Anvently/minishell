@@ -6,13 +6,13 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:37:52 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 14:43:36 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 15:03:12 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
-#include <error.h>
+#include <errno.h>
 
 /// @brief Print str to stdout.
 /// @param str
@@ -30,5 +30,15 @@ static int	put_str(char *str)
 /// @return ```0``` if success, ```errno``` if write error.
 int	builtin_env(char **env)
 {
-
+	while (env && *env)
+	{
+		if (put_str(*env))
+			return (errno);
+		if (*(env + 1) && put_str("\n"))
+			return (errno);
+		env++;
+	}
+	if (put_str("\n"))
+		return (errno);
+	return (0);
 }
