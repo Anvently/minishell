@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 16:30:02 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 10:29:13 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,15 @@ static char	*build_path(char *command, char **path_strs)
 /// ```NULL``` if allocation error or if no ```PATH``` variable is found in env.
 static char	**split_path(char **env)
 {
-	char	*sub_path;
+	char	*var_path;
 	char	**path_strs;
 
 	path_strs = NULL;
-	while (*env && ft_strncmp(*env, "PATH=", 5))
-		env++;
-	if (*env)
+	var_path = get_var_value("PATH", env);
+	if (var_path)
 	{
-		sub_path = ft_substr(*env, 5, ft_strlen(*env) - 5);
-		if (!sub_path)
-			return (alloc_error());
-		path_strs = ft_split(sub_path, ':');
-		free(sub_path);
+		path_strs = ft_split(var_path, ':');
+		free(var_path);
 		if (!path_strs)
 			return (alloc_error());
 	}
