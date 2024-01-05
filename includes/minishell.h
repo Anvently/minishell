@@ -6,14 +6,14 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 12:01:02 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 14:29:00 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdbool.h>
+# include <libft.h>
 
 /// @note interperet : 0 = NO || 1 = YES
 /// @note append_mod : 0 = NO || 1 = YES
@@ -50,7 +50,8 @@ typedef struct s_command {
 /* ---------------------------------- ERROR --------------------------------- */
 
 int		error(int err, char *str);
-int 	parse_error(int err, char *str);
+int		parse_error(int err, char *str);
+int		builtin_error(int err, char *builtin, char *context);
 
 /* -------------------------------------------------------------------------- */
 /*                              PIPES & COMMANDS                              */
@@ -80,5 +81,12 @@ bool	command_is_path(char *command);
 char	*get_var_value(char *var, char **env);
 int		expand_wc(char *path, char *dest);
 int		check_file_meta(t_list *files, char **env);
+
+/* -------------------------------------------------------------------------- */
+/*                                  BUILTINs                                  */
+/* -------------------------------------------------------------------------- */
+
+void	builtin_exit(char **argv);
+int		builtin_echo(char **argv);
 
 #endif

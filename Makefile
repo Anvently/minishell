@@ -5,9 +5,12 @@ INCLUDES	=	includes/
 SRCS_FOLDER	=	srcs/
 OBJS_FOLDER	=	objs/
 
-SRCS_FILES	=	main.c error.c prompt.c pipe.c files_utils.c \
-				parse_quote_check.c metachar.c command_path.c command_check.c \
-				command_exec.c
+SRCS_FILES	=	main.c error.c \
+				parse_quote_check.c metachar.c \
+				prompt.c pipe.c files_utils.c \
+				command_path.c command_check.c command_exec.c \
+				builtin_exit.c builtin_echo.c builtin_cd.c builtin_pwd.c \
+				builtin_export.c builtin_unset.c builtin_env.c
 
 
 OBJS		=	$(addprefix $(OBJS_FOLDER),$(SRCS_FILES:.c=.o))
