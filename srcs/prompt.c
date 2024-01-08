@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 12:06:35 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 11:38:20 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /// @return Exit status of last executed command.
 /// @note A pipe is defined as such : ```[t_cmd1 | t_cmd2 | t_cmd3]```
 /// @note A prompt is defined as such : ```[t_pipe1]([||/&&][t_pipe2]])*n```
-int	exec_prompt(t_list *pipe_list, char **env)
+int	exec_prompt(t_list *pipe_list, t_data *data)
 {
 	int		status;
 	int		id;
@@ -35,7 +35,7 @@ int	exec_prompt(t_list *pipe_list, char **env)
 		if (pipe->condition == 0 || (!status && pipe->condition == 1)
 			|| (status && pipe->condition == 2))
 		{
-			id = exec_pipe(pipe->commands, env, NULL);
+			id = exec_pipe(pipe->commands, data, NULL);
 			if (id > 0)
 				waitpid(id, &status, NULL);
 			else

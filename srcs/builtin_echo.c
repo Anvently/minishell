@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:10:44 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 14:36:29 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 16:22:10 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 /// @return ```0``` if no error or ```errno``` if write error.
 static int	put_str(char *str)
 {
-
 	if (write(1, str, ft_strlen(str)) < 0)
 		return (builtin_error(errno, "echo", str));
 	return (0);

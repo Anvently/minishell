@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 16:45:28 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:24:38 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,18 @@ typedef struct s_command {
 	char		**argv;
 }				t_command;
 
+typedef struct s_data {
+	t_list		*pipe_list;
+	char		***env;
+}				t_data;
+
 /* ---------------------------------- ERROR --------------------------------- */
 
 int		error(int err, char *str);
 int		parse_error(int err, char *str);
 int		builtin_error(int err, char *builtin, char *context);
+int		free_data(int err, t_data *data);
+
 
 /* -------------------------------------------------------------------------- */
 /*                              PIPES & COMMANDS                              */
@@ -59,10 +66,10 @@ int		builtin_error(int err, char *builtin, char *context);
 
 /* -------------------------------- EXECUTION ------------------------------- */
 
-int		exec_pipe(t_list *commands, char ***env, int *old_fd);
-int		exec_prompt(t_list *pipe_list, char ***env);
-int		exec_command(t_command *command, int *fd, int *old_fd, char ***env);
-int		exec_builtin(t_command *command, char ***env);
+int		exec_pipe(t_list *commands, t_data *data, int *old_fd);
+int		exec_prompt(t_list *pipe_list, t_data *data);
+int		exec_command(t_command *command, int *fd, int *old_fd, t_data *data);
+int		exec_builtin(t_command *command, t_data *data);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
@@ -89,5 +96,17 @@ int		check_file_meta(t_list *files, char **env);
 void	builtin_exit(char **argv);
 int		builtin_echo(char **argv);
 int		builtin_env(char **env);
+int		builtin_export(char **argv, char ***env);
+int		builtin_unset(char **argv, char ***env);
+int		builtin_pwd(void);
+int		builtin_cd(char **argv, char ***env);
+
+/* -------------------------------------------------------------------------- */
+/*                                     ENV                                    */
+/* -------------------------------------------------------------------------- */
+
+char	**env_copy(char **env, int size);
+int		set_var_value(char *var, char *value, char ***env);
+char	*get_var_value(char *var, char **env);
 
 #endif

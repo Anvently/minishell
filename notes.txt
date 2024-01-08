@@ -46,3 +46,7 @@ Cases :
 		- status is not changed
 	- fail and next is ||
 		- stauts = exec
+
+
+TODO :
+	- check exit status when command is empty.

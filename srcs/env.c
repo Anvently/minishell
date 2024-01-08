@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 16:06:33 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 17:31:16 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 16:07:22 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*var_join(char const *var, char const *value)
 
 /// @brief Look for a given variable in env and return it as a new allocated
 /// string
-/// @param var Name of the variable to fin (without $)
+/// @param var Name of the variable to find (without $)
 /// @param env
 /// @return Allocated string. If variable isn't found, return empty string.
 /// ```NULL``` if allocation error.
@@ -86,7 +86,9 @@ char	**env_copy(char **env, int size)
 	new_env = malloc((size + 1) * sizeof(char *));
 	if (!new_env)
 		return (alloc_error());
-	while (env && env[i])
+	new_env[size] = NULL;
+	i = 0;
+	while (env && i < size && env[i])
 	{
 		new_env[i] = ft_strdup(env[i]);
 		if (!new_env[i])
@@ -94,16 +96,15 @@ char	**env_copy(char **env, int size)
 		i++;
 	}
 	while (i < size)
-		new_env[i] = NULL;
+		new_env[i++] = NULL;
 	return (new_env);
 }
 
 /// @brief Add a new variable entry to env
 /// @param env it is freed and reallocated in the process.
 /// @param var variable entry in the format of ```NAME=[VALUE]```.
-/// It is ALWAYS freed during process.
 /// @return ```0``` if succes (env is updated)
-/// ```1``` if allocation error (current env is left untouched)
+/// ```-1``` if allocation error (current env is left untouched)
 static int	add_var_value(char ***env, char *var)
 {
 	char	**new_env;
@@ -119,7 +120,6 @@ static int	add_var_value(char ***env, char *var)
 	new_env[size_env] = var;
 	ft_free_strs(*env);
 	*env = new_env;
-	free(var);
 	return (0);
 }
 
@@ -128,7 +128,7 @@ static int	add_var_value(char ***env, char *var)
 /// @param value Can be ```NULL```.
 /// @param env
 /// @return ```0``` if success.
-/// ```-1``` if allocation error.
+/// ```-1``` if allocation error. Error is not printed
 int	set_var_value(char *var, char *value, char ***env)
 {
 	size_t	len_var;
@@ -138,10 +138,7 @@ int	set_var_value(char *var, char *value, char ***env)
 	new_var = var_join(var, value);
 	env_ptr = *env;
 	if (!*new_var)
-	{
-		alloc_error();
 		return (-1);
-	}
 	len_var = ft_strlen(var);
 	while (*env_ptr && ft_strncmp(*env_ptr, var, len_var))
 		env_ptr++;

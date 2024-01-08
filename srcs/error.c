@@ -6,13 +6,14 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 14:05:05 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:03:12 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <string.h>
 #include <errno.h>
+#include <minishell.h>
 
 int	error(int err, char *str)
 {
@@ -51,9 +52,22 @@ int	parse_error(int err, char *str)
 int	builtin_error(int err, char *builtin, char *context)
 {
 	errno = err;
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(builtin, 2);
 	ft_putstr_fd(": ", 2);
 	if (context)
 		ft_putendl_fd(context, 2);
+	return (err);
+}
+
+/// @brief Free all data and return given err code.
+/// @param err
+/// @param data
+/// @return ```err```
+int	free_data(int err, t_data *data)
+{
+	//free pipe_list
+	ft_free_strs(*data->env);
+	*data->env = NULL;
 	return (err);
 }

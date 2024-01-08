@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:37:52 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 15:03:12 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 14:50:43 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <libft.h>
 #include <errno.h>
 
-/// @brief Print str to stdout.
+/// @brief Print str to STDOUT_FILENO.
 /// @param str
 /// @return ```0``` if no error or ```errno``` if write error.
 static int	put_str(char *str)
