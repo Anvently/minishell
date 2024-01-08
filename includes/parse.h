@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/05 14:42:01 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/05 17:32:52 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef enum 	e_atom_type
 	double_quote,
 	space,
 	variable,
+	wildcard,
 	litteral
 }			t_atom_type;
 
@@ -68,6 +69,9 @@ void	print_atom(t_atom *atom);
 
 /*---------------ATOMS CHECK------------------*/
 int	check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt);
+int	check_double_pipe(t_atom *atom);
+int	check_double_and(t_atom *atom);
+int	check_void(t_atom *atom);
 
 
 

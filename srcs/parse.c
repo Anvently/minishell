@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/05 14:32:34 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/08 08:55:58 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,21 @@ void	trim_quotes(t_atom **atom)
 		trim_quotes(&pt->next);
 	}
 }
- int	check_double_errors(t_atom *atom)
- {
- 	check_double_redir(pt, redirection_in, double_in);
- 	check_double_redir(pt, redirection_out, double_out);
- 	check_double_sep(&atom);
-	check_void(atom);
+int	check_double_errors(t_atom *atom)
+{
+ 	if (check_double_redir(atom, redirection_in, double_in) > 0)
+		return (1);
+ 	if (check_double_redir(atom, redirection_out, double_out) > 0)
+		return (1);
+	if (check_double_pipe(atom) > 0)
+		return (1);
+	if (check_double_and(atom) > 0)
+		return (1);
+	//if (check_void(atom) > 0)
+	//	return (1);
+	return (0);
 }
+
 
 // int	trim_atoms(t_atom **atom)
 // {
@@ -101,13 +109,14 @@ void	trim_quotes(t_atom **atom)
 int	main(void)
 {
 	t_atom *pt;
-	char	*line = ">>>";
+	char	*line = "   dfd |    >>  d   ";
 
 	pt = parse_by_atom(line);
 	quote_litteral(pt);
 	trim_quotes(&pt);
-	check_double_redir(pt, redirection_in, double_in);
-	check_double_redir(pt, redirection_out, double_out);
-	printf("@@@@@@@@@@@@@@@@@@@@@\n");
-	print_atom(pt);
+	if (check_double_errors(pt) == 0)
+	{
+		printf("@@@@@@@@@@@@@@@@@@@@@\n");
+		print_atom(pt);
+	}
 }
