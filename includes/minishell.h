@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 14:29:00 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 16:45:28 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int		builtin_error(int err, char *builtin, char *context);
 
 /* -------------------------------- EXECUTION ------------------------------- */
 
-int		exec_pipe(t_list *commands, char **env, int *old_fd);
-int		exec_prompt(t_list *pipe_list, char **env);
-int		exec_command(t_command *command, int *fd, int *old_fd, char **env);
-int		exec_builtin(t_command *command, char **env);
+int		exec_pipe(t_list *commands, char ***env, int *old_fd);
+int		exec_prompt(t_list *pipe_list, char ***env);
+int		exec_command(t_command *command, int *fd, int *old_fd, char ***env);
+int		exec_builtin(t_command *command, char ***env);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
@@ -88,5 +88,6 @@ int		check_file_meta(t_list *files, char **env);
 
 void	builtin_exit(char **argv);
 int		builtin_echo(char **argv);
+int		builtin_env(char **env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:58:46 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 11:01:04 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 16:49:58 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,6 @@ char		*get_var_value(char *var, char **env);
 int			expand_wc(char *path, char *dest);
 static int	check_file_wc(t_file_rd *file);
 int			check_file_meta(t_list *files, char **env);
-
-/// @brief Look for a given variable in env and return it as a new allocated
-/// string
-/// @param var Name of the variable to fin (without $)
-/// @param env
-/// @return Allocated string. If variable isn't found, return empty string.
-/// ```NULL``` if allocation error.
-char	*get_var_value(char *var, char **env)
-{
-	char	*var_value;
-	size_t	len_var;
-
-	len_var = ft_strlen(var);
-	while (*env && ft_strncmp(*env, var, len_var))
-		env++;
-	if (*env)
-		var_value = ft_substr(*env, len_var + 1,
-				ft_strlen(*env) - len_var + 1);
-	else
-		var_value = ft_strdup("");
-	if (!var_value)
-		return (alloc_error());
-	return (var_value);
-}
 
 /// @brief Check if a path string contains ```*``` char and if so expand it.
 /// @param path can contain 0, 1 or more ```*```.

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 11:49:11 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/05 16:44:26 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,18 +103,19 @@ static int	handle_files_out(t_list *files_out, int *fd, char **env)
 /// @param old_fd File descriptors of input pipe. ```NULL``` if first command.
 /// @param env
 /// @return Process id of command if executed.
-///```-1``` if error.
+///```-1``` if error. Can occurs during in or out redirection, during piping,
+/// or during forking
 /// ```0``` if builtin succeed n in parent or no command was given
 /// (only redirection).
 /// ```< 0``` corresponding to builtin exit status if failed in parent.
 static int	handle_command(t_command *command, int *fd,
-				int *old_fd, char **env)
+				int *old_fd, char ***env)
 {
 	int	id;
 
 	id = 0;
-	if (handle_files_in(command->files_in, old_fd, env)
-		&& handle_file_out(command->files_out, fd, env))
+	if (handle_files_in(command->files_in, old_fd, *env)
+		&& handle_file_out(command->files_out, fd, *env))
 	{
 		if (command->argv)
 			id = exec_command(command, fd, old_fd, env);
@@ -131,7 +132,7 @@ static int	handle_command(t_command *command, int *fd,
 /// @param old_fd Previous command's pipe fd. ```NULL``` for first command.
 /// @return Last command's process id. ```<= 0``` if last command was
 /// a builtin executed in parent (in this case it represents the exit status)
-int	exec_pipe(t_list *commands, char **env, int *old_fd)
+int	exec_pipe(t_list *commands, char ***env, int *old_fd)
 {
 	int		fd[2];
 	int		id;
