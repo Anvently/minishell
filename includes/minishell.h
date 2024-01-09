@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 14:56:18 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 17:36:09 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,31 @@ typedef struct s_data {
 	char		***env;
 }				t_data;
 
+///* #### Word are separated by :
+///*		- ['" $*] (space),
+///*		- when inside '', nothing is separated
+///* ```content``` Litteral content of word
+///* #### quote
+///* ```quote = 0``` outside quote (* and $ are interpreted)
+///* ```quote = "``` "" (only $ are interpreted)
+///* ```quote = '``` '' (no metachar are interpreted)
+///* #### type
+///* ```type = 0``` litteral
+///* ```type = $``` variable (not including $)
+///* ```type = *``` wildcard (not including *, content is NULL)
+typedef struct s_word {
+	char		*content;
+	char		quote;
+	char		type;
+
+}				t_word;
+
+/* --------------------------- STRUCT T_WORD UTILS -------------------------- */
+
+t_list	*t_word_new_node(void);
+void	t_word_init(t_word *word);
+void	t_word_free(void *word);
+
 /* ---------------------------------- ERROR --------------------------------- */
 
 int		error(int err, char *str);
@@ -89,9 +114,9 @@ bool	command_is_builtin(char *command);
 
 /* -------------------------------- META-CHARACTERS ------------------------- */
 
-char	*get_var_value(char *var, char **env);
-int		expand_wc(char *path, char *dest);
-int		check_file_meta(t_list *files, char **env);
+
+int		expand_var(char *str, t_list **results, char **env);
+int		check_files_meta(t_list *files, char **env);
 
 /* -------------------------------------------------------------------------- */
 /*                                  BUILTINs                                  */
