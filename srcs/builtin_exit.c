@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:21:03 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 11:49:41 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 09:59:31 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ void	builtin_exit(char **argv)
 	int	err;
 
 	if (ft_strslen(argv) > 2)
-		free_and_exit(builtin_error(1, "exit", "too many arguments"), argv);
+		free_and_exit(builtin_error(1, "exit", NULL, "too many arguments"),
+			argv);
 	if (!argv || (argv[0] && !argv[1]))
 		free_and_exit(0, argv);
 	err = ft_strtoi(argv[1], &status);
 	if (!err)
 		free_and_exit((unsigned char) status, argv);
 	else
-		free_and_exit(builtin_error(2, "exit", "numeric argument required"),
-			argv);
+		free_and_exit(builtin_error(2, "exit", NULL,
+				"numeric argument required"), argv);
 }

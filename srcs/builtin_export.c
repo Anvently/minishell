@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:04:34 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 16:18:07 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 09:58:25 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,10 @@
 #include <libft.h>
 #include <errno.h>
 
-static int	error_export(int err, char *identifier, char *context);
 static int	check_name(char *name);
 static int	parse_identifier(char *identifier, char **name, char **value);
 static int	export_var(char *identifier, char ***env);
 int			builtin_export(char **argv, char ***env);
-
-static int	error_export(int err, char *identifier, char *context)
-{
-	errno = err;
-	ft_putstr_fd("minishell: export: `", 2);
-	ft_putstr_fd(identifier, 2);
-	ft_putstr_fd("': ", 2);
-	if (context)
-		ft_putendl_fd(context, 2);
-	return (err);
-}
 
 /// @brief Check if the given identifier name has a valid format
 /// @param name Name of the variable (before ```=```)
@@ -134,13 +122,10 @@ int	builtin_export(char **argv, char ***env)
 	{
 		ret = export_var(*argv, env);
 		if (ret < 0)
-		{
-			alloc_error();
-			return (2);
-		}
+			return (builtin_error(2, "export", *argv, "allocation error"));
 		else if (ret)
 		{
-			error_export(1, *argv, "not a valid identifier");
+			builtin_error(1, "export", *argv, "not a valid identifier");
 			err = true;
 		}
 		argv++;

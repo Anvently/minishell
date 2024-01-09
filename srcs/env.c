@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 16:06:33 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 16:07:22 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 10:28:36 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	**env_copy(char **env, int size)
 
 	new_env = malloc((size + 1) * sizeof(char *));
 	if (!new_env)
-		return (alloc_error());
+		return (NULL);
 	new_env[size] = NULL;
 	i = 0;
 	while (env && i < size && env[i])
@@ -115,7 +115,7 @@ static int	add_var_value(char ***env, char *var)
 	if (!new_env)
 	{
 		free(var);
-		return (-1);
+		return (error(-1, "adding variable in env"));
 	}
 	new_env[size_env] = var;
 	ft_free_strs(*env);

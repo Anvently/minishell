@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 17:24:38 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 14:56:18 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,14 @@ typedef struct s_data {
 
 int		error(int err, char *str);
 int		parse_error(int err, char *str);
-int		builtin_error(int err, char *builtin, char *context);
+int		builtin_error(int err, char *builtin, char *value, char *context);
 int		free_data(int err, t_data *data);
 
+/* ---------------------------------- UTILS --------------------------------- */
+
+bool	is_abs_path(char *str);
+bool	is_directory(char *path);
+char	*path_join(char const *path, char const *tail);
 
 /* -------------------------------------------------------------------------- */
 /*                              PIPES & COMMANDS                              */
@@ -81,7 +86,6 @@ char	*command_find_path(char *command, char **env);
 /* ------------------------------ COMMAND CHECK ----------------------------- */
 
 bool	command_is_builtin(char *command);
-bool	command_is_path(char *command);
 
 /* -------------------------------- META-CHARACTERS ------------------------- */
 
@@ -100,6 +104,7 @@ int		builtin_export(char **argv, char ***env);
 int		builtin_unset(char **argv, char ***env);
 int		builtin_pwd(void);
 int		builtin_cd(char **argv, char ***env);
+int		cd_find_path(char **buf, char *path, char **env);
 
 /* -------------------------------------------------------------------------- */
 /*                                     ENV                                    */
@@ -108,5 +113,6 @@ int		builtin_cd(char **argv, char ***env);
 char	**env_copy(char **env, int size);
 int		set_var_value(char *var, char *value, char ***env);
 char	*get_var_value(char *var, char **env);
+bool	is_var_defined(char *var, char **env);
 
 #endif

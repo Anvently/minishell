@@ -6,13 +6,14 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:37:52 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 14:50:43 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 10:00:42 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <errno.h>
+#include <string.h>
 
 /// @brief Print str to STDOUT_FILENO.
 /// @param str
@@ -21,7 +22,7 @@ static int	put_str(char *str)
 {
 
 	if (write(1, str, ft_strlen(str)) < 0)
-		return (builtin_error(errno, "env", str));
+		return (builtin_error(errno, "env", NULL, strerror(errno)));
 	return (0);
 }
 

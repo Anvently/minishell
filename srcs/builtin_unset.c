@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:54:59 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 16:17:35 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/09 09:54:41 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,7 @@ int	builtin_unset(char **argv, char ***env)
 	{
 		new_env = env_filter_copy(*env, argv + 1);
 		if (!new_env)
-		{
-			alloc_error();
-			return (2);
-		}
+			return (builtin_error(2, "unset", NULL, "allocation error"));
 		ft_free_strs(*env);
 		*env = new_env;
 	}
