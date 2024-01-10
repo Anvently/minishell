@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_atom_utils2.c                                :+:      :+:    :+:   */
+/*   parse_space.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/05 10:54:37 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/08 11:39:48 by lmahe            ###   ########.fr       */
+/*   Created: 2024/01/08 11:42:41 by lmahe             #+#    #+#             */
+/*   Updated: 2024/01/08 14:48:04 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,42 @@
 #include <libft.h>
 #include <parse.h>
 
-void	free_atom_list(t_atom *pt)
+/*
+the 2 functins below will merge sequence of spaces into just one
+*/
+int	create_space(t_atom *pt, char **env)
 {
-	t_atom	*temp;
+	while (pt && pt->next && pt->next->type == space)
+	{
+		if (merge_atom(&pt, &pt->next, space, none))
+		{
+			ft_free_strs(env);
+			return (-1);
+		}
+	}
+	return (0);
+}
 
-	if (!pt)
-		return ;
+int	merge_space(t_atom *atom, char **env)
+{
+	t_atom	*pt;
+
+	pt = atom;
 	while (pt)
 	{
-		temp = pt;
-		pt = pt->next;
-		if (temp->content)
-			free(temp->content);
-		free(temp);
-	}
-}
-void	delete_atom(t_atom *previous, t_atom *to_del)
-{
-	t_atom	*pt;
-
-	if (!previous || !to_del)
-		return ;
-	pt = to_del->next;
-	previous->next = pt;
-	free_atom(to_del);
-}
-
-t_atom	*atom_last_but_one(t_atom *atom)
-{
-	t_atom	*pt;
-
-	if (!atom || !atom->next)
-		return (NULL);
-	pt = atom->next;
-	while (pt != NULL)
-	{
-		atom = atom->next;
+		if (pt->type == space)
+		{
+			if (create_space(pt, env))
+			{
+				free_atom_list(atom);
+				parse_error(-1, NULL);
+				exit (-1);
+			}
+		}
 		pt = pt->next;
 	}
-	return (atom);
+	return (0);
+
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/08 08:55:58 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/10 10:50:35 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,84 +39,60 @@ void	quote_litteral(t_atom *pt)
 	if (pt)
 		quote_litteral(pt->next);
 }
-void	trim_quotes(t_atom **atom)
+void	trim_quotes(t_atom *atom)
 {
-	t_atom	*pt;
 
-	if (!atom || !*atom)
+
+	if (!atom)
 		return ;
-	pt = *atom;
-	if((*atom)->type == QUOTE || (*atom)->type == D_QUOTE)
+	while (atom)
 	{
-		*atom = (*atom)->next;
-		free_atom(pt);
-		trim_quotes(atom);
-	}
-	else
-	{
-		trim_quotes(&pt->next);
+		if (atom->type == QUOTE || atom->type == D_QUOTE)
+		{
+			atom->type = litteral;
+			atom->subtype = none;
+		}
+		atom =atom->next;
 	}
 }
-int	check_double_errors(t_atom *atom)
+int	check_double_errors(t_atom *atom, char **env)
 {
- 	if (check_double_redir(atom, redirection_in, double_in) > 0)
-		return (1);
- 	if (check_double_redir(atom, redirection_out, double_out) > 0)
-		return (1);
-	if (check_double_pipe(atom) > 0)
-		return (1);
-	if (check_double_and(atom) > 0)
-		return (1);
-	//if (check_void(atom) > 0)
-	//	return (1);
-	return (0);
+ 	int	check;
+
+	check = check_double_redir(atom, redirection_in, double_in);
+	if (check)
+		return (parse_free(atom, env, check, NULL));
+ 	check = check_double_redir(atom, redirection_out, double_out);
+	if (check)
+		return (parse_free(atom, env, check, NULL));
+	check = check_double_pipe(atom);
+	if (check)
+		return (parse_free(atom, env, check, NULL));
+	check = check_double_and(atom);
+	if (check < 0)
+		return (parse_free(atom, env, check, NULL));
+	return (check);
 }
 
-
-// int	trim_atoms(t_atom **atom)
-// {
-// 	quote_litteral(*atom);
-// 	trim_quotes(atom);
-	//*atom = expand_dollar(*atom);
-
-
-
-// }
-
-// t_list	*parse_line(char *line, char **env)
-// {
-// 	t_atom	*atom_line;
-
-// 	atom_line = NULL;
-// 	if (quote_check(line) < 0)
-// 	{
-// 		parse_error("quote error");
-// 		return (NULL);
-// 	}
-// 	atom_line = parse_by_atom(line); //create a node by character and assign its type
-// 	if (!atom_line)
-// 		return (NULL);
-// 	if (trim_atoms(&atom_line) < 0)
-// 		return (NULL);
-// 	parsed_line = merge_atom(parse_line); // put together atom of size type and checks egs |||
-// 	if (!parsed_line)
-// 		return (NULL);
-// 	parsed_line = get_pipe_list(parse_line); // create the t_pipe elements
-// 	return (parsed_line);
-// }
-
-
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_atom *pt;
-	char	*line = "   dfd |    >>  d   ";
+	char	*line = "";
 
+	(void)argv;
+	(void)argc;
 	pt = parse_by_atom(line);
 	quote_litteral(pt);
-	trim_quotes(&pt);
-	if (check_double_errors(pt) == 0)
+	trim_quotes(pt);
+	//expand_dollar(pt, env);
+	merge_litteral(pt, env);
+	merge_space(pt, env);
+	print_atom(pt);
+	if (check_double_errors(pt, env) == 0)
 	{
 		printf("@@@@@@@@@@@@@@@@@@@@@\n");
 		print_atom(pt);
 	}
+	syntax_check(pt);
+	free_atom_list(pt);
 }
