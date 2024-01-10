@@ -1,6 +1,7 @@
 #include <libft.h>
 #include <minishell.h>
 #include <readline/readline.h>
+#include <errno.h>
 
 /* int	main(void)
 {

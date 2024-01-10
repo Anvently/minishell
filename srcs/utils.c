@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:53:50 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 14:58:43 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/10 16:57:01 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <libft.h>
+#include <minishell.h>
+
+bool	is_abs_path(char *str);
+bool	is_directory(char *path);
+char	*path_join(char const *path, char const *tail);
 
 /// @brief Check if the string is a path. Meaning it starts with one
 /// or more```.```  followed with a ```/``` or start with a ```/```.

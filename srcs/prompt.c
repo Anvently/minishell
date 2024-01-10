@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 11:38:20 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/10 15:13:31 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,30 @@
 /// Following ones are executed depending on the exit status of previous
 /// pipe's last command .
 /// @param pipe_list list of ```t_pipe``` structure
-/// @param env
-/// @return Exit status of last executed command.
+/// @param data
+/// @return Exit status of last executed command. data->exit_status
+/// is updated whilst executing prompts.
 /// @note A pipe is defined as such : ```[t_cmd1 | t_cmd2 | t_cmd3]```
 /// @note A prompt is defined as such : ```[t_pipe1]([||/&&][t_pipe2]])*n```
 int	exec_prompt(t_list *pipe_list, t_data *data)
 {
-	int		status;
 	int		id;
 	t_pipe	*pipe;
 
-	status = 0;
 	while (pipe_list)
 	{
 		pipe = (t_pipe *) pipe_list->content;
-		if (pipe->condition == 0 || (!status && pipe->condition == 1)
-			|| (status && pipe->condition == 2))
+		if (pipe->condition == 0 || (!data->exit_status
+				&& pipe->condition == 1)
+			|| (data->exit_status && pipe->condition == 2))
 		{
 			id = exec_pipe(pipe->commands, data, NULL);
 			if (id > 0)
-				waitpid(id, &status, NULL);
+				waitpid(id, &data->exit_status, NULL);
 			else
-				status = -id;
+				data->exit_status = -id;
 		}
 		pipe_list = pipe_list->next;
 	}
-	return (status);
+	return (data->exit_status);
 }

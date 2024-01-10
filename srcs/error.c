@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 11:12:53 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/10 15:47:57 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	builtin_error(int err, char *builtin, char *value, char *context)
 int	free_data(int err, t_data *data)
 {
 	//free pipe_list
-	ft_free_strs(*data->env);
-	*data->env = NULL;
+	ft_free_strs(data->env);
+	data->env = NULL;
 	return (err);
 }

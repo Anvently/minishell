@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:58:46 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 17:36:16 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/10 18:57:54 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,37 @@
 #include <minishell.h>
 #include <errno.h>
 
-int			expand_var(char *str, t_list **results, char **env);
-static int	check_file_meta(t_file_rd *file, char **env);
-int			check_files_meta(t_list *files, char **env);
+int			interpret_metachar(char *str, t_list **results, t_data *data);
+static int	check_file_meta(t_file_rd *file, t_data *data);
+int			check_files_meta(t_list *files, t_data *data);
 
 /// @brief Parse given string, removing quotes ("" and '') if necessary
-/// and interpret $ sign that need to be interpreted.
+/// and interpret $ and * that need to be interpreted.
 /// @param str Unclosed quotes MUST be checked before.
 /// @param result pointer toward the head of the list storing the matches
 /// of the parsing.
 /// @param env Undefined variables are replaced with empty string.
-/// @return Number of matches added to ```results```.
-/// ```0``` if no match.
-/// ```-1``` if allocation error.
-int	expand_var(char *str, t_list **results, char **env)
+/// @return ```0``` for success (no match or empty string is a success).
+/// ```errno``` if error.
+int	interpret_metachar(char *str, t_list **results, t_data *data)
 {
-	t_list	*words_list;
-	int		nbr_match;
+	t_list	*word_list;
 
 	*results = NULL;
-	words_list = t_word_parse(str);
-	if (!words_list)
-		return (-1);
-	nbr_match = t_word_interpret(words_list, results, env);
-	ft_lstclear(&words_list, t_word_free);
-	return (nbr_match);
+	if (t_word_parse(str, &word_list, data))
+		return (error(errno, "parsing metacharacters"));
+	if (word_list && t_word_concat_dup(word_list))
+	{
+		ft_lstclear(&word_list, t_word_free);
+		return (error(errno, "parsing metacharacters"));
+	}
+	if (word_list && t_word_interpret(word_list, results))
+	{
+		ft_lstclear(&word_list, t_word_free);
+		return (error(errno, "interpreting wildcards"));
+	}
+	ft_lstclear(&word_list, t_word_free);
+	return (0);
 }
 
 /// @brief Check if given node in a t_file_rd list contain a wildcard in file's
@@ -47,23 +53,15 @@ int	expand_var(char *str, t_list **results, char **env)
 /// @return ```0``` if no wildcard was found, if no file was found
 /// or if no error occured during wildcard's expension.
 /// Set errno to ```1``` if ambiguous redirect.
-/// ```-1``` if allocation error (meaning a file was found but path could not be
-/// retrieved)
-static int	check_file_meta(t_file_rd *file, char **env)
+/// ```errno``` if error
+static int	check_file_meta(t_file_rd *file, t_data *data)
 {
 	int		nbr_files;
 	t_list	*results;
 
-	nbr_files = expand_var(file->path, &results, env);
-	if (nbr_files == 0)
-		return (0);
-	else if (nbr_files < 0)
-	{
-		free(file->path);
-		file->path = NULL;
-		return (error(errno, "parsing metacharacters"));
-	}
-	if (nbr_files > 1)
+	if (interpret_metachar(file->path, &results, data))
+		return (errno);
+	if (ft_lstsize(results) > 1)
 	{
 		ft_lstclear(&results, NULL);
 		return (parse_error(2, file->path));
@@ -93,14 +91,14 @@ static int	check_file_var(t_file_rd *file, char **env)
 /// @param files List of ```t_file_rd``` structure.
 /// @return ```0``` if no wildcard was found or if no error occured during
 /// wildcard's expension. Set errno to ```1``` if ambiguous redirect.
-int	check_files_meta(t_list *files, char **env)
+int	check_files_meta(t_list *files, t_data *data)
 {
 	t_file_rd	*file;
 
 	while (files)
 	{
 		file = (t_file_rd *) files->content;
-		if (check_file_meta(file, env))
+		if (check_file_meta(file, data->env))
 			return (errno);
 		files = files->next;
 	}

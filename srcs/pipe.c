@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 14:50:43 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/10 15:15:16 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <errno.h>
 #include <fcntl.h>
 
-static int	handle_files_in(t_list *files_in, int *old_fd, char **env);
-static int	handle_files_out(t_list *files_out, int *fd, char **env);
+static int	handle_files_in(t_list *files_in, int *old_fd, t_data *data);
+static int	handle_files_out(t_list *files_out, int *fd, t_data *data);
 static int	handle_command(t_command *command, int *fd,
 				int *old_fd, t_data *data);
 int			exec_pipe(t_list *commands, t_data *data, int *old_fd);
@@ -35,7 +35,7 @@ int			exec_pipe(t_list *commands, t_data *data, int *old_fd);
 /// @param files_in List of t_file_rd struct
 /// @param old_fd File descripors of input pipe. ```NULL``` for first command.
 /// @return ```0``` if no error. Else ```errno```.
-static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
+static int	handle_files_in(t_list *files_in, int *old_fd, t_data *data)
 {
 	t_file_rd	*file;
 
@@ -45,7 +45,7 @@ static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
 	while (files_in)
 	{
 		file = (t_file_rd *) files_in->content;
-		if (check_file_meta(files_in, env))
+		if (check_file_meta(files_in, data))
 			return (errno);
 		if (old_fd)
 			clear_pipe(old_fd[0]);
@@ -70,7 +70,7 @@ static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
 /// @param files_out List of t_file_rd struct
 /// @param fd File descripors of output pipe. ```NULL``` for last command.
 /// @return ```0``` if no error. Else ```errno```.
-static int	handle_files_out(t_list *files_out, int *fd, char **env)
+static int	handle_files_out(t_list *files_out, int *fd, t_data *data)
 {
 	t_file_rd	*file;
 	int			o_flag;
@@ -78,7 +78,7 @@ static int	handle_files_out(t_list *files_out, int *fd, char **env)
 	while (files_out)
 	{
 		file = (t_file_rd *) files_out->content;
-		if (check_file_meta(files_out, env))
+		if (check_file_meta(files_out, data))
 			return (errno);
 		o_flag = O_RDWR | O_TRUNC | O_CREAT;
 		if (file->append_mode)
@@ -114,11 +114,11 @@ static int	handle_command(t_command *command, int *fd,
 	int	id;
 
 	id = 0;
-	if (handle_files_in(command->files_in, old_fd, *data->env)
-		&& handle_file_out(command->files_out, fd, *data->env))
+	if (handle_files_in(command->files_in, old_fd, data)
+		&& handle_file_out(command->files_out, fd, data))
 	{
 		if (command->argv)
-			id = exec_command(command, fd, old_fd, data->env);
+			id = exec_command(command, fd, old_fd, data);
 		return (id);
 	}
 	return (-1);
@@ -132,6 +132,7 @@ static int	handle_command(t_command *command, int *fd,
 /// @param old_fd Previous command's pipe fd. ```NULL``` for first command.
 /// @return Last command's process id. ```<= 0``` if last command was
 /// a builtin executed in parent (in this case it represents the exit status)
+/// or last command failed before execution.
 int	exec_pipe(t_list *commands, t_data *data, int *old_fd)
 {
 	int		fd[2];

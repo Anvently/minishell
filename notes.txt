@@ -47,6 +47,11 @@ Cases :
 	- fail and next is ||
 		- stauts = exec
 
+# ------------------------------- WORD-PARSING ------------------------------- #
+
+test'"ded de $PATH'
+
 
 TODO :
-	- check exit status when command is empty.
+
+

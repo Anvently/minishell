@@ -6,71 +6,94 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 18:12:21 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/10 18:06:45 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-int		t_word_interpret(t_list *words, t_list **results, char **env);
-t_list	*t_word_parse(char *str);
+int	t_word_parse(char *str, t_list **word_list, t_data *data);
+char	*t_word_get_exit_status(char *str, t_list **word_list, t_data *data);
+int		t_word_concat_dup(t_list *word_list);
 
-/// @brief Add a new node containing everything between str[0] and the next
-/// ```'``` character.
+/// @brief Concatenate litteral word with var word and removing duplicate
+/// ```*``` in word_list, leaving only litterals with possible ```*```
+/// in between.
+/// @param word_list Two consecutive t_word unit with the same type
+/// are merged together (* vs litteral/var)
+/// @return ```0``` for success ```-1``` for allocation error.
+int	t_word_concat_dup(t_list *word_list)
+{
+	t_word	*word;
+	t_word	*word_next;
+	t_list	*next;
+	char	*new_content;
+
+	while (word_list && word_list->next)
+	{
+		word = (t_word *)word_list->content;
+		word_next = (t_word *)word_list->next->content;
+		if ((word->type == '*' && word_next->type == '*')
+			|| (word->type != '*' && word_next->type != '*'))
+		{
+			new_content = ft_strjoin(word->content, word_next->content);
+			free(word->content);
+			word->content = new_content;
+			next = word_list->next->next;
+			ft_lstdelone(word_list->next, t_word_free);
+			if (!new_content && word->type != '*')
+				return (-1);
+			word_list->next = next;
+		}
+		else
+			word_list = word_list->next;
+	}
+	return (0);
+}
+
+/// @brief Add a new node to word_list for exit status as a string (case
+/// where ```$?``` was given.
 /// @param str
 /// @param word_list
-/// @return Address of the character following the next ```'``` found,
-/// or ```NULL``` if allocation error.
-static char	*get_simple_quote(char *str, t_list **word_list)
+/// @param data
+/// @return Pointer toward the character following ```?```.
+char	*t_word_get_exit_status(char *str, t_list **word_list, t_data *data)
 {
 	t_list	*node;
-	int		i;
 
-	i = 0;
-	while (str[i] && str[i] != '\'')
-		i++;
-	if (str[i])
-	{
-		node = t_word_new_node(ft_substr(str, 0, i - 1), false, 0);
-		if (!node)
-			return (NULL);
-		ft_lstadd_back(word_list, node);
-		if (!node->content)
-			return (NULL);
-		return (str + i + 1);
-	}
-	return (str + i);
+	node = t_word_new_node(ft_itoa(data->exit_status), '$');
+	if (!node)
+		return (NULL);
+	ft_lstadd_back(word_list, node);
+	if (!node->content)
+		return (NULL);
+	return (str + 1);
 }
 
-static char	*find_next_word(char *str, t_list **word_list, bool *quote)
+/// @brief Parse given string by splitting it in t_word units (see t_word
+/// definition).
+/// @param str
+/// @param word_list List of t_word used to store result of the parsing
+/// @param data
+/// @return ```0``` if successfull parsing or empty string.
+/// ```-1``` if allocation error.
+int	t_word_parse(char *str, t_list **word_list, t_data *data)
 {
-	int	i;
-
-	if (!*quote && *str == '\'')
-		str = get_quote(str, &word_list);
-	else if (str && *str == '"')
-	{
-		*quote = !*quote;
-		str++;
-	}
-	while (str && *str && !ft_strchr("\" $", *str))
-
-
-	return (str);
-}
-
-t_list	*t_word_parse(char *str)
-{
-	t_list	*word_list;
 	bool	quote;
 
 	quote = false;
+	*word_list = NULL;
+	if (!str || !*str)
+		return (0);
 	while (str && *str)
 	{
-		str = find_next_word(str, &word_list, &quote);
+		str = t_word_parse_next(str, word_list, &quote, data);
 		if (!str)
-			ft_lstclear(&word_list, t_word_free);
+		{
+			ft_lstclear(word_list, t_word_free);
+			return (-1);
+		}
 	}
-	return (word_list);
+	return (0);
 }
