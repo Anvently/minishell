@@ -6,13 +6,14 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/08 09:41:38 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/10 11:13:44 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <string.h>
 #include <errno.h>
+#include <minishell.h>
 
 int	error(int err, char *str)
 {
@@ -54,17 +55,40 @@ int	parse_error(int err, char *str)
 }
 
 /// @brief Set errno to err, and print error with given builtin name
-/// and given context if provided
+/// and given value & context if provided
 /// @param err
 /// @param builtin Name of the builtin command
+/// @param value Can be left to ```NULL```
 /// @param context Can be left to ```NULL```
 /// @return ```err```
-int	builtin_error(int err, char *builtin, char *context)
+/// @note format : "minishell: $builtin[: value][: context]"
+int	builtin_error(int err, char *builtin, char *value, char *context)
 {
 	errno = err;
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(builtin, 2);
-	ft_putstr_fd(": ", 2);
+	if (value)
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(value, 2);
+	}
 	if (context)
-		ft_putendl_fd(context, 2);
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(context, 2);
+	}
+	ft_putstr_fd("\n", 2);
+	return (err);
+}
+
+/// @brief Free all data and return given err code.
+/// @param err
+/// @param data
+/// @return ```err```
+int	free_data(int err, t_data *data)
+{
+	//free pipe_list
+	ft_free_strs(*data->env);
+	*data->env = NULL;
 	return (err);
 }

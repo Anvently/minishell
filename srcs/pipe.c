@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/05 16:44:26 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/08 14:50:43 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 static int	handle_files_in(t_list *files_in, int *old_fd, char **env);
 static int	handle_files_out(t_list *files_out, int *fd, char **env);
 static int	handle_command(t_command *command, int *fd,
-				int *old_fd, char **env);
-int			exec_pipe(t_list *commands, char **env, int *old_fd);
+				int *old_fd, t_data *data);
+int			exec_pipe(t_list *commands, t_data *data, int *old_fd);
 
 /// @brief 1. Check infiles
 /// 		- if infile
@@ -28,7 +28,7 @@ int			exec_pipe(t_list *commands, char **env, int *old_fd);
 /// 				- clear old_fd[0]
 /// 		- if no infile
 /// 			- if old_fd
-/// 				- stdin = old_fd[0]
+/// 				- STDIN_FILENO = old_fd[0]
 /// 				- close(old_fd[0])
 /// 			-else
 /// 				- do nothing
@@ -40,7 +40,7 @@ static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
 	t_file_rd	*file;
 
 	if (!files_in && old_fd)
-		if (dup_and_close(old_fd[0], stdin))
+		if (dup_and_close(old_fd[0], STDIN_FILENO))
 			return (error(errno, NULL));
 	while (files_in)
 	{
@@ -49,7 +49,7 @@ static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
 			return (errno);
 		if (old_fd)
 			clear_pipe(old_fd[0]);
-		if (file_redirect(file->path, stdin, O_RDONLY))
+		if (file_redirect(file->path, STDIN_FILENO, O_RDONLY))
 			return (errno);
 		files_in = files_in->next;
 	}
@@ -61,10 +61,10 @@ static int	handle_files_in(t_list *files_in, int *old_fd, char **env)
 /// 			- open and dup
 /// 		- if no outfile
 /// 			- if not last
-/// 				- stdout = fd[1]
+/// 				- STDOUT_FILENO = fd[1]
 /// 				- close(fd[1])
 /// 			- else
-/// 				- do nothing to stdout
+/// 				- do nothing to STDOUT_FILENO
 ///			- if not last
 /// 			- pipe
 /// @param files_out List of t_file_rd struct
@@ -83,7 +83,7 @@ static int	handle_files_out(t_list *files_out, int *fd, char **env)
 		o_flag = O_RDWR | O_TRUNC | O_CREAT;
 		if (file->append_mode)
 			o_flag = O_APPEND | O_RDWR | O_CREAT;
-		if (file_redirect(file->path, stdout, o_flag))
+		if (file_redirect(file->path, STDOUT_FILENO, o_flag))
 			return (errno);
 		files_out = files_out->next;
 	}
@@ -91,7 +91,7 @@ static int	handle_files_out(t_list *files_out, int *fd, char **env)
 	{
 		if (pipe(fd))
 			return (error(errno, NULL));
-		if (dup_and_close(fd[1], stdout))
+		if (dup_and_close(fd[1], STDOUT_FILENO))
 			return (error(errno, NULL));
 	}
 	return (0);
@@ -109,16 +109,16 @@ static int	handle_files_out(t_list *files_out, int *fd, char **env)
 /// (only redirection).
 /// ```< 0``` corresponding to builtin exit status if failed in parent.
 static int	handle_command(t_command *command, int *fd,
-				int *old_fd, char ***env)
+				int *old_fd, t_data *data)
 {
 	int	id;
 
 	id = 0;
-	if (handle_files_in(command->files_in, old_fd, *env)
-		&& handle_file_out(command->files_out, fd, *env))
+	if (handle_files_in(command->files_in, old_fd, *data->env)
+		&& handle_file_out(command->files_out, fd, *data->env))
 	{
 		if (command->argv)
-			id = exec_command(command, fd, old_fd, env);
+			id = exec_command(command, fd, old_fd, data->env);
 		return (id);
 	}
 	return (-1);
@@ -132,7 +132,7 @@ static int	handle_command(t_command *command, int *fd,
 /// @param old_fd Previous command's pipe fd. ```NULL``` for first command.
 /// @return Last command's process id. ```<= 0``` if last command was
 /// a builtin executed in parent (in this case it represents the exit status)
-int	exec_pipe(t_list *commands, char ***env, int *old_fd)
+int	exec_pipe(t_list *commands, t_data *data, int *old_fd)
 {
 	int		fd[2];
 	int		id;
@@ -141,11 +141,11 @@ int	exec_pipe(t_list *commands, char ***env, int *old_fd)
 	{
 		if (pipe(fd))
 			return (error(errno, NULL));
-		handle_command((t_command *) commands->content, fd, old_fd, env);
-		id = exec_pipe(commands->next, env, fd);
+		handle_command((t_command *) commands->content, fd, old_fd, data);
+		id = exec_pipe(commands->next, data, fd);
 	}
 	else
 		id = handle_command((t_command *) commands->content,
-				NULL, old_fd, env);
+				NULL, old_fd, data);
 	return (id);
 }
