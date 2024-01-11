@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:45:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/09 17:02:37 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:36:59 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ t_atom	*redir_in(t_atom *atom, t_atom *newline)
 			if (!next)
 			{
 				error = newline;
-				break;
+				break ;
 			}
 			if (next->type != litteral)
 			{
 				error = next;
-				break;
+				break ;
 			}
 		}
 		pt = pt->next;
@@ -59,12 +59,12 @@ t_atom	*redir_out(t_atom *atom, t_atom *newline)
 			if (!next)
 			{
 				error = newline;
-				break;
+				break ;
 			}
 			if (next->type != litteral)
 			{
 				error = next;
-				break;
+				break ;
 			}
 		}
 		pt = pt->next;

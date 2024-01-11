@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:23:17 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 10:51:34 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:36:23 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	syntax_check(t_atom *atom)
 		return (1);
 	}
 	free_atom(newline);
-	error =  parenth_close(atom);
+	error = parenth_close(atom);
 	if (error)
 		return (parse_error(1, error->content));
 	return (0);

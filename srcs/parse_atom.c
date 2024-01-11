@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:32:36 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 14:08:57 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:19:15 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_atom	*get_type(t_atom *new, char c)
 void	print_atom(t_atom *atom)
 {
 	if (!atom)
-		printf("(null)\n") ;
+		printf("(null)\n");
 	while (atom)
 	{
 		ft_printf("content: %s, type: %d, subtype: %d\n", \
@@ -88,6 +88,7 @@ void	print_atom(t_atom *atom)
 /// @brief parse the line and assign its type to each character
 /// @param line
 /// @return a pointer to the first atom of the line
+
 t_atom	*parse_by_atom(char *line)
 {
 	t_atom	*pt;
@@ -111,7 +112,5 @@ t_atom	*parse_by_atom(char *line)
 		atom_addback(&pt, atom);
 		line++;
 	}
-	return(pt);
+	return (pt);
 }
-
-

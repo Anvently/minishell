@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 12:00:28 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:35:57 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_atom	*find_redir(t_atom *start, t_atom *end)
 	else
 		return (NULL);
 }
+
 int	inscribe_file(t_list **lst, t_atom *file)
 {
 	t_file_rd	*pt;
@@ -62,7 +63,7 @@ t_list	*get_files(t_atom **start, t_atom *end)
 	{
 		next_file = find_redir(*start, end);
 		if (!next_file)
-			break;
+			break ;
 		new = new_file_node();
 		if (!new)
 			return (NULL);
@@ -74,5 +75,3 @@ t_list	*get_files(t_atom **start, t_atom *end)
 	}
 	return (pt);
 }
-
-

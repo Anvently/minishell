@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:06:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/08 11:47:22 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:23:14 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,18 @@ void	free_atom(t_atom *atom)
 	atom->next = NULL;
 	free(atom);
 }
-/// @brief merge two atom into one keeping the ppointer to the first and merging the content
+/// @brief merge two atom into the first
 /// @param a1 the first atom
 /// @param a2 the second one, to be free'ed during the process
 /// @param type the type of the new atom
 /// @param subtype ..
 /// @return
-int	merge_atom(t_atom **a1, t_atom **a2, t_atom_type type, t_atom_subtype subtype)
+
+int	merge_atom(t_atom **a1, t_atom **a2, \
+t_atom_type type, t_atom_subtype subtype)
 {
 	char	*temp;
 	t_atom	*pt;
-
 
 	temp = ft_strjoin((*a1)->content, (*a2)->content);
 	pt = (*a2)->next;
@@ -92,5 +93,3 @@ void	atom_addback(t_atom **pt, t_atom *atom)
 	else
 		atom_last(*pt)->next = atom;
 }
-
-

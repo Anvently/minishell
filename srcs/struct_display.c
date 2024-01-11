@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:53:10 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 14:33:21 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:39:18 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	file_display(void *file)
 	if (!pt)
 		return ;
 	printf("\n/----FILE----/\n");
-	printf("path:%s\ntype:%d\nappend:%d\nunlink:%d\n", pt->path,pt->type, pt->append_mode, pt->unlink);
+	printf("path:%s\ntype:%d\nappend:%d\nunlink:%d\n", \
+	pt->path, pt->type, pt->append_mode, pt->unlink);
 }
 
 void	command_display(void *command)

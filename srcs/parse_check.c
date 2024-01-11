@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:21:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 13:15:26 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:28:31 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt)
 /// @brief check for || and assign its subtype
 /// @param atom the list to check
 /// @return
+
 int	check_double_pipe(t_atom *atom)
 {
 	t_atom	*pt;
@@ -65,6 +66,7 @@ int	check_double_pipe(t_atom *atom)
 /// @brief checks for && and merge and assign the correct subtype
 /// @param atom
 /// @return
+
 int	check_double_and(t_atom *atom)
 {
 	t_atom	*pt;
@@ -91,3 +93,21 @@ int	check_double_and(t_atom *atom)
 	return (0);
 }
 
+int	check_double_errors(t_atom *atom)
+{
+	int	check;
+
+	check = check_double_redir(atom, redirection_in, double_in);
+	if (check)
+		return (check);
+	check = check_double_redir(atom, redirection_out, double_out);
+	if (check)
+		return (check);
+	check = check_double_pipe(atom);
+	if (check)
+		return (check);
+	check = check_double_and(atom);
+	if (check < 0)
+		return (check);
+	return (check);
+}

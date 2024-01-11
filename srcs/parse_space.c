@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:42:41 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/08 14:48:04 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:32:23 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,19 @@
 /*
 the 2 functins below will merge sequence of spaces into just one
 */
-int	create_space(t_atom *pt, char **env)
+int	create_space(t_atom *pt)
 {
 	while (pt && pt->next && pt->next->type == space)
 	{
 		if (merge_atom(&pt, &pt->next, space, none))
 		{
-			ft_free_strs(env);
 			return (-1);
 		}
 	}
 	return (0);
 }
 
-int	merge_space(t_atom *atom, char **env)
+int	merge_space(t_atom *atom)
 {
 	t_atom	*pt;
 
@@ -39,17 +38,12 @@ int	merge_space(t_atom *atom, char **env)
 	{
 		if (pt->type == space)
 		{
-			if (create_space(pt, env))
+			if (create_space(pt))
 			{
-				free_atom_list(atom);
-				parse_error(-1, NULL);
-				exit (-1);
+				return (-1);
 			}
 		}
 		pt = pt->next;
 	}
 	return (0);
-
 }
-
-

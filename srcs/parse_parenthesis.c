@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 09:35:45 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 13:47:47 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:33:58 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_atom	*find_closing(t_atom *atom)
 	while (pt)
 	{
 		if (pt && pt->subtype == right_p && count == 0)
-			break;
+			break ;
 		if (pt && pt->subtype == right_p && count)
 			count--;
 		if (pt && pt->subtype == left_p)
@@ -33,15 +33,17 @@ t_atom	*find_closing(t_atom *atom)
 	}
 	return (pt);
 }
+
 int	litteralize_atoms(t_atom *start, t_atom *end)
 {
 	t_atom	*pt;
+
 	pt = start->next;
 	if (pt == end)
 		return (0);
 	while (pt->next != end)
 	{
-		if(merge_atom(&pt, &pt->next, litteral, none) < 0)
+		if (merge_atom(&pt, &pt->next, litteral, none) < 0)
 			return (-1);
 	}
 	return (0);
@@ -60,4 +62,3 @@ int	litteralize_parenthesis(t_atom *atom)
 	atom = closing_p;
 	return (litteralize_parenthesis(atom));
 }
-

@@ -6,14 +6,13 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:37:59 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 09:09:18 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:37:38 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <parse.h>
-
 
 t_atom	*separator_syntax(t_atom *atom, t_atom *newline)
 {
@@ -29,16 +28,15 @@ t_atom	*separator_syntax(t_atom *atom, t_atom *newline)
 	{
 		pt = go_to(pt->next, NULL, separator, 42);
 		if (!pt)
-			break;
+			break ;
 		next = skip_space(pt->next);
 		if (next && (next->type == separator))
 		{
 			error = next;
-			break;
+			break ;
 		}
 		if (!next)
 			return (newline);
 	}
-
 	return (error);
 }

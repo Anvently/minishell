@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:06:57 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 12:23:45 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:34:39 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	free_t_file(void *file)
 	t_file_rd	*pt;
 
 	pt = (t_file_rd *)file;
-
 	if (!pt)
 		return ;
 	if (pt->path)
@@ -56,7 +55,7 @@ t_list	*new_file_node(void)
 
 void	free_t_command(void *comd)
 {
-	t_command *cmd;
+	t_command	*cmd;
 
 	cmd = (t_command *)comd;
 	if (!cmd)

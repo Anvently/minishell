@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 10:54:37 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 10:10:44 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:23:39 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	free_atom_list(t_atom *pt)
 		free(temp);
 	}
 }
+
 void	delete_atom(t_atom *previous, t_atom *to_del)
 {
 	t_atom	*pt;
