@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:06:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/05 14:26:45 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/08 11:47:22 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include <libft.h>
 #include <parse.h>
 
+/// @brief create a atom node and return a pointer to it
+/// @param str the content of the node
+/// @param type the type
+/// @param subtype
+/// @return
 t_atom	*create_atom(char *str, int type, int subtype)
 {
 	t_atom	*new;
@@ -44,7 +49,12 @@ void	free_atom(t_atom *atom)
 	atom->next = NULL;
 	free(atom);
 }
-
+/// @brief merge two atom into one keeping the ppointer to the first and merging the content
+/// @param a1 the first atom
+/// @param a2 the second one, to be free'ed during the process
+/// @param type the type of the new atom
+/// @param subtype ..
+/// @return
 int	merge_atom(t_atom **a1, t_atom **a2, t_atom_type type, t_atom_subtype subtype)
 {
 	char	*temp;
@@ -66,6 +76,8 @@ int	merge_atom(t_atom **a1, t_atom **a2, t_atom_type type, t_atom_subtype subtyp
 
 t_atom	*atom_last(t_atom *pt)
 {
+	if (!pt)
+		return (NULL);
 	while (pt && pt->next)
 		pt = pt->next;
 	return (pt);

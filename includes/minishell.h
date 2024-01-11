@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 13:19:41 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 14:48:46 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 
 # include <libft.h>
 
+# include <fcntl.h>
+
+# define HEREPATH "/tmp/heredoc_"
+
 /// @note interperet : 0 = NO || 1 = YES
 /// @note append_mod : 0 = NO || 1 = YES
+/// @note type       : 0 = <  || 1 = << || 2 = > || 3 = >>
 typedef struct s_file_rd {
 	char	*path;
-	bool	interpret_wc;
-	bool	interpret_var;
+	int		type;
+	bool	unlink;
 	bool	append_mode;
 }			t_file_rd;
 
@@ -145,5 +150,19 @@ char	**env_copy(char **env, int size);
 int		set_var_value(char *var, char *value, char ***env);
 char	*get_var_value(char *var, char **env);
 bool	is_var_defined(char *var, char **env);
+
+/* -------------------------------------------------------------------------- */
+/*                                    STRUCTS UTILS                           */
+/* -------------------------------------------------------------------------- */
+
+t_list		*new_file_node(void);
+t_list		*new_pipe_node(void);
+t_list		*new_cmd_node(void);
+void		free_t_command(void *comd);
+void		free_t_file(void *file);
+void		free_t_pipe(void *tpip);
+t_command	*init_t_command(t_command *cmd);
+t_pipe		*init_t_pipe(t_pipe *pip);
+void	init_t_file(t_file_rd *file);
 
 #endif

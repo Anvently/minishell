@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:32:36 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/05 14:40:11 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/10 08:52:32 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include <libft.h>
 #include <parse.h>
 
+/*
+the two function below are used to get the type of a given character
+it allocates memory inside an atom node to store the character
+*/
 t_atom	*find_type(t_atom *new, char c, t_atom types[])
 {
 	int		i;
@@ -55,11 +59,14 @@ t_atom	*get_type(t_atom *new, char c)
 	{"||", separator, x_or, NULL},
 	{"'", simple_quote, none, NULL},
 	{"\"", double_quote, none, NULL},
-	{"$", variable, none, NULL},
+	{"$", litteral, var, NULL},
+	{"*", wildcard, none, NULL},
 	{" ", space, none, NULL},
 	{"\t", space, none, NULL},
 	{"\r", space, none, NULL},
 	{"\f", space, none, NULL},
+	{"(", parenth, left_p, NULL},
+	{")", parenth, right_p, NULL},
 	{0, 0, 0, 0}
 	};
 
@@ -69,6 +76,8 @@ t_atom	*get_type(t_atom *new, char c)
 
 void	print_atom(t_atom *atom)
 {
+	if (!atom)
+		return ;
 	while (atom)
 	{
 		ft_printf("content: %s, type: %d, subtype: %d\n", \
@@ -76,7 +85,9 @@ void	print_atom(t_atom *atom)
 		atom = atom->next;
 	}
 }
-
+/// @brief parse the line and assign its type to each character
+/// @param line
+/// @return a pointer to the first atom of the line
 t_atom	*parse_by_atom(char *line)
 {
 	t_atom	*pt;
