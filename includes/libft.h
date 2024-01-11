@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 09:23:38 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/04 16:31:01 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 10:48:30 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	*null_error(char *msg);
 void	ft_print_strs(char **strs);
 
 /*--------------------------------------------------------------
----------------------------- BONUS -----------------------------
+---------------------------- LIST ------------------------------
 -----------------------------------------------------------------*/
 
 typedef struct s_list
@@ -134,10 +134,17 @@ void	ft_lstclear(t_list **list, void (*del)(void *));
 void	ft_lstiter(t_list *list, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
+
 ///----------------------- READ ------------------------------
 
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
+void	ft_lstprint(t_list *pt, void (*disp)(void *));
+
+/* ------------------------------- STRING LIST ------------------------------ */
+
+void	ft_lst_str_print(t_list *lst);
+int		ft_lst_str_append(t_list **lst, char *str);
 
 ///-----------------------------------------------------------
 

@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 10:33:30 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 12:00:28 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_atom	*find_redir(t_atom *start, t_atom *end)
 		return (NULL);
 	while (start && start != end && !is_redir(start->type))
 		start = start->next;
+	if (!start)
+		return (NULL);
 	if (is_redir(start->type))
 		return (start);
 	else
@@ -36,24 +38,26 @@ int	inscribe_file(t_list **lst, t_atom *file)
 {
 	t_file_rd	*pt;
 
-	pt = (t_file_rd *)(*lst);
+	pt = (t_file_rd *)((*lst)->content);
 	if (file->subtype == double_in)
 		pt->unlink = 1;
 	if (file->subtype == double_out)
 		pt->append_mode = 1;
 	pt->type = file->subtype - 3;
-	pt->path = ft_strdup(file->content);
+	pt->path = ft_strdup(file->next->content);
 	if (!pt->path)
 		return (-1);
 	return (0);
 }
 
-t_list	*get_files(t_list **lst, t_atom **start, t_atom *end)
+t_list	*get_files(t_atom **start, t_atom *end)
 {
 	t_list	*new;
+	t_list	*pt;
 	t_atom	*next_file;
 	t_atom	*file_name;
 
+	pt = NULL;
 	while (1)
 	{
 		next_file = find_redir(*start, end);
@@ -66,7 +70,9 @@ t_list	*get_files(t_list **lst, t_atom **start, t_atom *end)
 		if (inscribe_file(&new, file_name) < 0)
 			return (NULL);
 		*start = remove_file_from_atom(*start, next_file);
-		ft_lstadd_back(lst, new);
+		ft_lstadd_back(&pt, new);
 	}
-	return (*lst);
+	return (pt);
 }
+
+

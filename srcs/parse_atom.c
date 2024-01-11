@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:32:36 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 08:52:32 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 14:08:57 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_atom	*get_type(t_atom *new, char c)
 void	print_atom(t_atom *atom)
 {
 	if (!atom)
-		return ;
+		printf("(null)\n") ;
 	while (atom)
 	{
 		ft_printf("content: %s, type: %d, subtype: %d\n", \

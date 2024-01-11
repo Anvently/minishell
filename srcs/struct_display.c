@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:53:10 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 14:11:52 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 14:33:21 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	file_display(void *file)
 	if (!pt)
 		return ;
 	printf("\n/----FILE----/\n");
-	printf("path:%s\nappend:%d\nunlink:%d\n", pt->path, pt->append_mode, pt->unlink);
+	printf("path:%s\ntype:%d\nappend:%d\nunlink:%d\n", pt->path,pt->type, pt->append_mode, pt->unlink);
 }
 
 void	command_display(void *command)
@@ -43,11 +43,9 @@ void	command_display(void *command)
 		return ;
 	printf("\n/----COMMAND----/\n");
 	printf("args:\n");
-	ft_print_strs(pt->argv);
-	printf("files_in:\n");
-	lst_display(pt->files_in, file_display);
-	printf("files_out:\n");
-	lst_displat(pt->files_out, file_display);
+	ft_lst_str_print(pt->argv);
+	printf("files:\n");
+	lst_display(pt->files, file_display);
 }
 
 void	pipe_display(void *pip)
@@ -58,7 +56,7 @@ void	pipe_display(void *pip)
 	if (!pt)
 		return ;
 	printf("\n/----PIPE----/\n");
-	printf("condition: %d", pt->condition);
-	printf("command list:/n");
+	printf("condition: %d\n", pt->condition);
+	printf("command list:\n");
 	lst_display(pt->commands, command_display);
 }
