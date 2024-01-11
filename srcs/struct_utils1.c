@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:06:57 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 17:10:51 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 12:23:45 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ t_list	*new_file_node(void)
 		free_t_file(file);
 		return (NULL);
 	}
-	new->next = NULL;
 	return (new);
 }
 
@@ -63,11 +62,9 @@ void	free_t_command(void *comd)
 	if (!cmd)
 		return ;
 	if (cmd->argv)
-		free(cmd->argv);
-	if (cmd->files_in)
-		ft_lstclear(&cmd->files_in, free_t_file);
-	if (cmd->files_out)
-		ft_lstclear(&cmd->files_out, free_t_file);
+		ft_lstclear(&cmd->argv, free);
+	if (cmd->files)
+		ft_lstclear(&cmd->files, free_t_file);
 	free(cmd);
 }
 
@@ -76,18 +73,6 @@ t_command	*init_t_command(t_command *cmd)
 	if (!cmd)
 		return (NULL);
 	cmd->argv = NULL;
-	cmd->files_in = NULL;
-	// if (!cmd->files_in)
-	// {
-	// 	free(cmd);
-	// 	return (NULL);
-	// }
-	cmd->files_out = NULL;
-	// if (!cmd->files_out)
-	// {
-	// 	free_t_file(cmd->files_in);
-	// 	free(cmd);
-	// 	return (NULL);
-	// }
+	cmd->files = NULL;
 	return (cmd);
 }

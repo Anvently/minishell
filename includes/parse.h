@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 10:27:22 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 14:38:52 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ typedef enum 	e_atom_type
 typedef enum	e_atom_subtype
 {
 	pipeline,
-	s_and,
+	double_and,
 	x_or,
 	simple_in,
 	double_in,
 	simple_out,
 	double_out,
-	double_and,
+	s_and,
 	left_p,
 	right_p,
 	var,
@@ -99,8 +99,11 @@ t_atom	*parenth_close(t_atom *atom);
 
 /*-----------------BUILD STRUCT--------------------*/
 
-int	litteralize_parenthesis(t_atom *atom);
-t_list	*get_files(t_list **lst, t_atom **start, t_atom *end);
+int		litteralize_parenthesis(t_atom *atom);
+t_list	*get_commands(t_list **lst, t_atom **atom, t_atom *end);
+t_list	*get_files(t_atom **start, t_atom *end);
+t_list	*get_argv(t_atom **atom, t_atom *next);
+int		build_struct(t_list **lst, t_atom **atom, int condition);
 
 
 

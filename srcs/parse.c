@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 10:28:06 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 14:39:47 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,19 @@ int	check_double_errors(t_atom *atom, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	t_atom *pt;
-	char	*line = "<file1 >file2 >file3 cat -e <<file4 grep 5 >>file5";
+	char	*line = "<file1 <<LIM cat -e | (grep 458 >out) && echo 4 || <<LIM grep 4 | sleep 4 >>out";
 	t_list	*lst;
 
 	(void)argv;
 	(void)argc;
+	lst = NULL;
 	pt = parse_by_atom(line);
 	quote_litteral(pt);
 	trim_quotes(pt);
 	//expand_dollar(pt, env);
 	merge_litteral(pt, env);
 	merge_space(pt, env);
-	print_atom(pt);
+	//print_atom(pt);
 	if (check_double_errors(pt, env) == 0)
 	{
 		syntax_check(pt);
@@ -97,6 +98,8 @@ int	main(int argc, char **argv, char **env)
 		print_atom(pt);
 		printf("@@@@@@@@@@@@@@@@@@@@@\n");
 	}
-	lst = get_files(NULL, &pt, NULL);
+	build_struct(&lst, &pt, 0);
+	lst_display(lst, pipe_display);
+	//print_atom(pt);
 	free_atom_list(pt);
 }

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 14:48:46 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 14:54:24 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <libft.h>
 
 # include <fcntl.h>
+# include <errno.h>
 
 # define HEREPATH "/tmp/heredoc_"
 
@@ -47,9 +48,8 @@ typedef struct s_pipe {
 /// Ends with ```NULL```.
 /// @note If no command given, argv is ```NULL```
 typedef struct s_command {
-	t_list		*files_in;
-	t_list		*files_out;
-	char		**argv;
+	t_list		*files;
+	t_list		*argv;
 }				t_command;
 
 typedef struct s_data {
@@ -164,5 +164,9 @@ void		free_t_pipe(void *tpip);
 t_command	*init_t_command(t_command *cmd);
 t_pipe		*init_t_pipe(t_pipe *pip);
 void	init_t_file(t_file_rd *file);
+void	lst_display(t_list *pt, void (*disp)(void *));
+void	file_display(void *file);
+void	command_display(void *command);
+void	pipe_display(void *pip);
 
 #endif
