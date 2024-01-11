@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 13:58:46 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 18:57:54 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 10:18:46 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	interpret_metachar(char *str, t_list **results, t_data *data)
 	if (word_list && t_word_interpret(word_list, results))
 	{
 		ft_lstclear(&word_list, t_word_free);
-		return (error(errno, "interpreting wildcards"));
+		return (errno);
 	}
 	ft_lstclear(&word_list, t_word_free);
 	return (0);

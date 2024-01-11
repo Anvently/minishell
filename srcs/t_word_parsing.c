@@ -6,14 +6,14 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 18:06:45 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 09:48:41 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-int	t_word_parse(char *str, t_list **word_list, t_data *data);
+int		t_word_parse(char *str, t_list **word_list, t_data *data);
 char	*t_word_get_exit_status(char *str, t_list **word_list, t_data *data);
 int		t_word_concat_dup(t_list *word_list);
 
