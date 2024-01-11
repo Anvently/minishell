@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:12:24 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 14:36:38 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:39:59 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_atom	*find_logical_separator(t_atom *atom)
 		atom = atom->next;
 	return (atom);
 }
+
 t_atom	*find_next_pipe(t_atom *start, t_atom *end)
 {
 	while (start && start != end && start->subtype != pipeline)
@@ -61,7 +62,8 @@ int	build_struct(t_list **lst, t_atom **atom, int condition)
 	if (!new)
 		return (-1);
 	next_separator = find_logical_separator(*atom);
-	((t_pipe *)new->content)->commands = get_commands(&((t_pipe *)new->content)->commands, atom, next_separator);
+	((t_pipe *)new->content)->commands = \
+	get_commands(&((t_pipe *)new->content)->commands, atom, next_separator);
 	if (!new->content)
 	{
 		ft_lstdelone(new, free_t_pipe);

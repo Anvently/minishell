@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:27:50 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 17:00:04 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:35:11 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_list	*new_cmd_node(void)
 	new->next = NULL;
 	return (new);
 }
+
 void	free_t_pipe(void *tpip)
 {
 	t_pipe	*pip;
@@ -44,6 +45,7 @@ void	free_t_pipe(void *tpip)
 	ft_lstclear(&pip->commands, free_t_command);
 	free(pip);
 }
+
 t_pipe	*init_t_pipe(t_pipe *pip)
 {
 	if (!pip)
@@ -52,6 +54,7 @@ t_pipe	*init_t_pipe(t_pipe *pip)
 	pip->condition = 0;
 	return (pip);
 }
+
 t_list	*new_pipe_node(void)
 {
 	t_pipe	*pip;
@@ -64,7 +67,7 @@ t_list	*new_pipe_node(void)
 	if (!pip)
 		return (NULL);
 	new = ft_lstnew(pip);
-	if  (!new)
+	if (!new)
 	{
 		free_t_pipe(pip);
 		return (NULL);

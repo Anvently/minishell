@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:00:25 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 10:02:22 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:29:43 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,31 @@
 #include <libft.h>
 #include <parse.h>
 
-int	parse_free(t_atom *atom, char **env, int err, char *str)
+int	parse_free(t_atom *atom, int err)
 {
 	free_atom_list(atom);
-	if (err == -1)
-		ft_free_strs(env);
-	parse_error(err, str);
-	if (err == -1)
-		exit (-1);
 	return (err);
 }
 
-t_atom	*go_to(t_atom *atom, char *content, t_atom_type type, t_atom_subtype subt)
+t_atom	*go_to(t_atom *atom, char *content, \
+t_atom_type type, t_atom_subtype subt)
 {
 	if (content)
 	{
 		while (atom && atom->content[0] != content[0])
-			atom =atom->next;
+			atom = atom->next;
 		return (atom);
 	}
 	else if (subt < 42)
 	{
 		while (atom && (atom->type != type || atom->subtype != subt))
-			atom =atom->next;
+			atom = atom->next;
 		return (atom);
 	}
 	else
 	{
-		while(atom && atom->type != type)
-			atom= atom->next;
+		while (atom && atom->type != type)
+			atom = atom->next;
 		return (atom);
 	}
 }
