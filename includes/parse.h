@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 14:38:52 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 16:09:54 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,15 @@ t_atom	*remove_file_from_atom(t_atom *atom, t_atom *file);
 int	check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt);
 int	check_double_pipe(t_atom *atom);
 int	check_double_and(t_atom *atom);
+int	check_double_errors(t_atom *atom);
 int	check_void(t_atom *atom);
-int	expand_dollar(t_atom *atom, char **env);
-int	merge_litteral(t_atom *atom, char **env);
-int	merge_space(t_atom *atom, char **env);
-int	parse_free(t_atom *atom, char **env, int err, char *str);
+int	expand_dollar(t_atom *atom);
+int	merge_litteral(t_atom *atom);
+int	merge_space(t_atom *atom);
+int	parse_free(t_atom *atom, int err);
 t_atom	*find_first(t_atom *a1, t_atom *a2, t_atom *list);
+void	quote_litteral(t_atom *pt);
+void	trim_quotes(t_atom *atom);
 
 /*---------------SYNTAX CHECK--------------------------*/
 
