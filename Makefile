@@ -22,7 +22,10 @@ SRCS_FILES	=	parse_atom.c \
 				syntax_parenthesis.c \
 				syntax_redirection.c \
 				syntax_separator.c \
-				error.c
+				error.c \
+				struct_display.c \
+				struct_make.c \
+				struct_make_argv.c
 
 
 OBJS		=	$(addprefix $(OBJS_FOLDER),$(SRCS_FILES:.c=.o))
