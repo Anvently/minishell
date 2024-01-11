@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 11:13:44 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 14:51:10 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	builtin_error(int err, char *builtin, char *value, char *context)
 int	free_data(int err, t_data *data)
 {
 	//free pipe_list
-	ft_free_strs(*data->env);
-	*data->env = NULL;
+	ft_free_strs(data->env);
+	data->env = NULL;
 	return (err);
 }

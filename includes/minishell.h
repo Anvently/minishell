@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 14:29:13 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 14:54:24 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ typedef struct s_command {
 
 typedef struct s_data {
 	t_list		*pipe_list;
-	char		***env;
+	char		**env;
+	int			exit_status;
+	char		*exe_path;
 }				t_data;
 
 ///* #### Word are separated by :
@@ -62,25 +64,16 @@ typedef struct s_data {
 ///*		- when inside '', nothing is separated
 ///* ```content``` Litteral content of word
 ///* #### quote
-///* ```quote = 0``` outside quote (* and $ are interpreted)
-///* ```quote = "``` "" (only $ are interpreted)
-///* ```quote = '``` '' (no metachar are interpreted)
+///* ```quote = false``` outside quote (* and $ are interpreted)
+///* ```quote = true``` "" (only $ are interpreted)
 ///* #### type
 ///* ```type = 0``` litteral
 ///* ```type = $``` variable (not including $)
 ///* ```type = *``` wildcard (not including *, content is NULL)
 typedef struct s_word {
 	char		*content;
-	char		quote;
 	char		type;
-
 }				t_word;
-
-/* --------------------------- STRUCT T_WORD UTILS -------------------------- */
-
-t_list	*t_word_new_node(void);
-void	t_word_init(t_word *word);
-void	t_word_free(void *word);
 
 /* ---------------------------------- ERROR --------------------------------- */
 
@@ -119,9 +112,22 @@ bool	command_is_builtin(char *command);
 
 /* -------------------------------- META-CHARACTERS ------------------------- */
 
+int		interpret_metachar(char *str, t_list **results, t_data *data);
+int		check_files_meta(t_list *files, t_data *data);
+int		t_word_parse(char *str, t_list **word_list, t_data *data);
+char	*t_word_parse_next(char *str, t_list **word_list, bool *quote,
+			t_data *data);
+char	*t_word_get_exit_status(char *str, t_list **word_list, t_data *data);
+int		t_word_concat_dup(t_list *word_list);
+int		t_word_interpret(t_list *words, t_list **results);
 
-int		expand_var(char *str, t_list **results, char **env);
-int		check_files_meta(t_list *files, char **env);
+/* --------------------------- STRUCT T_WORD UTILS -------------------------- */
+
+t_list	*t_word_new_node(char *str, char type);
+void	t_word_init(t_word *word, char *str, char type);
+void	t_word_free(void *word);
+void	t_word_print(void *content);
+char	*t_word_concat_str(t_list *word_list);
 
 /* -------------------------------------------------------------------------- */
 /*                                  BUILTINs                                  */
