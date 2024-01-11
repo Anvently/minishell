@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 08:08:43 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 10:27:22 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ typedef enum 	e_atom_type
 
 typedef enum	e_atom_subtype
 {
+	pipeline,
+	s_and,
+	x_or,
 	simple_in,
 	double_in,
 	simple_out,
 	double_out,
-	pipeline,
 	double_and,
-	x_or,
-	s_and,
 	left_p,
 	right_p,
 	var,
@@ -76,6 +76,7 @@ t_atom	*atom_last_but_one(t_atom *atom);
 t_atom	*skip_space(t_atom *atom);
 t_atom	*go_to(t_atom *atom, char *content, t_atom_type type, t_atom_subtype subt);
 t_atom	*go_to_previous(t_atom *list, t_atom *target);
+t_atom	*remove_file_from_atom(t_atom *atom, t_atom *file);
 
 /*---------------ATOMS CHECK------------------*/
 int	check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt);
@@ -96,7 +97,10 @@ t_atom	*redir_syntax(t_atom *atom, t_atom *newline);
 t_atom	*separator_syntax(t_atom *atom, t_atom *newline);
 t_atom	*parenth_close(t_atom *atom);
 
+/*-----------------BUILD STRUCT--------------------*/
 
+int	litteralize_parenthesis(t_atom *atom);
+t_list	*get_files(t_list **lst, t_atom **start, t_atom *end);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:00:25 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 08:43:50 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 10:02:22 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_atom	*go_to(t_atom *atom, char *content, t_atom_type type, t_atom_subtype subt
 			atom =atom->next;
 		return (atom);
 	}
-	else if (subt <= 42)
+	else if (subt < 42)
 	{
 		while (atom && (atom->type != type || atom->subtype != subt))
 			atom =atom->next;

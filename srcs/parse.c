@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 10:50:35 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 10:28:06 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	check_double_errors(t_atom *atom, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	t_atom *pt;
-	char	*line = "";
+	char	*line = "<file1 >file2 >file3 cat -e <<file4 grep 5 >>file5";
+	t_list	*lst;
 
 	(void)argv;
 	(void)argc;
@@ -90,9 +91,12 @@ int	main(int argc, char **argv, char **env)
 	print_atom(pt);
 	if (check_double_errors(pt, env) == 0)
 	{
+		syntax_check(pt);
+		litteralize_parenthesis(pt);
 		printf("@@@@@@@@@@@@@@@@@@@@@\n");
 		print_atom(pt);
+		printf("@@@@@@@@@@@@@@@@@@@@@\n");
 	}
-	syntax_check(pt);
+	lst = get_files(NULL, &pt, NULL);
 	free_atom_list(pt);
 }

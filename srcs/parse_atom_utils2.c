@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 10:54:37 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/08 11:39:48 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/11 10:10:44 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,28 @@ t_atom	*atom_last_but_one(t_atom *atom)
 	return (atom);
 }
 
+t_atom	*remove_file_from_atom(t_atom *atom, t_atom *file)
+{
+	t_atom	*previous;
 
+	if (atom == file)
+	{
+		atom = atom->next->next;
+		previous = file->next;
+		free_atom(file);
+		while (previous->type != litteral)
+		{
+			file = previous;
+			previous = previous->next;
+			free_atom(file);
+		}
+		free_atom(previous);
+		return (atom);
+	}
+	previous = atom;
+	while (previous->next != file)
+		previous = previous->next;
+	delete_atom(previous, file);
+	delete_atom(previous, previous->next);
+	return (atom);
+}
