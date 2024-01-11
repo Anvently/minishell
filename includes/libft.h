@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 09:23:38 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 14:55:16 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 15:37:38 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ void	ft_lstiter(t_list *list, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstmerge(t_list *node, t_list **from);
 
-
 ///----------------------- READ ------------------------------
 
 int		ft_lstsize(t_list *lst);
@@ -147,6 +146,8 @@ void	ft_lstprint(t_list *pt, void (*disp)(void *));
 
 void	ft_lst_str_print(t_list *lst);
 int		ft_lst_str_append(t_list **lst, char *str);
+char	**ft_lsttostrs(t_list *list);
+t_list	*ft_strstolst(char **strs);
 
 ///-----------------------------------------------------------
 

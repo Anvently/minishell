@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 16:45:02 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 13:19:26 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 16:38:13 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*t_word_concat_str(t_list *word_list)
 	{
 		word = (t_word *)word_list->content;
 		if (word->type != '*')
-			str_tmp = ft_strjoin2(str, word->content);
+			str_tmp = ft_strjoin2(str, (char *)word->content);
 		else if (word->type == '*')
 			str_tmp = ft_strjoin2(str, "*");
 		free(str);

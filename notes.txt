@@ -53,5 +53,5 @@ test'"ded de $PATH'
 
 
 TODO :
-
-
+	- change file redirection
+	-
