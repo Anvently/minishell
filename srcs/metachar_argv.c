@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:11:12 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 16:34:50 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 17:37:46 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,10 @@ static int	expand_arg(t_list *arg, t_list **next, t_data *data)
 		ft_lstclear(&word_list, t_word_free);
 		return (error(errno, "concatenating word"));
 	}
-	ft_lstprint(word_list, t_word_print);
 	results = NULL;
 	err = t_word_interpret(word_list, &results);
 	if (!err)
 		*next = merge_results(arg, &results);
-	if (!err)
-		ft_lst_str_print(arg);
 	ft_lstclear(&results, free);
 	ft_lstclear(&word_list, t_word_free);
 	return (err);

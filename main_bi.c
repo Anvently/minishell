@@ -1,6 +1,7 @@
 #include <libft.h>
 #include <minishell.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <errno.h>
 
 /* int	main(void)
@@ -32,7 +33,6 @@ static int	update_argv(char ***argv, t_data *data)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	**env_cop;
 	char	**strs;
 	char	*line;
 	t_data	data;
@@ -45,6 +45,7 @@ int	main(int argc, char **argv, char **env)
 		return (-1);
 	while ((line = readline("minishell: ")))
 	{
+		add_history(line);
 		strs = ft_split(line, ' ');
 		if (!strs) {
 			free(line);
@@ -59,9 +60,9 @@ int	main(int argc, char **argv, char **env)
 			exit(errno);
 		}
 		if (!ft_strcmp(strs[0], "export"))
-			printf("status = %d\n", builtin_export(strs, &env_cop));
+			printf("status = %d\n", builtin_export(strs, &data.env));
 		else if (!ft_strcmp(strs[0], "env"))
-			printf("status = %d\n", builtin_env(env_cop));
+			printf("status = %d\n", builtin_env(data.env));
 		else if (!ft_strcmp(strs[0], "echo"))
 			printf("status = %d\n", builtin_echo(strs));
 		else if (!ft_strcmp(strs[0], "exit"))
@@ -72,11 +73,11 @@ int	main(int argc, char **argv, char **env)
 			builtin_exit(strs);
 		}
 		else if (!ft_strcmp(strs[0], "unset"))
-			printf("status = %d\n", builtin_unset(strs, &env_cop));
+			printf("status = %d\n", builtin_unset(strs, &data.env));
 		else if (!ft_strcmp(strs[0], "pwd"))
 			printf("status = %d\n", builtin_pwd());
 		else if (!ft_strcmp(strs[0], "cd"))
-			printf("status = %d\n", builtin_cd(strs, &env_cop));
+			printf("status = %d\n", builtin_cd(strs, &data.env));
 		free(line);
 		ft_free_strs(strs);
 	}

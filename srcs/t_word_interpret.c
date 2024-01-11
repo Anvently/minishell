@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 13:20:02 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 17:50:30 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <dirent.h>
 
 static bool	is_match(t_list *word_list, char *path);
+static int	add_default_result(t_list **results, t_list *word_list);
+static bool	is_ignored(t_list *word_list, char *path);
 int			t_word_interpret(t_list *words, t_list **results);
 
 /// @brief Check if given path match t_word list.
@@ -69,6 +71,24 @@ static int	add_default_result(t_list **results, t_list *word_list)
 	return (0);
 }
 
+/// @brief Check if a hidden file (starting with a ```.```) need to be
+/// ignored or not0
+/// @param word_list
+/// @param path
+/// @return
+static bool	is_ignored(t_list *word_list, char *path)
+{
+	t_word	*word;
+
+	if (!word_list)
+		return (false);
+	word = (t_word *)word_list->content;
+	if (path[0] == '.' && (word->type == '*'
+			|| (word->type != '*' && word->content[0] != '.')))
+		return (true);
+	return (false);
+}
+
 /// @brief Search for match of t_word units in working directory.
 /// @param words Succession of t_word unit of different types (either litterals
 /// or ```*```).
@@ -90,12 +110,13 @@ int	t_word_interpret(t_list *word_list, t_list **results)
 	d_file = readdir(wk_dir);
 	while (d_file)
 	{
-		if (!ft_strschr((char *[]){"..", ".", NULL}, d_file->d_name)
+		if (!is_ignored(word_list, d_file->d_name)
 			&& is_match(word_list, d_file->d_name)
 			&& ft_lst_str_append(results, d_file->d_name))
 			return (error(errno, d_file->d_name));
 		d_file = readdir(wk_dir);
 	}
+	free(wk_dir);
 	if (errno)
 		return (error(errno, wk_dir_path));
 	if (!*results && add_default_result(results, word_list))
