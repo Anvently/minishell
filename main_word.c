@@ -14,6 +14,7 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*line;
 	t_list	*word_list;
+	t_list	*results;
 	t_data	data;
 
 	(void) argc;
@@ -28,7 +29,11 @@ int	main(int argc, char **argv, char **env)
 			exit(error(errno, "parsing word"));
 		if (t_word_concat_dup(word_list))
 			exit(error(errno, "concatenating word"));
-		t_word_print_list(word_list);
+		ft_lstprint(word_list, t_word_print);
+		results = NULL;
+		if (!t_word_interpret(word_list, &results))
+			ft_lst_str_print(results);
+		ft_lstclear(&results, free);
 		ft_lstclear(&word_list, t_word_free);
 		free(line);
 	}

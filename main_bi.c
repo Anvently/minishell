@@ -10,6 +10,73 @@
 	return (0);
 } */
 
+/// @brief Insert results list in place of argv node. Current argv content
+/// is replaced with the content of the first result.
+/// @param argv
+/// @param results Size is always >= 1.
+/// @param next Address of a pointer toward the next element in the list,
+/// which is equal to the node following current argv node before merging.
+/// @return ```0``` for success. ```errno``` for error.
+static int	merge_results(t_list *argv, t_list *results, t_list **next)
+{
+
+}
+
+/// @brief Check if given arg contain metacharacter to interpret and if
+/// insert every match in the list after arg.
+/// @param argv A string list's node
+/// @param data
+/// @return ```0``` for success. ```errno``` if error.
+static int	expand_argv(t_list *arg, t_list **next, t_data *data)
+{
+	t_list	*results;
+	t_list	*word_list;
+	char	*arg_str;
+	int		err;
+
+	err = 0;
+	arg_str = (char *)arg->content;
+	if (t_word_parse(arg_str, &word_list, &data))
+		return (error(errno, "parsing word"));
+	if (t_word_concat_dup(word_list))
+	{
+		ft_lstclear(&word_list, t_word_free);
+		return (error(errno, "concatenating word"));
+	}
+	ft_lstprint(word_list, t_word_print);
+	results = NULL;
+	err = t_word_interpret(word_list, &results);
+	if (!err)
+		err = merge_results(arg, results, next);
+	if (!err)
+		ft_lst_str_print(results);
+	ft_lstclear(&results, free);
+	ft_lstclear(&word_list, t_word_free);
+	return (err);
+}
+
+/// @brief Check metacharacters for every node of argv list and insert
+/// all matches in the list.
+/// @param argv first element of argv (which is the name of the command)
+/// is not checked.
+/// @param data
+/// @return ```0``` for success. ```errno``` if error
+static int	interpret_argv(t_list *argv, t_data *data)
+{
+	if (argv)
+		argv = argv->next;
+	while (argv)
+	{
+		if (check_parenthesis(argv, data))
+			return (errno);
+		else
+			argv = argv->next;
+		if (argv && expand_arg(argv, &argv, data))
+			return (errno);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char	**env_cop;

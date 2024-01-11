@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 18:57:55 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 13:19:41 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_data {
 	t_list		*pipe_list;
 	char		**env;
 	int			exit_status;
+	char		*exe_path;
 }				t_data;
 
 ///* #### Word are separated by :
@@ -120,8 +121,8 @@ int		t_word_interpret(t_list *words, t_list **results);
 t_list	*t_word_new_node(char *str, char type);
 void	t_word_init(t_word *word, char *str, char type);
 void	t_word_free(void *word);
-void	t_word_print_list(t_list *word_list);
-
+void	t_word_print(void *content);
+char	*t_word_concat_str(t_list *word_list);
 
 /* -------------------------------------------------------------------------- */
 /*                                  BUILTINs                                  */

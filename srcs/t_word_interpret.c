@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 10:33:22 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 13:20:02 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,36 +18,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-static int	append_result(t_list **results, char *str);
 static bool	is_match(t_list *word_list, char *path);
 int			t_word_interpret(t_list *words, t_list **results);
-
-/// @brief Append a str to the list of result.
-/// @param results
-/// @param str
-/// @return ```0``` for success.
-/// ```-1``` if allocation error, list is freed.
-static int	append_result(t_list **results, char *str)
-{
-	t_list	*node;
-	char	*content;
-
-	content = ft_strdup(str);
-	if (!content)
-	{
-		ft_lstclear(results, free);
-		return (-1);
-	}
-	node = ft_lstnew(content);
-	if (!node)
-	{
-		free(content);
-		ft_lstclear(results, free);
-		return (-1);
-	}
-	ft_lstadd_back(results, node);
-	return (0);
-}
 
 /// @brief Check if given path match t_word list.
 /// @param words
@@ -63,12 +35,13 @@ static bool	is_match(t_list *word_list, char *path)
 		word = (t_word *)word_list->content;
 		if (word->type == '*' && word_list->next)
 		{
-			next_word = (t_word *)word_list->next->content;
+			next_word = ((t_word *)word_list->next->content);
 			path = ft_strnstr(path, next_word->content, ft_strlen(path));
 			if (!path)
 				return (false);
 			path += ft_strlen(next_word->content);
 			word_list = word_list->next;
+			word = (t_word *)word_list->content;
 		}
 		else if (word->type != '*')
 		{
@@ -78,7 +51,22 @@ static bool	is_match(t_list *word_list, char *path)
 		}
 		word_list = word_list->next;
 	}
-	return (true);
+	return ((word->type != '*' && !*path) || word->type == '*');
+}
+
+static int	add_default_result(t_list **results, t_list *word_list)
+{
+	char	*str;
+
+	str = t_word_concat_str(word_list);
+	if (!str)
+		return (errno);
+	if (ft_lst_str_append(results, str))
+	{
+		free(str);
+		return (errno);
+	}
+	return (0);
 }
 
 /// @brief Search for match of t_word units in working directory.
@@ -93,24 +81,24 @@ int	t_word_interpret(t_list *word_list, t_list **results)
 	DIR				*wk_dir;
 	struct dirent	*d_file;
 
-	if (!word_list->next && ((t_word *)word_list->content)->type != '*')
-		if (append_result(results, ((t_word *)word_list->content)->content))
-			return (error(errno, "interpreting metacharacters"));
 	if (!getcwd(wk_dir_path, PATH_MAX))
 		return (error(errno, "cannot retrieve working directory path"));
 	wk_dir = opendir(wk_dir_path);
-	if (!opendir)
+	if (!wk_dir)
 		return (error(errno, wk_dir_path));
 	errno = 0;
 	d_file = readdir(wk_dir);
 	while (d_file)
 	{
-		if (is_match(word_list, d_file->d_name)
-			&& append_result(results, d_file->d_name))
+		if (!ft_strschr((char *[]){"..", ".", NULL}, d_file->d_name)
+			&& is_match(word_list, d_file->d_name)
+			&& ft_lst_str_append(results, d_file->d_name))
 			return (error(errno, d_file->d_name));
 		d_file = readdir(wk_dir);
 	}
 	if (errno)
 		return (error(errno, wk_dir_path));
+	if (!*results && add_default_result(results, word_list))
+		return (error(errno, "trying to concatenate metacharacters"));
 	return (0);
 }
