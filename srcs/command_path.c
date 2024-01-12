@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 15:00:29 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 18:55:46 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,30 @@
 #include <libft.h>
 
 /// @brief Return the path of a command if it can be found in one of
-/// ```path_strs```'s path and if the file is executable. Free command
-/// if path is found or alloc error.
+/// ```path_strs```'s path and if the file is executable.
 /// @param command
 /// @param path_strs
-/// @return Path of given command, command if path not found
-/// NULL if alloc error
+/// @return Path of given command, ```NULL``` if allocation error
+/// (error is printed) or path not found.
 static char	*build_path(char *command, char **path_strs)
 {
 	char	*path;
 
+	path = NULL;
 	while (*path_strs)
 	{
 		path = path_join(*path_strs++, command);
 		if (!path)
 		{
-			free(command);
-			return (alloc_error());
+			error(errno, "joining cmd path");
+			return (NULL);
 		}
 		if (access(path, X_OK) == 0)
-		{
-			free(command);
 			return (path);
-		}
 		free(path);
+		path = NULL;
 	}
-	return (command);
+	return (path);
 }
 
 /// @brief Search for ```PATH``` variable in ```env``` and split it into
@@ -73,13 +71,18 @@ static char	**split_path(char **env)
 char	*command_find_path(char *command, char **env)
 {
 	char		**path_strs;
+	char		*path;
 
 	if (is_abs_path(command) || command_is_builtin(command) || !env)
 		return (command);
 	path_strs = split_path(env);
 	if (!path_strs)
 		return (command);
-	command = build_path(command, path_strs);
+	path = build_path(command, path_strs);
+
+	if (!path && errno != ENOMEM)
+		builtin_error(127, command, NULL, "command not found");
+	free(command);
 	ft_free_strs(path_strs);
-	return (command);
+	return (path);
 }

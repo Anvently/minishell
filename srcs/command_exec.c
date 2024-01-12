@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 18:06:40 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 19:13:21 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ int	exec_builtin(char **argv, t_data *data)
 	else if (!ft_strcmp(argv[0], "echo"))
 		return (builtin_echo(argv));
 	else if (!ft_strcmp(argv[0], "exit"))
-	{
-		free_data(0, data);
-		builtin_exit(argv);
-	}
+		builtin_exit(argv, data);
 	else if (!ft_strcmp(argv[0], "unset"))
 		return (builtin_unset(argv, &data->env));
 	return (0);
@@ -84,6 +81,8 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 	int	id;
 
 	argv[0] = command_find_path(argv[0], data->env);
+	if (!argv[0])
+		return (-127);
 	id = command_check_fork(!(!fd && !old_fd
 				&& command_is_builtin(argv[0])), argv[0]);
 	if (id == -1)
@@ -97,7 +96,7 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 		if (execve(argv[0], argv, data->env))
 		{
 			error(errno, argv[0]);
-			return (-1);
+			exit(free_data(errno, data));
 		}
 	}
 	else if (id == -2)

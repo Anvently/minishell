@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 16:49:42 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 19:09:50 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ char		*t_word_concat_str(t_list *word_list);
 /*                                  BUILTINs                                  */
 /* -------------------------------------------------------------------------- */
 
-void		builtin_exit(char **argv);
+void		builtin_exit(char **argv, t_data *data);
 int			builtin_echo(char **argv);
 int			builtin_env(char **env);
 int			builtin_export(char **argv, char ***env);

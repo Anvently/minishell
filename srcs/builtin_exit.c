@@ -6,16 +6,17 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:21:03 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 18:04:44 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 19:12:08 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
 
-static void	free_and_exit(int status, char **argv)
+static void	free_and_exit(int status, char **argv, t_data *data)
 {
 	ft_free_strs(argv);
+	free_data(status, data);
 	exit((unsigned char) status);
 }
 
@@ -23,20 +24,20 @@ static void	free_and_exit(int status, char **argv)
 /// an error occurs during parsing, or too many arguments then
 /// exit status is ```1```.
 /// @param argv If ```NULL``` or ```argv[0]==NULL```, status is set to ```0```.
-void	builtin_exit(char **argv)
+void	builtin_exit(char **argv, t_data *data)
 {
 	int	status;
 	int	err;
 
 	if (ft_strslen(argv) > 2)
 		free_and_exit(builtin_error(1, "exit", NULL, "too many arguments"),
-			argv);
+			argv, data);
 	if (!argv || (argv[0] && !argv[1]))
-		free_and_exit(0, argv);
+		free_and_exit(data->exit_status, argv, data);
 	err = ft_strtoi(argv[1], &status);
 	if (!err)
-		free_and_exit(status, argv);
+		free_and_exit(status, argv, data);
 	else
 		free_and_exit(builtin_error(2, "exit", NULL,
-				"numeric argument required"), argv);
+				"numeric argument required"), argv, data);
 }
