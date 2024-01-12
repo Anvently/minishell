@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:35:57 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/12 18:10:07 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_atom	*find_redir(t_atom *start, t_atom *end)
 		return (NULL);
 }
 
-int	inscribe_file(t_list **lst, t_atom *file)
+int	inscribe_file(t_list **lst, t_atom *file, t_atom *file_name)
 {
 	t_file_rd	*pt;
 
@@ -45,7 +45,7 @@ int	inscribe_file(t_list **lst, t_atom *file)
 	if (file->subtype == double_out)
 		pt->append_mode = 1;
 	pt->type = file->subtype - 3;
-	pt->path = ft_strdup(file->next->content);
+	pt->path = ft_strdup(file_name->content);
 	if (!pt->path)
 		return (-1);
 	return (0);
@@ -67,8 +67,8 @@ t_list	*get_files(t_atom **start, t_atom *end)
 		new = new_file_node();
 		if (!new)
 			return (NULL);
-		file_name = skip_space(next_file);
-		if (inscribe_file(&new, file_name) < 0)
+		file_name = skip_space(next_file->next);
+		if (inscribe_file(&new, next_file, file_name) < 0)
 			return (NULL);
 		*start = remove_file_from_atom(*start, next_file);
 		ft_lstadd_back(&pt, new);

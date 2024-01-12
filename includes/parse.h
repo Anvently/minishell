@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 14:58:27 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/11 16:50:05 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,18 @@ t_atom	*go_to_previous(t_atom *list, t_atom *target);
 t_atom	*remove_file_from_atom(t_atom *atom, t_atom *file);
 
 /*---------------ATOMS CHECK------------------*/
-int		check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt);
-int		check_double_pipe(t_atom *atom);
-int		check_double_and(t_atom *atom);
-int		check_void(t_atom *atom);
-int		expand_dollar(t_atom *atom, char **env);
-int		merge_litteral(t_atom *atom, char **env);
-int		merge_space(t_atom *atom, char **env);
-int		parse_free(t_atom *atom, char **env, int err, char *str);
+int	check_double_redir(t_atom *atom, t_atom_type type, t_atom_subtype subt);
+int	check_double_pipe(t_atom *atom);
+int	check_double_and(t_atom *atom);
+int	check_double_errors(t_atom *atom);
+int	check_void(t_atom *atom);
+int	expand_dollar(t_atom *atom);
+int	merge_litteral(t_atom *atom);
+int	merge_space(t_atom *atom);
+int	parse_free(t_atom *atom, int err);
 t_atom	*find_first(t_atom *a1, t_atom *a2, t_atom *list);
+void	quote_litteral(t_atom *pt);
+void	trim_quotes(t_atom *atom);
 
 /*---------------SYNTAX CHECK--------------------------*/
 

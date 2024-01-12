@@ -1,6 +1,7 @@
 #include <libft.h>
 #include <minishell.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <errno.h>
 
 /* int	main(void)
@@ -10,7 +11,7 @@
 	return (0);
 } */
 
-static int	update_argv(char ***argv, t_data *data)
+/* static int	update_argv(char ***argv, t_data *data)
 {
 	t_list	*arg_list;
 
@@ -28,57 +29,33 @@ static int	update_argv(char ***argv, t_data *data)
 	if (!*argv)
 		return (errno);
 	return (0);
-}
+} */
 
 int	main(int argc, char **argv, char **env)
 {
-	char	**env_cop;
-	char	**strs;
 	char	*line;
 	t_data	data;
 
 	(void) argc;
-	(void) argv;
 	data.exit_status = 0;
+	data.exe_path = ft_strdup(argv[0]);
+	if (!data.exe_path)
+		exit(1);
 	data.env = env_copy(env, ft_strslen(env));
+	data.pipe_list = NULL;
 	if (!data.env)
 		return (-1);
 	while ((line = readline("minishell: ")))
 	{
-		strs = ft_split(line, ' ');
-		if (!strs) {
-			free(line);
-			return (-1);
-		}
-		if (update_argv(&strs, &data))
+		add_history(line);
+		if (parse_line(&data.pipe_list, line))
 		{
 			free(line);
-			free_data(0, &data);
-			rl_clear_history();
-			ft_free_strs(strs);
-			exit(errno);
+			return (free_data(1, &data));
 		}
-		if (!ft_strcmp(strs[0], "export"))
-			printf("status = %d\n", builtin_export(strs, &env_cop));
-		else if (!ft_strcmp(strs[0], "env"))
-			printf("status = %d\n", builtin_env(env_cop));
-		else if (!ft_strcmp(strs[0], "echo"))
-			printf("status = %d\n", builtin_echo(strs));
-		else if (!ft_strcmp(strs[0], "exit"))
-		{
-			free(line);
-			free_data(0, &data);
-			rl_clear_history();
-			builtin_exit(strs);
-		}
-		else if (!ft_strcmp(strs[0], "unset"))
-			printf("status = %d\n", builtin_unset(strs, &env_cop));
-		else if (!ft_strcmp(strs[0], "pwd"))
-			printf("status = %d\n", builtin_pwd());
-		else if (!ft_strcmp(strs[0], "cd"))
-			printf("status = %d\n", builtin_cd(strs, &env_cop));
+		printf("status = %d\n", exec_prompt(data.pipe_list, &data));
+		ft_lstclear(&data.pipe_list, free_t_pipe);
 		free(line);
-		ft_free_strs(strs);
 	}
 	return (free_data(0, &data));
 }

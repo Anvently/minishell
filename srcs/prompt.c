@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 15:13:31 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 18:15:13 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 int	exec_prompt(t_list *pipe_list, t_data *data)
 {
 	int		id;
+	int		status;
 	t_pipe	*pipe;
 
 	while (pipe_list)
@@ -37,7 +38,12 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 		{
 			id = exec_pipe(pipe->commands, data, NULL);
 			if (id > 0)
-				waitpid(id, &data->exit_status, NULL);
+			{
+				waitpid(id, &status, 0);
+				data->exit_status = status / 256;
+				while (wait(NULL) > 0)
+					continue ;
+			}
 			else
 				data->exit_status = -id;
 		}

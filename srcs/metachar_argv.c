@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:11:12 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 16:34:50 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 10:55:09 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,10 @@ static int	expand_arg(t_list *arg, t_list **next, t_data *data)
 		ft_lstclear(&word_list, t_word_free);
 		return (error(errno, "concatenating word"));
 	}
-	ft_lstprint(word_list, t_word_print);
 	results = NULL;
 	err = t_word_interpret(word_list, &results);
 	if (!err)
 		*next = merge_results(arg, &results);
-	if (!err)
-		ft_lst_str_print(arg);
 	ft_lstclear(&results, free);
 	ft_lstclear(&word_list, t_word_free);
 	return (err);
@@ -97,6 +94,7 @@ static int	check_parenthesis(t_list *argv, t_data *data)
 		free(new_str);
 		return (errno);
 	}
+	free(new_str);
 	free(argv->content);
 	argv->content = path_exe;
 	return (0);
@@ -116,8 +114,6 @@ int	interpret_argv(t_list *argv, t_data *data)
 			return (error(errno, "interpreting parenthesis"));
 		return (0);
 	}
-	if (argv)
-		argv = argv->next;
 	while (argv)
 	{
 		if (argv && expand_arg(argv, &argv, data))

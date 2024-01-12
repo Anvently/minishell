@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 10:54:37 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:23:39 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/12 18:13:29 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_atom	*remove_file_from_atom(t_atom *atom, t_atom *file)
 
 	if (atom == file)
 	{
-		atom = atom->next->next;
+		atom = go_to(atom, NULL, litteral, 42)->next;
 		previous = file->next;
 		free_atom(file);
 		while (previous->type != litteral)
