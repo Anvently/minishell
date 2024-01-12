@@ -38,8 +38,10 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 
 	(void) argc;
-	(void) argv;
 	data.exit_status = 0;
+	data.exe_path = ft_strdup(argv[0]);
+	if (!data.exe_path)
+		exit(1);
 	data.env = env_copy(env, ft_strslen(env));
 	if (!data.env)
 		return (-1);

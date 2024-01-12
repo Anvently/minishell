@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 17:50:30 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 10:25:57 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static int	add_default_result(t_list **results, t_list *word_list)
 		free(str);
 		return (errno);
 	}
+	free(str);
 	return (0);
 }
 
