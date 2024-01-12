@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:21:03 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 09:59:31 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 18:04:44 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	free_and_exit(int status, char **argv)
 {
 	ft_free_strs(argv);
-	exit(status);
+	exit((unsigned char) status);
 }
 
 /// @brief Exit current process with given statsus in ```argv[1]```. If an
@@ -35,7 +35,7 @@ void	builtin_exit(char **argv)
 		free_and_exit(0, argv);
 	err = ft_strtoi(argv[1], &status);
 	if (!err)
-		free_and_exit((unsigned char) status, argv);
+		free_and_exit(status, argv);
 	else
 		free_and_exit(builtin_error(2, "exit", NULL,
 				"numeric argument required"), argv);
