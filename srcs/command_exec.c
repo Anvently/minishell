@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 12:25:37 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 17:27:16 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 	if (id == -1)
 		return (id);
 	if (command_is_builtin(argv[0]) && old_fd)
-		clear_pipe(0, old_fd[0]);
+		clear_pipe(0, 0);
 	if (id == 0)
 	{
 		if (command_is_builtin(argv[0]))

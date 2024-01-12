@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 13:39:47 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 17:03:09 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,11 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 		{
 			id = exec_pipe(pipe->commands, data, NULL);
 			if (id > 0)
+			{
 				waitpid(id, &data->exit_status, 0);
+				while (wait(NULL) > 0)
+					continue ;
+			}
 			else
 				data->exit_status = -id;
 		}

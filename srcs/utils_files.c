@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:27:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 12:31:25 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 17:12:44 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	clear_pipe(int err, int fd)
 	while (read(fd, NULL, 100) > 0)
 		continue ;
 	errno = old_errno;
+	close(fd);
 	return (err);
 }
 
@@ -84,5 +85,14 @@ int	file_redirect(char *path, int fd_out, int o_flag)
 		return (error(errno, path));
 	if (dup_and_close(file_fd, fd_out))
 		return (error(errno, path));
+	return (0);
+}
+
+int	restore_std(t_data *data)
+{
+	if (dup2(data->stdout_copy, STDOUT_FILENO) < 0)
+		return (errno);
+	if (dup2(data->stdin_copy, STDIN_FILENO) < 0)
+		return (errno);
 	return (0);
 }

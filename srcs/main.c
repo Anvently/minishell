@@ -1,81 +1,79 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 11:37:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 13:43:04 by npirard          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <libft.h>
 #include <minishell.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <signal.h>
 
-static void	catch_signal(int signo)
+/* int	main(void)
 {
-	printf("SIGNAL CATCHED : %d\n", signo);
-}
+	char	*name = ft_substr("=test", 0, 0);
+	printf("%s", name);
+	return (0);
+} */
+
+/* static int	update_argv(char ***argv, t_data *data)
+{
+	t_list	*arg_list;
+
+	arg_list = ft_strstolst(*argv);
+	if (!arg_list)
+		return (errno);
+	if (interpret_argv(arg_list, data))
+	{
+		ft_lstclear(&arg_list, free);
+		return (errno);
+	}
+	ft_free_strs(*argv);
+	*argv = ft_lsttostrs(arg_list);
+	ft_lstclear(&arg_list, free);
+	if (!*argv)
+		return (errno);
+	return (0);
+} */
 
 int	main(int argc, char **argv, char **env)
 {
-	char	**strs;
 	char	*line;
 	t_data	data;
 
-	(void) argc;
-	signal(SIGINT, catch_signal);
 	data.exit_status = 0;
+	data.stdout_copy = dup(STDOUT_FILENO);
+	data.stdin_copy = dup(STDIN_FILENO);
+	if (data.stdout_copy < 0 || data.stdin_copy < 0)
+		return (1);
 	data.exe_path = ft_strdup(argv[0]);
 	if (!data.exe_path)
 		exit(1);
 	data.env = env_copy(env, ft_strslen(env));
+	data.pipe_list = NULL;
 	if (!data.env)
 		return (-1);
-	while ((line = readline("minishell: ")))
+	if (argc > 1)
 	{
-		add_history(line);
-		strs = ft_split(line, ' ');
-		if (!strs) {
-			free(line);
-			return (-1);
-		}
-		if (update_argv(&strs, &data))
+		line = argv[1];
+		if (parse_line(&data.pipe_list, line))
+			return (free_data(1, &data));
+		printf("status = %d\n", exec_prompt(data.pipe_list, &data));
+		ft_lstclear(&data.pipe_list, free_t_pipe);
+		int status = data.exit_status;
+		free_data(0, &data);
+		return (status);
+	}
+	else
+	{
+		while (1)
 		{
+			line = readline("minishell: ");
+			add_history(line);
+			if (parse_line(&data.pipe_list, line))
+			{
+				free(line);
+				return (free_data(1, &data));
+			}
+			printf("status = %d\n", exec_prompt(data.pipe_list, &data));
+			ft_lstclear(&data.pipe_list, free_t_pipe);
 			free(line);
-			free_data(0, &data);
-			rl_clear_history();
-			ft_free_strs(strs);
-			exit(errno);
 		}
-		if (!ft_strcmp(strs[0], "export"))
-			printf("status = %d\n", builtin_export(strs, &data.env));
-		else if (!ft_strcmp(strs[0], "env"))
-			printf("status = %d\n", builtin_env(data.env));
-		else if (!ft_strcmp(strs[0], "echo"))
-			printf("status = %d\n", builtin_echo(strs));
-		else if (!ft_strcmp(strs[0], "exit"))
-		{
-			free(line);
-			free_data(0, &data);
-			rl_clear_history();
-			builtin_exit(strs);
-		}
-		else if (!ft_strcmp(strs[0], "unset"))
-			printf("status = %d\n", builtin_unset(strs, &data.env));
-		else if (!ft_strcmp(strs[0], "pwd"))
-			printf("status = %d\n", builtin_pwd());
-		else if (!ft_strcmp(strs[0], "cd"))
-			printf("status = %d\n", builtin_cd(strs, &data.env));
-		free(line);
-		ft_free_strs(strs);
 	}
 	return (free_data(0, &data));
 }

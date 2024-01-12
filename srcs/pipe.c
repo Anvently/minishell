@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 13:39:06 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 17:31:05 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	handle_redirection(t_list *files, int *old_fd,
 			return (errno);
 		files = files->next;
 	}
-	if (fd && pipe(fd) && dup_and_close(fd[1], STDOUT_FILENO))
+	if (fd && (pipe(fd) < 0 || dup_and_close(fd[1], STDOUT_FILENO)))
 		return (error(errno, NULL));
 	return (0);
 }
@@ -106,20 +106,20 @@ static int	handle_command(t_command *command, int *old_fd,
 	int		err;
 
 	id = 0;
-	err = handle_redirection(command->files, old_fd, fd, data);
-	if (!err)
-		err = interpret_argv(command->argv, data);
+	if (handle_redirection(command->files, old_fd, fd, data))
+		return (-1);
+	err = interpret_argv(command->argv, data);
 	argv = ft_lsttostrs(command->argv);
 	if (!argv || err)
 	{
 		if (old_fd)
-			clear_pipe(0, old_fd[0]);
+			clear_pipe(0, 0);
 		return (-1);
 	}
 	if (command->argv)
 		id = exec_command(argv, fd, old_fd, data);
 	if (id < 0 && old_fd)
-		clear_pipe(0, old_fd[0]);
+		clear_pipe(0, 0);
 	free(argv);
 	return (id);
 }
@@ -140,13 +140,15 @@ int	exec_pipe(t_list *commands, t_data *data, int *old_fd)
 
 	if (commands->next)
 	{
-		if (pipe(fd))
-			return (error(errno, NULL));
 		handle_command((t_command *) commands->content, old_fd, fd, data);
+		if (restore_std(data))
+			return (-1);
 		id = exec_pipe(commands->next, data, fd);
 	}
 	else
 		id = handle_command((t_command *) commands->content,
 				old_fd, NULL, data);
+	if (restore_std(data))
+		return (-1);
 	return (id);
 }
