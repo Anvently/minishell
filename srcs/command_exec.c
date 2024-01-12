@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 19:13:21 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 19:32:51 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@ int	exec_builtin(char **argv, t_data *data)
 		builtin_exit(argv, data);
 	else if (!ft_strcmp(argv[0], "unset"))
 		return (builtin_unset(argv, &data->env));
+	else if (!ft_strcmp(argv[0], "cd"))
+		return (builtin_cd(argv, &data->env));
+	else if (!ft_strcmp(argv[0], "pwd"))
+		return (builtin_pwd());
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 19:08:04 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/12 19:21:09 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ t_list	*get_files(t_atom **start, t_atom *end)
 		if (inscribe_file(&new, next_file, file_name) < 0)
 			return (NULL);
 		*start = remove_file_from_atom(*start, next_file);
-		print_atom(*start);
-		printf("\n---END---\n");
 		ft_lstadd_back(&pt, new);
 	}
 	return (pt);
