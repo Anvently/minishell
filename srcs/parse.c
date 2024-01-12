@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 17:52:42 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 18:22:05 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,3 +66,5 @@ int	parse_line(t_list **lst, char *line)
 	free_atom_list(atom);
 	return (0);
 }
+
+
