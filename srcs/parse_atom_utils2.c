@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 10:54:37 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 18:13:29 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/12 19:11:11 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ t_atom	*remove_file_from_atom(t_atom *atom, t_atom *file)
 	while (previous->next != file)
 		previous = previous->next;
 	delete_atom(previous, file);
+	if (previous->next->type == space)
+		delete_atom(previous, previous->next);
 	delete_atom(previous, previous->next);
 	return (atom);
 }
