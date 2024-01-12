@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 17:31:05 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 19:49:14 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static int	handle_command(t_command *command, int *old_fd,
 		id = exec_command(argv, fd, old_fd, data);
 	if (id < 0 && old_fd)
 		clear_pipe(0, 0);
-	free(argv);
+	ft_free_strs(argv);
 	return (id);
 }
 

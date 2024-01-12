@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 19:32:51 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 19:55:55 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,17 @@
 #include <unistd.h>
 #include <errno.h>
 
+static int	free_and_exit(int status, char **argv, t_data *data);
 static int	command_check_fork(bool child, char *command);
 int			exec_builtin(char **argv, t_data *data);
 int			exec_command(char **argv, int *fd, int *old_fd, t_data *data);
+
+static int	free_and_exit(int status, char **argv, t_data *data)
+{
+	ft_free_strs(argv);
+	free_data(status, data);
+	exit(status);
+}
 
 /// @brief Fork if child is ```false```.
 /// @param child Determines if command is a builtin that needs to be
@@ -96,12 +104,9 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 	if (id == 0)
 	{
 		if (command_is_builtin(argv[0]))
-			exit(free_data(exec_builtin(argv, data), data));
+			free_and_exit(exec_builtin(argv, data), argv, data);
 		if (execve(argv[0], argv, data->env))
-		{
-			error(errno, argv[0]);
-			exit(free_data(errno, data));
-		}
+			free_and_exit(error(clear_pipe(errno, 0), argv[0]), argv, data);
 	}
 	else if (id == -2)
 		id = -exec_builtin(argv, data);
