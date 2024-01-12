@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:27:56 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/12 18:14:37 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	parse_line(t_list **lst, char *line)
 
 	if (only_space(line))
 		return (0);
-	error = atomize_line(line, &atom)
+	error = atomize_line(line, &atom);
 	if (error)
 		return (parse_free(atom, error));
 	error = syntax_check(atom);
@@ -66,3 +66,5 @@ int	parse_line(t_list **lst, char *line)
 	free_atom_list(atom);
 	return (0);
 }
+
+
