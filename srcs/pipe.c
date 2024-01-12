@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 15:15:16 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 13:39:06 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,85 +15,75 @@
 #include <errno.h>
 #include <fcntl.h>
 
-static int	handle_files_in(t_list *files_in, int *old_fd, t_data *data);
-static int	handle_files_out(t_list *files_out, int *fd, t_data *data);
+static int	redirection_in(t_file_rd *file);
+static int	redirection_out(t_file_rd *file);
+static int	handle_redirection(t_list *files, int *old_fd, int *fd,
+				t_data *data);
 static int	handle_command(t_command *command, int *fd,
 				int *old_fd, t_data *data);
 int			exec_pipe(t_list *commands, t_data *data, int *old_fd);
 
-/// @brief 1. Check infiles
-/// 		- if infile
-/// 			- open and dup
-/// 			- if old_fd
-/// 				- clear old_fd[0]
-/// 		- if no infile
-/// 			- if old_fd
-/// 				- STDIN_FILENO = old_fd[0]
-/// 				- close(old_fd[0])
-/// 			-else
-/// 				- do nothing
-/// @param files_in List of t_file_rd struct
+/// @brief
+/// @param file t_file_rd struct
 /// @param old_fd File descripors of input pipe. ```NULL``` for first command.
 /// @return ```0``` if no error. Else ```errno```.
-static int	handle_files_in(t_list *files_in, int *old_fd, t_data *data)
+static int	redirection_in(t_file_rd *file)
 {
-	t_file_rd	*file;
-
-	if (!files_in && old_fd)
-		if (dup_and_close(old_fd[0], STDIN_FILENO))
-			return (error(errno, NULL));
-	while (files_in)
-	{
-		file = (t_file_rd *) files_in->content;
-		if (check_file_meta(files_in, data))
-			return (errno);
-		if (old_fd)
-			clear_pipe(old_fd[0]);
-		if (file_redirect(file->path, STDIN_FILENO, O_RDONLY))
-			return (errno);
-		files_in = files_in->next;
-	}
+	if (file_redirect(file->path, STDIN_FILENO, O_RDONLY))
+		return (errno);
+	if (file->type == 1 && unlink(file->path) < 0)
+		return (error(errno, file->path));
 	return (0);
 }
 
-/// @brief 2. Check outfile
-/// 		- if outfile
-/// 			- open and dup
-/// 		- if no outfile
-/// 			- if not last
-/// 				- STDOUT_FILENO = fd[1]
-/// 				- close(fd[1])
-/// 			- else
-/// 				- do nothing to STDOUT_FILENO
-///			- if not last
-/// 			- pipe
-/// @param files_out List of t_file_rd struct
+/// @brief
+/// @param file t_file_rd struct
 /// @param fd File descripors of output pipe. ```NULL``` for last command.
 /// @return ```0``` if no error. Else ```errno```.
-static int	handle_files_out(t_list *files_out, int *fd, t_data *data)
+static int	redirection_out(t_file_rd *file)
 {
-	t_file_rd	*file;
 	int			o_flag;
 
-	while (files_out)
+	o_flag = O_RDWR | O_TRUNC | O_CREAT;
+	if (file->type == 3)
+		o_flag = O_APPEND | O_RDWR | O_CREAT;
+	if (file_redirect(file->path, STDOUT_FILENO, o_flag))
+		return (errno);
+	return (0);
+}
+
+/// @brief Handle file and pipe redirection
+/// @param files List of file redirection
+/// @param old_fd File descripors of input pipe. ```NULL``` for first command.
+/// @param fd File descripors of output pipe. ```NULL``` for last command.
+/// @param data
+/// @return ```0``` for success. ```errno``` if error.
+static int	handle_redirection(t_list *files, int *old_fd,
+				int *fd, t_data *data)
+{
+	t_file_rd	*file;
+
+	if (old_fd && dup_and_close(old_fd[0], STDIN_FILENO))
+		return (error(errno, NULL));
+	while (files)
 	{
-		file = (t_file_rd *) files_out->content;
-		if (check_file_meta(files_out, data))
+		file = (t_file_rd *) files->content;
+		if (check_file_meta(file, data))
 			return (errno);
-		o_flag = O_RDWR | O_TRUNC | O_CREAT;
-		if (file->append_mode)
-			o_flag = O_APPEND | O_RDWR | O_CREAT;
-		if (file_redirect(file->path, STDOUT_FILENO, o_flag))
+		if (file->type <= 1)
+		{
+			if (old_fd)
+				clear_pipe(0, old_fd[0]);
+			old_fd = NULL;
+			if (redirection_in(file))
+				return (errno);
+		}
+		else if (file->type >= 2 && redirection_out(file))
 			return (errno);
-		files_out = files_out->next;
+		files = files->next;
 	}
-	if (fd)
-	{
-		if (pipe(fd))
-			return (error(errno, NULL));
-		if (dup_and_close(fd[1], STDOUT_FILENO))
-			return (error(errno, NULL));
-	}
+	if (fd && pipe(fd) && dup_and_close(fd[1], STDOUT_FILENO))
+		return (error(errno, NULL));
 	return (0);
 }
 
@@ -104,24 +94,34 @@ static int	handle_files_out(t_list *files_out, int *fd, t_data *data)
 /// @param env
 /// @return Process id of command if executed.
 ///```-1``` if error. Can occurs during in or out redirection, during piping,
-/// or during forking
+/// during forking or during argv metachar interpretation and conversion
 /// ```0``` if builtin succeed n in parent or no command was given
 /// (only redirection).
 /// ```< 0``` corresponding to builtin exit status if failed in parent.
-static int	handle_command(t_command *command, int *fd,
-				int *old_fd, t_data *data)
+static int	handle_command(t_command *command, int *old_fd,
+				int *fd, t_data *data)
 {
-	int	id;
+	int		id;
+	char	**argv;
+	int		err;
 
 	id = 0;
-	if (handle_files_in(command->files_in, old_fd, data)
-		&& handle_file_out(command->files_out, fd, data))
+	err = handle_redirection(command->files, old_fd, fd, data);
+	if (!err)
+		err = interpret_argv(command->argv, data);
+	argv = ft_lsttostrs(command->argv);
+	if (!argv || err)
 	{
-		if (command->argv)
-			id = exec_command(command, fd, old_fd, data);
-		return (id);
+		if (old_fd)
+			clear_pipe(0, old_fd[0]);
+		return (-1);
 	}
-	return (-1);
+	if (command->argv)
+		id = exec_command(argv, fd, old_fd, data);
+	if (id < 0 && old_fd)
+		clear_pipe(0, old_fd[0]);
+	free(argv);
+	return (id);
 }
 
 /// @brief A pipe is defined as a list of ```t_command``` separated by ```|```.
@@ -142,11 +142,11 @@ int	exec_pipe(t_list *commands, t_data *data, int *old_fd)
 	{
 		if (pipe(fd))
 			return (error(errno, NULL));
-		handle_command((t_command *) commands->content, fd, old_fd, data);
+		handle_command((t_command *) commands->content, old_fd, fd, data);
 		id = exec_pipe(commands->next, data, fd);
 	}
 	else
 		id = handle_command((t_command *) commands->content,
-				NULL, old_fd, data);
+				old_fd, NULL, data);
 	return (id);
 }

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 15:19:19 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 12:18:10 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,12 @@ char	*path_join(char const *path, char const *tail);
 
 int		exec_pipe(t_list *commands, t_data *data, int *old_fd);
 int		exec_prompt(t_list *pipe_list, t_data *data);
-int		exec_command(t_command *command, int *fd, int *old_fd, t_data *data);
-int		exec_builtin(t_command *command, t_data *data);
+int		exec_command(char **argv, int *fd, int *old_fd, t_data *data);
+int		exec_builtin(char **argv, t_data *data);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
-void	clear_pipe(int fd);
+int		clear_pipe(int err, int fd);
 int		dup_and_close(int file_fd, int std_fd);
 int		file_redirect(char *path, int fd_out, int o_flag);
 char	*command_find_path(char *command, char **env);
@@ -113,7 +113,7 @@ bool	command_is_builtin(char *command);
 /* -------------------------------- META-CHARACTERS ------------------------- */
 
 int		interpret_metachar(char *str, t_list **results, t_data *data);
-int		check_files_meta(t_list *files, t_data *data);
+int		check_file_meta(t_file_rd *file, t_data *data);
 int		interpret_argv(t_list *argv, t_data *data);
 int		t_word_parse(char *str, t_list **word_list, t_data *data);
 char	*t_word_parse_next(char *str, t_list **word_list, bool *quote,

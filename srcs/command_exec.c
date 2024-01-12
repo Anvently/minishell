@@ -6,13 +6,17 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 15:10:31 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/12 12:25:37 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <unistd.h>
 #include <errno.h>
+
+static int	command_check_fork(bool child, char *command);
+int			exec_builtin(char **argv, t_data *data);
+int			exec_command(char **argv, int *fd, int *old_fd, t_data *data);
 
 /// @brief Fork if child is ```false```.
 /// @param child Determines if command is a builtin that needs to be
@@ -46,22 +50,21 @@ static int	command_check_fork(bool child, char *command)
 /// @param env
 /// @return builtin exit status.
 /// ```0``` if command is not a builtin.
-int	exec_builtin(t_command *command, t_data *data)
+int	exec_builtin(char **argv, t_data *data)
 {
-	if (!ft_strcmp(command->argv[0], "export"))
-		return (builtin_export(command->argv, &data->env));
-	else if (!ft_strcmp(command->argv[0], "env"))
+	if (!ft_strcmp(argv[0], "export"))
+		return (builtin_export(argv, &data->env));
+	else if (!ft_strcmp(argv[0], "env"))
 		return (builtin_env(data->env));
-	else if (!ft_strcmp(command->argv[0], "echo"))
-		return (builtin_echo(command->argv));
-	else if (!ft_strcmp(command->argv[0], "exit"))
+	else if (!ft_strcmp(argv[0], "echo"))
+		return (builtin_echo(argv));
+	else if (!ft_strcmp(argv[0], "exit"))
 	{
-		//Free data
-		ft_free_strs(data->env);
-		builtin_exit(command->argv);
+		free_data(0, data);
+		builtin_exit(argv);
 	}
-	else if (!ft_strcmp(command->argv[0], "unset"))
-		return (builtin_unset(command->argv, &data->env));
+	else if (!ft_strcmp(argv[0], "unset"))
+		return (builtin_unset(argv, &data->env));
 	return (0);
 }
 
@@ -76,28 +79,28 @@ int	exec_builtin(t_command *command, t_data *data)
 ///```-1``` if error while forking.
 /// ```0``` if builtin succeed n in parent
 /// ```< 0``` corresponding to builtin exit status if failed in parent.
-int	exec_command(t_command *command, int *fd, int *old_fd, t_data *data)
+int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 {
 	int	id;
 
-	command->argv[0] = command_find_path(command->argv[0], data->env);
+	argv[0] = command_find_path(argv[0], data->env);
 	id = command_check_fork(!(!fd && !old_fd
-				&& command_is_builtin(command->argv[0])), command->argv[0]);
+				&& command_is_builtin(argv[0])), argv[0]);
 	if (id == -1)
 		return (id);
-	if (command_is_builtin(command->argv[0]))
-		clear_pipe(old_fd[0]);
+	if (command_is_builtin(argv[0]) && old_fd)
+		clear_pipe(0, old_fd[0]);
 	if (id == 0)
 	{
-		if (command_is_builtin(command->argv[0]))
-			exit(free_data(exec_builtin(command, data), data));
-		if (execve(command->argv[0], command->argv, data->env))
+		if (command_is_builtin(argv[0]))
+			exit(free_data(exec_builtin(argv, data), data));
+		if (execve(argv[0], argv, data->env))
 		{
-			clear_pipe(old_fd[0]);
-			exit(error(errno, command->argv[0]));
+			error(errno, argv[0]);
+			return (-1);
 		}
 	}
 	else if (id == -2)
-		id = -exec_builtin(command, data);
+		id = -exec_builtin(argv, data);
 	return (id);
 }
