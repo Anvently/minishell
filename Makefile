@@ -47,7 +47,8 @@ SRCS		=	$(addprefix $(SRCS_FOLDER),$(SRCS_FILES))
 
 LIBFT		=	libft/libft.a
 
-DEPS		=	$(LIBFT) $(INCLUDES)$(NAME).h $(INCLUDES)libft.h Makefile
+DEPS		=	$(LIBFT) $(INCLUDES)$(NAME).h $(INCLUDES)libft.h \
+				$(INCLUDES)parse.h Makefile
 
 STATIC_LINK	=	-Llibft/ -lft -lreadline
 
@@ -90,5 +91,8 @@ fclean: clean
 	make fclean -C libft/
 	rm -rf $(NAME) $(BONUS_NAME)
 	@echo "$(NAME) and object files have been removed."
+
+vallog:
+	valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --error-limit=no --suppressions=./minishell.supp --gen-suppressions=all --log-file=minishell.log ./minishell
 
 re: fclean all
