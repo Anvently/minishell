@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:50:56 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 16:56:42 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,13 @@ int	main(int argc, char **argv, char **envp)
 	t_data	*data;
 
 	(void)argc;
+	printf("PID=%d\n",getpid());
 	//il faut les sigactions
 	if (init_env(&data, argv, envp) < 0)
 		parse_error(-1, NULL);
 	if (argc > 1 && exe_line(data, argv[1]))
 		return (free_data(-1, data));
-	if (miniline(data) < 0)
+	else if (argc < 2 && miniline(data) < 0)
 		return (free_data(-1, data));
 	return (free_data(data->exit_status, data));
 }

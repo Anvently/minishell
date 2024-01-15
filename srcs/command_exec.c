@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 19:55:55 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 17:37:01 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,14 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 				&& command_is_builtin(argv[0])), argv[0]);
 	if (id == -1)
 		return (id);
-	if (command_is_builtin(argv[0]) && old_fd)
-		clear_pipe(0, 0);
 	if (id == 0)
 	{
+		if (fd)
+			close(fd[0]);
 		if (command_is_builtin(argv[0]))
 			free_and_exit(exec_builtin(argv, data), argv, data);
+		close(data->stdin_copy);
+		close(data->stdout_copy);
 		if (execve(argv[0], argv, data->env))
 			free_and_exit(error(clear_pipe(errno, 0), argv[0]), argv, data);
 	}

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 10:25:57 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:38:07 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,10 @@ int	t_word_interpret(t_list *word_list, t_list **results)
 		if (!is_ignored(word_list, d_file->d_name)
 			&& is_match(word_list, d_file->d_name)
 			&& ft_lst_str_append(results, d_file->d_name))
-			return (error(errno, d_file->d_name));
+			return (closedir(wk_dir), error(errno, d_file->d_name));
 		d_file = readdir(wk_dir);
 	}
-	free(wk_dir);
+	closedir(wk_dir);
 	if (errno)
 		return (error(errno, wk_dir_path));
 	if (!*results && add_default_result(results, word_list))

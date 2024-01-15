@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:58:58 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 15:03:51 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	parse_line(t_list **lst, char *line)
 		return (0);
 	if (only_space(line))
 		return (0);
-	if (quote_check)
+	if (quote_check(line))
 		return (2);
 	error = atomize_line(line, &atom);
 	if (error)

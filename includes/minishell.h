@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 14:47:26 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:20:39 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <errno.h>
 
 # define HEREPATH "/tmp/heredoc_"
-# define COLOR_YELLOW "\033[1;33m"
-# define COLOR_RESET   "\033[0m"
+# define COLOR_YELLOW "\001\033[1;33m\002"
+# define COLOR_RESET   "\001\033[1;0m\002"
 
 /// @note interperet : 0 = NO || 1 = YES
 /// @note append_mod : 0 = NO || 1 = YES

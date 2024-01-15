@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:31:05 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:47:56 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:39:03 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	free_data(int err, t_data *data)
 	if (data->prompt)
 		free(data->prompt);
 	data->env = NULL;
+	close(data->stdin_copy);
+	close(data->stdout_copy);
 	free(data);
 	return (err);
 }

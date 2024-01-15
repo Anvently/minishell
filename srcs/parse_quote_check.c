@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_quote_check.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 13:35:10 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:52:39 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 15:04:32 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	quote_check(char *line)
 		return (0);
 	while (line[i] && line[i] != '\"' && line[i] != '\'')
 		i++;
-	printf("\nquote found:%c\n", line[i]);
 	if (line[i])
 	{
 		while (line[i + j] && line[i + j] != line[i])

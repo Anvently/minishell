@@ -55,4 +55,3 @@ test'"ded de $PATH'
 TODO :
 	- signals
 	- parsing error data status
-	- corr export for_
