@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 11:22:55 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:47:26 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <errno.h>
 
 # define HEREPATH "/tmp/heredoc_"
+# define COLOR_YELLOW "\033[1;33m"
+# define COLOR_RESET   "\033[0m"
 
 /// @note interperet : 0 = NO || 1 = YES
 /// @note append_mod : 0 = NO || 1 = YES
@@ -57,6 +59,7 @@ typedef struct s_data {
 	char		**env;
 	int			exit_status;
 	char		*exe_path;
+	char		*prompt;
 	int			stdout_copy;
 	int			stdin_copy;
 }				t_data;
@@ -184,8 +187,9 @@ void		pipe_display(void *pip);
 /*                                    INIT MAIN                               */
 /* -------------------------------------------------------------------------- */
 
-t_data	*init_data(void);
-char	*make_prompt(t_data *data);
-char	*replace_with_tilde(char *path, t_data *data);
+t_data		*init_data(void);
+char		*make_prompt(t_data *data);
+char		*colorize_prompt(char *prompt);
+char		*replace_with_tilde(char *path, t_data *data);
 
 #endif

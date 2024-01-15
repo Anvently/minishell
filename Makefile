@@ -39,7 +39,7 @@ SRCS_FILES	=	parse_atom.c \
 				data.c \
 				make_prompt.c \
 				make_prompt2.c\
-				##main.c
+				struct_make_heredoc.c
 
 
 OBJS		=	$(addprefix $(OBJS_FOLDER),$(SRCS_FILES:.c=.o))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 13:38:57 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 11:51:02 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:53:17 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ char	*make_prompt(t_data *data)
 	free(hostname);
 	if (!temp)
 		prompt_error(-1, data, user_name);
+	free(user_name);
 	path = get_pathname(data);
 	if (!path)
 		prompt_error(-1, data, temp);

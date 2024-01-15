@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 13:49:50 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:50:56 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 #include <libft.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
-#define CYELLOW "\001\e[0;31m\002"
-#define RESET   "\001\e[0m\002"
-
 
 int	is_signal = 0;
 
@@ -56,16 +52,16 @@ int	exe_line(t_data *data, char *line)
 int	miniline(t_data *data)
 {
 	char	*line;
-	char	*prompt;
 
 	while (1)
 	{
-		prompt = "minishell:";
-		if (!prompt)
+		data->prompt = make_prompt(data);
+		data->prompt = colorize_prompt(data->prompt);
+		if (!data->prompt)
 			return (-1);
-		line = readline(prompt);
-		//free(prompt);
-		add_history(line);
+		line = readline(data->prompt);
+		if (line)
+			add_history(line);
 		if (exe_line(data, line))
 		{
 			free(line);
@@ -74,6 +70,7 @@ int	miniline(t_data *data)
 		}
 		free(line);
 		ft_lstclear(&data->pipe_list, free_t_pipe);
+		free(data->prompt);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:04:34 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 09:58:25 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:01:15 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,15 @@ static int	check_name(char *name)
 {
 	if (!name)
 		return (-1);
-	if (!name[0] || !ft_isalpha(name[0]))
+	if (!name[0] || (!ft_isalpha(name[0]) && name[0] != '_'))
 		return (1);
 	name++;
 	while (*name)
-		if (!ft_isalnum(*(name++)))
+	{
+		if (!ft_isalnum(*name) && *name != '_')
 			return (1);
+		name++;
+	}
 	return (0);
 }
 

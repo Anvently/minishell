@@ -53,7 +53,6 @@ test'"ded de $PATH'
 
 
 TODO :
-	- heredoc
 	- signals
-	- prompt
 	- parsing error data status
+	- corr export for_

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_prompt2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 10:44:08 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 11:32:00 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:43:45 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,22 @@ char	*replace_with_tilde(char *path, t_data *data)
 	res = ft_strdup(path);
 	free(path);
 	return (res);
+}
+
+char	*colorize_prompt(char *prompt)
+{
+	char	*buffer1;
+	char	*buffer2;
+
+	if (!prompt)
+		return (NULL);
+	buffer1 = ft_strjoin(COLOR_YELLOW, prompt);
+	free(prompt);
+	if (!buffer1)
+		return (NULL);
+	buffer2 = ft_strjoin(buffer1, COLOR_RESET);
+	free(buffer1);
+	if (!buffer2)
+		return (NULL);
+	return (buffer2);
 }
