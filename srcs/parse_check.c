@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:21:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:28:31 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:56:21 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	check_double_and(t_atom *atom)
 		if (pt && (pt->next && pt->next->subtype != s_and))
 		{
 			parse_error(1, "\'&\'");
-			return (1);
+			return (2);
 		}
 		else if (pt && pt->next && pt->next->subtype == s_and)
 		{

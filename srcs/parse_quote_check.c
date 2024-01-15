@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 13:35:10 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:31:57 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:52:39 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,41 @@
 #include <libft.h>
 #include <parse.h>
 
-int	check_between(char *str, char a, char b)
+int	quote_error(char c)
 {
-	int	i;
-	int	count;
-
-	i = 1;
-	count = 0;
-	while (str[i] && str[i] != a)
-	{
-		if (str[i] == b)
-			count++;
-		i++;
-	}
-	if (count % 2 > 0)
-		return (-1);
-	if (str[i] == 0)
-		return (-1);
-	return (i);
+	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+	write(2, "`", 1);
+	write(2, &c, 1);
+	write(1, "'\n", 2);
+	return (2);
 }
-/// @brief check if there is no quote errors
-/// @param str the chain to check
-/// @return -1 on error, positive value elsewise
 
-int	quote_check(char *str)
+
+int	quote_check(char *line)
 {
 	int	i;
-	int	res;
+	int	j;
 
 	i = 0;
-	while (str[i])
+	j = 1;
+	if (!line || *line == 0)
+		return (0);
+	while (line[i] && line[i] != '\"' && line[i] != '\'')
+		i++;
+	printf("\nquote found:%c\n", line[i]);
+	if (line[i])
 	{
-		res = 0;
-		if (str[i] == 34)
-			res = check_between(str + i, 34, 39);
-		if (str[i] == 39)
-			res = check_between(str + i, 39, 34);
-		if (res < 0)
-			break ;
-		i += res + 1;
+		while (line[i + j] && line[i + j] != line[i])
+			j++;
+		if (!line[i + j] || line[i + j] != line[i])
+			return (quote_error(line[i]));
+		else
+		{
+			i += j + 1;
+			return (quote_check (line + i));
+		}
 	}
-	return (res);
+	return (0);
 }
 
 void	quote_litteral(t_atom *pt)
@@ -97,3 +91,4 @@ void	trim_quotes(t_atom *atom)
 		atom = atom->next;
 	}
 }
+
