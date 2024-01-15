@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:31:05 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 14:50:29 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 10:30:41 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	free_data(int err, t_data *data)
 {
 	ft_lstclear(&data->pipe_list, free_t_pipe);
 	ft_free_strs(data->env);
+	if (data->exe_path)
+		free(data->exe_path);
 	data->env = NULL;
 	return (err);
 }
@@ -35,6 +37,13 @@ t_data	*init_data(void)
 	new->pipe_list = NULL;
 	new->env = NULL;
 	new->exe_path = NULL;
+	new->stdin_copy = dup(STDIN_FILENO);
+	new->stdout_copy = dup(STDOUT_FILENO);
+	if (new->stdin_copy < 0 ||new->stdout_copy < 0)
+	{
+		free_data(-1, new);
+		return (NULL);
+	}
 	new->exit_status = 0;
 	return (new);
 }

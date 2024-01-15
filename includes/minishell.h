@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 19:09:50 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 11:22:55 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,5 +179,13 @@ void		lst_display(t_list *pt, void (*disp)(void *));
 void		file_display(void *file);
 void		command_display(void *command);
 void		pipe_display(void *pip);
+
+/* -------------------------------------------------------------------------- */
+/*                                    INIT MAIN                               */
+/* -------------------------------------------------------------------------- */
+
+t_data	*init_data(void);
+char	*make_prompt(t_data *data);
+char	*replace_with_tilde(char *path, t_data *data);
 
 #endif

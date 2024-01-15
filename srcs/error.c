@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 14:25:49 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:28:07 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,4 @@ int	builtin_error(int err, char *builtin, char *value, char *context)
 	return (err);
 }
 
-/// @brief Free all data and return given err code.
-/// @param err
-/// @param data
-/// @return ```err```
-int	free_data(int err, t_data *data)
-{
-	ft_lstclear(&data->pipe_list, free_t_pipe);
-	ft_free_strs(data->env);
-	free(data->exe_path);
-	data->env = NULL;
-	return (err);
-}
+

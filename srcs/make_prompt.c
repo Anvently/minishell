@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 13:38:57 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 15:05:42 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 11:51:02 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_user(t_data *data)
 	return (user_name);
 }
 
-char	*get_pathname(void)
+char	*get_pathname(t_data *data)
 {
 	char	*temp;
 	char	*path_name;
@@ -68,8 +68,11 @@ char	*get_pathname(void)
 	temp = getcwd(NULL, 0);
 	if (!temp)
 		return (NULL);
-	path_name = ft_strjoin(temp, "$ ");
+	path_name = ft_strjoin(temp, "$  ");
 	free (temp);
+	if (!path_name)
+		return (NULL);
+	path_name = replace_with_tilde(path_name, data);
 	if (!path_name)
 		return (NULL);
 	return (path_name);
@@ -90,11 +93,10 @@ char	*make_prompt(t_data *data)
 	if (!hostname)
 		prompt_error(-1, data, user_name);
 	temp = ft_strjoin(user_name, hostname);
-	free(user_name);
 	free(hostname);
 	if (!temp)
-		return (NULL);
-	path = get_pathname();
+		prompt_error(-1, data, user_name);
+	path = get_pathname(data);
 	if (!path)
 		prompt_error(-1, data, temp);
 	prompt = ft_strjoin(temp, path);

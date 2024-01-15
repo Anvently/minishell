@@ -35,7 +35,11 @@ SRCS_FILES	=	parse_atom.c \
 				t_word_interpret.c t_word_parsing.c t_word_parsing2.c \
 				t_word_util.c \
 				utils_files.c utils.c \
-				main.c
+				minishell.c \
+				data.c \
+				make_prompt.c \
+				make_prompt2.c\
+				##main.c
 
 
 OBJS		=	$(addprefix $(OBJS_FOLDER),$(SRCS_FILES:.c=.o))

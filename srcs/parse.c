@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 18:22:05 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 11:53:58 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	only_space(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == 32 || \
