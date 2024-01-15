@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 10:28:07 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:40:35 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	parse_error(int err, char *str)
 	}
 	else if (str && err == 2)
 		ft_putendl_fd(str, 2);
-	return (err);
+	return (2);
 }
 
 /// @brief Set errno to err, and print error with given builtin name
