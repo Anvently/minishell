@@ -53,5 +53,7 @@ test'"ded de $PATH'
 
 
 TODO :
-	- change file redirection
-	-
+	- heredoc
+	- signals
+	- prompt
+	- parsing error data status

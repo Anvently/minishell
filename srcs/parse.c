@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:54:07 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 14:58:58 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	parse_line(t_list **lst, char *line)
 	t_atom	*atom;
 	int		error;
 
+	if (!line)
+		return (0);
 	if (only_space(line))
 		return (0);
 	if (quote_check)

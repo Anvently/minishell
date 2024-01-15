@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:27:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 17:12:44 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 13:07:26 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ int	fd_to_fd(int fd_in, int fd_out)
 /// @return ```err```
 int	clear_pipe(int err, int fd)
 {
-	int	old_errno;
+	int		old_errno;
+	char	buffer[100];
 
 	old_errno = errno;
-	while (read(fd, NULL, 100) > 0)
+	while (read(fd, buffer, 100) > 0)
 		continue ;
 	errno = old_errno;
 	close(fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 11:59:32 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 13:49:50 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
 #include <readline/history.h>
 
 #define CYELLOW "\001\e[0;31m\002"
-#define RESET   "\001\e[0m\002
+#define RESET   "\001\e[0m\002"
 
 
 int	is_signal = 0;
 
 int	init_env(t_data **data, char **argv, char **envp)
 {
-	int	size;
+	int		size;
 	char	*pwd;
 
 	*data = init_data();
@@ -44,6 +44,15 @@ int	init_env(t_data **data, char **argv, char **envp)
 	return (0);
 }
 
+int	exe_line(t_data *data, char *line)
+{
+	if (parse_line(&data->pipe_list, line) < 0)
+		return (-1);
+	exec_prompt(data->pipe_list, data);
+	ft_lstclear(&data->pipe_list, free_t_pipe);
+	return (0);
+}
+
 int	miniline(t_data *data)
 {
 	char	*line;
@@ -51,35 +60,35 @@ int	miniline(t_data *data)
 
 	while (1)
 	{
-		prompt = make_prompt(data);
+		prompt = "minishell:";
 		if (!prompt)
 			return (-1);
 		line = readline(prompt);
 		//free(prompt);
 		add_history(line);
-		if (parse_line(&data->pipe_list, line) < 0)
-			return (free(line), -1);
-		if (exec_prompt(data->pipe_list, data) < 0)
-			return (free(line), -1);
+		if (exe_line(data, line))
+		{
+			free(line);
+			ft_lstclear(&data->pipe_list, free_t_pipe);
+			return (-1);
+		}
 		free(line);
 		ft_lstclear(&data->pipe_list, free_t_pipe);
 	}
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
+
 	(void)argc;
 	//il faut les sigactions
 	if (init_env(&data, argv, envp) < 0)
 		parse_error(-1, NULL);
-
-	// if (argc)
-	// 	exec_argv(data, argv);
+	if (argc > 1 && exe_line(data, argv[1]))
+		return (free_data(-1, data));
 	if (miniline(data) < 0)
-		free_data(-1 ,data);
-
-
-
-
+		return (free_data(-1, data));
+	return (free_data(data->exit_status, data));
 }

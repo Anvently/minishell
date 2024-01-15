@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 18:55:46 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 11:57:42 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ char	*command_find_path(char *command, char **env)
 	if (!path_strs)
 		return (command);
 	path = build_path(command, path_strs);
-
 	if (!path && errno != ENOMEM)
 		builtin_error(127, command, NULL, "command not found");
 	free(command);

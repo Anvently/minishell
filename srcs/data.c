@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:31:05 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 10:30:41 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 13:43:35 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	free_data(int err, t_data *data)
 	if (data->exe_path)
 		free(data->exe_path);
 	data->env = NULL;
+	free(data);
 	return (err);
 }
 t_data	*init_data(void)
@@ -39,7 +40,7 @@ t_data	*init_data(void)
 	new->exe_path = NULL;
 	new->stdin_copy = dup(STDIN_FILENO);
 	new->stdout_copy = dup(STDOUT_FILENO);
-	if (new->stdin_copy < 0 ||new->stdout_copy < 0)
+	if (new->stdin_copy < 0 || new->stdout_copy < 0)
 	{
 		free_data(-1, new);
 		return (NULL);
