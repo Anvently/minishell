@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 19:21:09 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 13:04:55 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ int	inscribe_file(t_list **lst, t_atom *file, t_atom *file_name)
 	if (file->subtype == double_out)
 		pt->append_mode = 1;
 	pt->type = file->subtype - 3;
-	pt->path = ft_strdup(file_name->content);
+	if (file->subtype == double_in)
+		pt->path = get_heredoc(file_name->content);
+	else
+		pt->path = ft_strdup(file_name->content);
 	if (!pt->path)
 		return (-1);
 	return (0);

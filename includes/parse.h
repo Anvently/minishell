@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 12:11:06 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:13:43 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,10 @@ t_list	*get_commands(t_list **lst, t_atom **atom, t_atom *end);
 t_list	*get_files(t_atom **start, t_atom *end);
 t_list	*get_argv(t_atom **atom, t_atom *next);
 int		build_struct(t_list **lst, t_atom **atom, int condition);
+
+/*-------------------HEREDOC-------------------------*/
+
+char	*get_heredoc(char *limiter);
 
 
 
