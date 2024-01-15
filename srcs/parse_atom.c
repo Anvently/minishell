@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:32:36 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/12 18:04:31 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/15 12:07:29 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_atom	*get_type(t_atom *new, char c)
 	{"'", simple_quote, none, NULL},
 	{"\"", double_quote, none, NULL},
 	{"$", litteral, var, NULL},
-	{"*", wildcard, none, NULL},
 	{" ", space, none, NULL},
 	{"\t", space, none, NULL},
 	{"\r", space, none, NULL},

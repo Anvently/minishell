@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:50:05 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 12:07:20 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef enum	e_atom_type
 	double_quote,
 	space,
 	variable,
-	wildcard,
 	litteral,
 	parenth,
 	end_of_line
