@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 13:35:10 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 15:04:32 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/15 17:38:12 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	quote_check(char *line)
 		else
 		{
 			i += j + 1;
-			return (quote_check (line + i));
+			if (line[i])
+				return (quote_check (line + i));
 		}
 	}
 	return (0);
