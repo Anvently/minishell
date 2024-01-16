@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make_heredoc.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:05:11 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 14:40:26 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 14:59:50 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,12 @@ int	write_in_file(int fd, char *limiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
+		if (!line && g_mode == 0)
 			return (heredoc_warning(limiter, fd));
 		if (g_mode == 1)
 		{
 			free(line);
 			g_mode = 0;
-			close(fd);
 			return (130);
 		}
 		if (ft_strcmp(line, limiter) == 0)
@@ -56,21 +55,25 @@ int	write_in_file(int fd, char *limiter)
 		write(fd, "\n", 1);
 		free(line);
 	}
-	close (fd);
 	return (0);
 }
 
 int	inscribe_heredoc(char *file, char *limiter)
 {
 	int		fd;
+	int		fd_stdin;
 	int		res;
 
+	fd_stdin = dup(STDIN_FILENO);
 	fd = open(file, O_WRONLY | O_CREAT, 0777);
 	if (fd < 0)
 		return (-1);
 	res = write_in_file(fd, limiter);
+	close (fd);
+	if (res)
+		dup2(fd_stdin, STDIN_FILENO);
+	close (fd_stdin);
 	rec_signal();
-
 	return (res);
 }
 
@@ -91,6 +94,7 @@ int	get_heredoc(char *limiter, t_file_rd *pt)
 	res = inscribe_heredoc(file, limiter);
 	if (res)
 	{
+		unlink(file);
 		free(file);
 		pt->path = NULL;
 		errno = res;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 14:30:40 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 15:43:38 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	heredoc_handler(int sig)
 {
 	(void)sig;
 	g_mode = 1;
-	write(1, "^C\n", 3);
-	close(0);
+	write(1, "^C", 2);
+	close (STDIN_FILENO);
 }
 
 void	signal_handler(int signo)
@@ -38,9 +38,10 @@ void	sigint_handler(int signo)
 
 	if (g_mode == 0)
 	{
-		write(1, "^C\n", 3);
-		rl_replace_line("", 0);
+
+		write(2, "^C\n", 3);
 		rl_on_new_line();
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	else
