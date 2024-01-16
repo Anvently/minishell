@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 14:30:40 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 15:59:13 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	signal_handler(int signo)
 {
 	if (signo == 2)
 		sigint_handler(signo);
+	else if (signo == 3 && g_mode == 1)
+		ft_putendl_fd("Quit (core dumped)", 1);
 }
 
 void	sigint_handler(int signo)
