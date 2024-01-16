@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make_heredoc.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:05:11 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 13:50:38 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 14:40:26 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,13 @@ int	write_in_file(int fd, char *limiter)
 		{
 			free(line);
 			g_mode = 0;
+			close(fd);
 			return (130);
 		}
 		if (ft_strcmp(line, limiter) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);

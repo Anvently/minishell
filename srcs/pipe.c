@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 14:00:35 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 14:07:48 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static int	handle_command(t_command *command, int *old_fd,
 	int		err;
 
 	id = 0;
-	if (handle_redirection(command->files, old_fd, fd, data))
+	if (handle_redirection(command->files, old_fd, fd, data) || errno)
 		return (-1);
 	err = interpret_argv(command->argv, data);
 	argv = ft_lsttostrs(command->argv);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 14:07:25 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 14:30:40 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,18 @@
 
 extern int	g_mode;
 
+void	heredoc_handler(int sig)
+{
+	(void)sig;
+	g_mode = 1;
+	write(1, "^C\n", 3);
+	close(0);
+}
+
 void	signal_handler(int signo)
 {
 	if (signo == 2)
 		sigint_handler(signo);
-	else if (signo == 3)
-		sigquit_handler(signo);
 }
 
 void	sigint_handler(int signo)
@@ -41,11 +47,6 @@ void	sigint_handler(int signo)
 		write(1, "\n", 1);
 }
 
-void	sigquit_handler(int signo)
-{
-	(void)signo;
-}
-
 int	rec_signal(void)
 {
 	struct sigaction	action_sa;
@@ -55,6 +56,16 @@ int	rec_signal(void)
 	action_sa.sa_handler = signal_handler;
 	sigaction(SIGINT, &action_sa, NULL);
 	sigaction(SIGQUIT, &action_sa, NULL);
+	return (0);
+}
+
+int	rec_heredoc_signal(void)
+{
+	struct sigaction	action_sa;
+
+	ft_bzero(&action_sa, sizeof(struct sigaction));
+	action_sa.sa_handler = heredoc_handler;
+	sigaction(SIGINT, &action_sa, NULL);
 	return (0);
 }
 
