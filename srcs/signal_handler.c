@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 12:18:05 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 14:07:25 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,27 @@ extern int	g_mode;
 void	signal_handler(int signo)
 {
 	if (signo == 2)
-		ctr_c_handler(signo);
+		sigint_handler(signo);
 	else if (signo == 3)
-		ctr_h_handler(signo);
+		sigquit_handler(signo);
 }
 
-void	ctr_c_handler(int signo)
+void	sigint_handler(int signo)
 {
 	(void)signo;
-	write(1, "\n", 2);
+
 	if (g_mode == 0)
 	{
+		write(1, "^C\n", 3);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
+	else
+		write(1, "\n", 1);
 }
 
-void	ctr_h_handler(int signo)
+void	sigquit_handler(int signo)
 {
 	(void)signo;
 }
@@ -48,8 +51,10 @@ int	rec_signal(void)
 	struct sigaction	action_sa;
 
 	ft_bzero(&action_sa, sizeof(struct sigaction));
+	rl_catch_signals = 0;
 	action_sa.sa_handler = signal_handler;
 	sigaction(SIGINT, &action_sa, NULL);
+	sigaction(SIGQUIT, &action_sa, NULL);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 09:22:07 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 14:00:35 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ static int	handle_redirection(t_list *files, int *old_fd,
 				clear_pipe(0, old_fd[0]);
 			old_fd = NULL;
 			if (redirection_in(file))
-				return (errno);
+				break ;
 		}
 		else if (file->type >= 2 && redirection_out(file))
-			return (errno);
+			break ;
 		files = files->next;
 	}
 	if (fd && (pipe(fd) < 0 || dup_and_close(fd[1], STDOUT_FILENO)))
