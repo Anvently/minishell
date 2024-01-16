@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 11:44:47 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 16:43:28 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ static int	command_check_fork(bool child, char *command)
 			error(errno, command);
 			return (-1);
 		}
-		if (id > 0)
+		if (id == 0)
+			g_mode = 0;
+		else if (id > 0)
 			g_mode = 1;
 	}
 	else
