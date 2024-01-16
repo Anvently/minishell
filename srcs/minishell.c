@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 10:26:38 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 11:41:05 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include <libft.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 
-int	is_signal = 0;
+int	g_mode = 0;
 
 int	init_env(t_data **data, char **argv, char **envp)
 {
@@ -49,6 +50,12 @@ int	exe_line(t_data *data, char *line)
 	return (0);
 }
 
+static void	exit_minishell(t_data *data)
+{
+	ft_putendl_fd("exit", 1);
+	exit(free_data(0, data));
+}
+
 int	miniline(t_data *data)
 {
 	char	*line;
@@ -60,9 +67,10 @@ int	miniline(t_data *data)
 		if (!data->prompt)
 			return (-1);
 		line = readline(data->prompt);
-		//global = 1
 		if (line)
 			add_history(line);
+		else
+			exit_minishell(data);
 		if (exe_line(data, line))
 		{
 			free(line);
@@ -83,7 +91,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	printf("PID=%d\n",getpid());
-	//il faut les sigactions
+	rec_signal();
 	if (init_env(&data, argv, envp) < 0)
 		parse_error(-1, NULL);
 	if (argc > 1 && exe_line(data, argv[1]))

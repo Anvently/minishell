@@ -6,13 +6,15 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 14:40:08 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 11:43:15 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <sys/wait.h>
+
+extern int	g_mode;
 
 /// @brief Execute a list of ```t_pipe```. First pipe is always executed.
 /// Following ones are executed depending on the exit status of previous
@@ -32,8 +34,7 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 	while (pipe_list)
 	{
 		pipe = (t_pipe *) pipe_list->content;
-		if (pipe->condition == 0 || (!data->exit_status
-				&& pipe->condition == 1)
+		if (pipe->condition == 0 || (!data->exit_status && pipe->condition == 1)
 			|| (data->exit_status && pipe->condition == 2))
 		{
 			id = exec_pipe(pipe->commands, data, NULL);
@@ -43,6 +44,7 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 				data->exit_status = status / 256;
 				while (wait(NULL) > 0)
 					continue ;
+				g_mode = 0;
 			}
 			else
 				data->exit_status = -id;

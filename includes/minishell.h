@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 15:20:39 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 12:08:26 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,5 +191,14 @@ t_data		*init_data(void);
 char		*make_prompt(t_data *data);
 char		*colorize_prompt(char *prompt);
 char		*replace_with_tilde(char *path, t_data *data);
+
+/* -------------------------------------------------------------------------- */
+/*                                   SIGNALS                                  */
+/* -------------------------------------------------------------------------- */
+
+int			rec_signal(void);
+void		ctr_c_handler(int signo);
+void		ctr_h_handler(int signo);
+void		signal_handler(int signo);
 
 #endif

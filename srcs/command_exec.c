@@ -6,13 +6,16 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 10:39:00 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 11:44:47 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <unistd.h>
 #include <errno.h>
+#include <signal.h>
+
+extern int	g_mode;
 
 static int	free_and_exit(int status, char **argv, t_data *data);
 static int	command_check_fork(bool child, char *command);
@@ -47,6 +50,8 @@ static int	command_check_fork(bool child, char *command)
 			error(errno, command);
 			return (-1);
 		}
+		if (id > 0)
+			g_mode = 1;
 	}
 	else
 		id = -2;

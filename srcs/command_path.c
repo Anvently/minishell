@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 17:25:01 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 11:58:24 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*build_path(char *command, char **path_strs)
 			error(errno, "joining cmd path");
 			return (NULL);
 		}
-		if (access(path, X_OK) == 0)
+		if (access(path, F_OK) == 0)
 			return (path);
 		free(path);
 		path = NULL;
