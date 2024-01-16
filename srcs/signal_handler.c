@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 12:04:24 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 12:18:05 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,3 +52,4 @@ int	rec_signal(void)
 	sigaction(SIGINT, &action_sa, NULL);
 	return (0);
 }
+

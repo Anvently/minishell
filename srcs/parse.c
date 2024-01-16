@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 17:38:27 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 14:00:21 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <parse.h>
+#include <errno.h>
 
 int	only_space(char *str)
 {
@@ -65,8 +66,10 @@ int	parse_line(t_list **lst, char *line)
 		return (parse_free(atom, error));
 	if (litteralize_parenthesis(atom) < 0)
 		return (parse_free(atom, -1));
-	if (build_struct(lst, &atom, 0) < 0)
-		return (parse_free(atom, -1));
+	if (build_struct(lst, &atom, 0))
+	{
+		return (parse_free(atom, errno));
+	}
 	free_atom_list(atom);
 	return (0);
 }

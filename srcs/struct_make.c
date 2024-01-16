@@ -6,13 +6,14 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:12:24 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:39:59 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 14:00:09 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <parse.h>
+#include <errno.h>
 
 t_atom	*find_logical_separator(t_atom *atom)
 {
@@ -40,7 +41,7 @@ t_list	*get_commands(t_list **lst, t_atom **atom, t_atom *end)
 		return (NULL);
 	next_pipe = find_next_pipe(*atom, end);
 	((t_command *)new->content)->files = get_files(atom, next_pipe);
-	if (!((t_command *)new->content)->files && errno == ENOMEM)
+	if (!((t_command *)new->content)->files && (errno == ENOMEM || errno == 130))
 		return (NULL);
 	((t_command *)new->content)->argv = get_argv(atom, next_pipe);
 	if (!((t_command *)new->content)->argv && errno == ENOMEM)
@@ -64,7 +65,7 @@ int	build_struct(t_list **lst, t_atom **atom, int condition)
 	next_separator = find_logical_separator(*atom);
 	((t_pipe *)new->content)->commands = \
 	get_commands(&((t_pipe *)new->content)->commands, atom, next_separator);
-	if (!new->content)
+	if (!new->content || errno == 130)
 	{
 		ft_lstdelone(new, free_t_pipe);
 		return (-1);

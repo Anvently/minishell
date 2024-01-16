@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 13:04:55 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 13:53:07 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_atom	*find_redir(t_atom *start, t_atom *end)
 int	inscribe_file(t_list **lst, t_atom *file, t_atom *file_name)
 {
 	t_file_rd	*pt;
+	int			res;
 
 	pt = (t_file_rd *)((*lst)->content);
 	if (file->subtype == double_in)
@@ -46,7 +47,11 @@ int	inscribe_file(t_list **lst, t_atom *file, t_atom *file_name)
 		pt->append_mode = 1;
 	pt->type = file->subtype - 3;
 	if (file->subtype == double_in)
-		pt->path = get_heredoc(file_name->content);
+	{
+		res = get_heredoc(file_name->content, pt);
+		if (res)
+			return (res);
+	}
 	else
 		pt->path = ft_strdup(file_name->content);
 	if (!pt->path)
@@ -61,6 +66,7 @@ t_list	*get_files(t_atom **start, t_atom *end)
 	t_atom	*next_file;
 	t_atom	*file_name;
 
+
 	pt = NULL;
 	while (1)
 	{
@@ -71,7 +77,7 @@ t_list	*get_files(t_atom **start, t_atom *end)
 		if (!new)
 			return (NULL);
 		file_name = skip_space(next_file->next);
-		if (inscribe_file(&new, next_file, file_name) < 0)
+		if (inscribe_file(&new, next_file, file_name))
 			return (NULL);
 		*start = remove_file_from_atom(*start, next_file);
 		ft_lstadd_back(&pt, new);

@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:05:11 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:02:36 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 13:50:38 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include <libft.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <errno.h>
+
+extern int	g_mode;
 
 int	heredoc_warning(char *limiter, int fd)
 {
@@ -27,20 +30,22 @@ int	heredoc_warning(char *limiter, int fd)
 	return (0);
 }
 
-int	inscribe_heredoc(char *file, char *limiter)
+int	write_in_file(int fd, char *limiter)
 {
-	int		fd;
 	char	*line;
 
-	/*penser a changer la variable globale ?*/
-	fd = open(file, O_WRONLY | O_CREAT, 0777);
-	if (fd < 0)
-		return (fd);
+	rec_heredoc_signal();
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 			return (heredoc_warning(limiter, fd));
+		if (g_mode == 1)
+		{
+			free(line);
+			g_mode = 0;
+			return (130);
+		}
 		if (ft_strcmp(line, limiter) == 0)
 		{
 			free(line);
@@ -54,25 +59,44 @@ int	inscribe_heredoc(char *file, char *limiter)
 	return (0);
 }
 
-char	*get_heredoc(char *limiter)
+int	inscribe_heredoc(char *file, char *limiter)
+{
+	int		fd;
+	int		res;
+
+	fd = open(file, O_WRONLY | O_CREAT, 0777);
+	if (fd < 0)
+		return (-1);
+	res = write_in_file(fd, limiter);
+	rec_signal();
+
+	return (res);
+}
+
+int	get_heredoc(char *limiter, t_file_rd *pt)
 {
 	static int	count = 0;
+	int			res;
 	char		*count_to_char;
 	char		*file;
 
 	count_to_char = ft_itoa(count);
 	if (!count_to_char)
-		return (NULL);
+		return (-1);
 	file = ft_strjoin(HEREPATH, count_to_char);
 	free (count_to_char);
 	if (!file)
-		return (NULL);
-	if (inscribe_heredoc(file, limiter))
+		return (-1);
+	res = inscribe_heredoc(file, limiter);
+	if (res)
 	{
 		free(file);
-		return(NULL);
+		pt->path = NULL;
+		errno = res;
+		return(res);
 	}
 	count++;
-	return (file);
+	pt->path = file;
+	return (0);
 }
 
