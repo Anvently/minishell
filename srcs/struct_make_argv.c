@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 12:00:30 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:40:21 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/16 10:45:49 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_list	*get_argv(t_atom **atom, t_atom *next)
 	t_list	*new;
 
 	new = NULL;
+	if (!*atom)
+		return (new);
 	pt = skip_space(*atom);
 	if (pt->type == parenth)
 	{
