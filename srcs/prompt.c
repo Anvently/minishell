@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 11:43:15 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 17:41:07 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 			if (id > 0)
 			{
 				waitpid(id, &status, 0);
+				printf("FINISHED WAITING %d\n", status);
 				data->exit_status = status / 256;
 				while (wait(NULL) > 0)
 					continue ;
