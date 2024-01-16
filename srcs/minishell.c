@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 16:56:42 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 10:26:38 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	miniline(t_data *data)
 		if (!data->prompt)
 			return (-1);
 		line = readline(data->prompt);
+		//global = 1
 		if (line)
 			add_history(line);
 		if (exe_line(data, line))
@@ -71,6 +72,7 @@ int	miniline(t_data *data)
 		free(line);
 		ft_lstclear(&data->pipe_list, free_t_pipe);
 		free(data->prompt);
+		//golbal = 0
 	}
 	return (0);
 }

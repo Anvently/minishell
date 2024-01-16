@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 17:37:01 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 10:39:00 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,23 +92,24 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 {
 	int	id;
 
-	argv[0] = command_find_path(argv[0], data->env);
-	if (!argv[0])
-		return (-127);
 	id = command_check_fork(!(!fd && !old_fd
 				&& command_is_builtin(argv[0])), argv[0]);
-	if (id == -1)
-		return (id);
 	if (id == 0)
 	{
 		if (fd)
 			close(fd[0]);
-		if (command_is_builtin(argv[0]))
-			free_and_exit(exec_builtin(argv, data), argv, data);
 		close(data->stdin_copy);
 		close(data->stdout_copy);
-		if (execve(argv[0], argv, data->env))
-			free_and_exit(error(clear_pipe(errno, 0), argv[0]), argv, data);
+		if (command_is_builtin(argv[0]))
+			free_and_exit(exec_builtin(argv, data), argv, data);
+		argv[0] = command_find_path(argv[0], data->env);
+		if (argv[0])
+			execve(argv[0], argv, data->env);
+		if (old_fd)
+			clear_pipe(0, 0);
+		if (argv[0])
+			free_and_exit(error(errno, argv[0]), argv, data);
+		free_and_exit(errno, argv, data);
 	}
 	else if (id == -2)
 		id = -exec_builtin(argv, data);

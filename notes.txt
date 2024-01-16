@@ -54,4 +54,20 @@ test'"ded de $PATH'
 
 TODO :
 	- signals
-	- parsing error data status
+	- command not found != permission denied
+
+
+Ctrl-C
+	- interactive : new line
+	- exe : SIGINT
+Ctrl-D
+	- interactive : write exit
+	- exe : EOF
+Ctrl-\
+	- interactive : nothing
+	- exe : QUIT
+
+SIG-TERM : happy ending 15
+SIG-KILL : brutal death 9
+SIG-INT : 2 Ctrl-c
+SIG-QUIT : 3 Ctrl-\
