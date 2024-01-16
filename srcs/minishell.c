@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 11:41:05 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/16 16:02:35 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	miniline(t_data *data)
 		if (!data->prompt)
 			return (-1);
 		line = readline(data->prompt);
+		errno = 0;
 		if (line)
 			add_history(line);
 		else
@@ -80,7 +81,6 @@ int	miniline(t_data *data)
 		free(line);
 		ft_lstclear(&data->pipe_list, free_t_pipe);
 		free(data->prompt);
-		//golbal = 0
 	}
 	return (0);
 }
@@ -94,7 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	rec_signal();
 	if (init_env(&data, argv, envp) < 0)
 		parse_error(-1, NULL);
-	if (argc > 1 && exe_line(data, argv[1]))
+	if (argc > 1 && printf("argv = %s\n", argv[1]) && exe_line(data, argv[1]))
 		return (free_data(-1, data));
 	else if (argc < 2 && miniline(data) < 0)
 		return (free_data(-1, data));
