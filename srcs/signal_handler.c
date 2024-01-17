@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 17:04:00 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 09:50:07 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,18 @@ void	sigint_handler(int signo)
 
 	if (g_mode == 0)
 	{
-
 		write(1, "^C\n", 3);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	else if (g_mode == 1)
+	{
+		return ;
+		//signal(SIGINT, SIG_IGN);
+	}
 	/* else
-		write(1, "\n", 1); */
+		 */
 }
 
 int	rec_signal(void)

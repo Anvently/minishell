@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 17:41:07 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/17 09:28:35 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 			id = exec_pipe(pipe->commands, data, NULL);
 			if (id > 0)
 			{
+				printf("gmode:%d\n", g_mode);
 				waitpid(id, &status, 0);
 				printf("FINISHED WAITING %d\n", status);
 				data->exit_status = status / 256;

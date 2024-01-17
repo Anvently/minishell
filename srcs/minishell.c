@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 16:02:35 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 09:30:46 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data	*data;
 
 	(void)argc;
-	printf("PID=%d\n",getpid());
+	printf("PID=%d, g_mode = %d\n",getpid(), g_mode);
 	rec_signal();
 	if (init_env(&data, argv, envp) < 0)
 		parse_error(-1, NULL);
