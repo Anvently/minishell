@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:45:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/11 16:36:59 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/17 14:57:28 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,13 @@ t_atom	*redir_syntax(t_atom *atom, t_atom *newline)
 	error = redir_in(atom, newline);
 	pt = redir_out(atom, newline);
 	if (!error && pt)
-		error = pt;
+		return (pt);
+	else if(error && !pt)
+		return (error);
 	else if (error == newline && pt)
-		error = pt;
+		return (pt);
 	else if (error && pt == newline)
-		pt = error;
+		return (error);
 	else
 		error = find_first(error, pt, atom);
 	return (error);
