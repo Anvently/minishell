@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 12:12:33 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 16:30:26 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,44 @@ extern int	g_mode;
 int	handle_exe_mode(int id, t_data *data);
 int	exec_prompt(t_list *pipe_list, t_data *data);
 
+void	handle_status(int status, int need_line)
+{
+	if (WIFSIGNALED(status) && WTERMSIG(status) == 2)
+	{
+		write(1, "\n", 1);
+		need_line = 0;
+	}
+	if (WIFSIGNALED(status) && WTERMSIG(status) == 3)
+	{
+		ft_putstr_fd("Quit (core dumped)\n", 1);
+		need_line = 0;
+	}
+	if (need_line)
+		write(1, "\n", 1);
+}
+
 int	handle_exe_mode(int id, t_data *data)
 {
 	int	status;
+	int	status_other;
+	int	need_line;
 
 	status = 0;
+	status_other = 0;
+	need_line = 0;
 	rec_signal();
 	waitpid(id, &status, 0);
 	data->exit_status = WEXITSTATUS(status);
-	while (wait(NULL) > 0)
+	while (wait(&status_other) > 0)
+	{
+		if (WIFSIGNALED(status_other) && WTERMSIG(status_other) == 2)
+			need_line = 1;
+		status_other = 0;
 		continue ;
+	}
 	if (errno == 10)
 		errno = 0;
-	if (WIFSIGNALED(status) && WTERMSIG(status) == 2)
-		write(1, "\n", 1);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == 3)
-		ft_putstr_fd("Quit (core dumped)\n", 1);
+	handle_status(status, need_line);
 	g_mode = 0;
 	rec_signal();
 	return (0);
