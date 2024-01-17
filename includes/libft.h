@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 09:23:38 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 17:15:45 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 18:29:57 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ void	ft_lstadd_front(t_list **list, t_list *new);
 void	ft_lstadd_back(t_list **list, t_list *new);
 void	ft_lstinsert(t_list *node_before, t_list *node);
 void	ft_lstdelone(t_list *list, void (*del)(void *));
+void	ft_lstdelif(t_list **lst, int (*f)(void *), void (*del)(void *));
 void	ft_lstclear(t_list **list, void (*del)(void *));
 void	ft_lstiter(t_list *list, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));

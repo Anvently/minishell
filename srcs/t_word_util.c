@@ -6,26 +6,27 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 16:45:02 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 16:38:13 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 18:02:21 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-void	t_word_init(t_word *word, char *str, char type);
-t_list	*t_word_new_node(char *str, char type);
+void	t_word_init(t_word *word, char *str, char type, bool quote);
+t_list	*t_word_new_node(char *str, char type, bool quote);
 void	t_word_free(void *word);
 void	t_word_print(void *content);
 char	*t_word_concat_str(t_list *word_list);
 
-void	t_word_init(t_word *word, char *str, char type)
+void	t_word_init(t_word *word, char *str, char type, bool quote)
 {
 	word->content = str;
 	word->type = type;
+	word->quote = quote;
 }
 
-t_list	*t_word_new_node(char *str, char type)
+t_list	*t_word_new_node(char *str, char type, bool quote)
 {
 	t_word	*word;
 	t_list	*node;
@@ -33,7 +34,7 @@ t_list	*t_word_new_node(char *str, char type)
 	word = malloc(sizeof(t_word));
 	if (!word)
 		return (NULL);
-	t_word_init(word, str, type);
+	t_word_init(word, str, type, quote);
 	node = ft_lstnew(word);
 	if (!node)
 		free(word);
@@ -52,8 +53,8 @@ void	t_word_print(void *content)
 	t_word	*word;
 
 	word = (t_word *)content;
-	printf("content = %s | type = %c\n",
-		word->content, word->type);
+	printf("content = %s | type = %c | quote = %d\n",
+		word->content, word->type, word->quote);
 }
 
 /// @brief Return the concatenation of every word in word_list

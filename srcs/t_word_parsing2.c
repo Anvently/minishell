@@ -6,16 +6,17 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 18:09:12 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 18:08:44 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-static char	*get_simple_quote(char *str, t_list **word_list);
-static char	*get_var_string(char *str, t_list **word_list, t_data *data);
-static char	*get_wc_string(char *str, t_list **word_list);
+static char	*get_simple_quote(char *str, bool quote, t_list **word_list);
+static char	*get_var_string(char *str, bool quote,
+				t_list **word_list, t_data *data);
+static char	*get_wc_string(char *str, bool quote, t_list **word_list);
 static char	*get_word_string(char *str, t_list **word_list, bool quote);
 char		*t_word_parse_next(char *str, t_list **word_list, bool *quote,
 				t_data *data);
@@ -26,7 +27,7 @@ char		*t_word_parse_next(char *str, t_list **word_list, bool *quote,
 /// @param word_list
 /// @return Address of the character following the next ```'``` found,
 /// or ```NULL``` if allocation error.
-static char	*get_simple_quote(char *str, t_list **word_list)
+static char	*get_simple_quote(char *str, bool quote, t_list **word_list)
 {
 	t_list	*node;
 	int		i;
@@ -36,7 +37,7 @@ static char	*get_simple_quote(char *str, t_list **word_list)
 		i++;
 	if (i == 0)
 		return (str + i);
-	node = t_word_new_node(ft_substr(str, 0, i), 0);
+	node = t_word_new_node(ft_substr(str, 0, i), 0, quote);
 	if (!node)
 		return (NULL);
 	ft_lstadd_back(word_list, node);
@@ -53,7 +54,8 @@ static char	*get_simple_quote(char *str, t_list **word_list)
 /// @param word_list
 /// @return Address of the first non alphanumeric character found,
 /// or ```NULL``` if allocation error.
-static char	*get_var_string(char *str, t_list **word_list, t_data *data)
+static char	*get_var_string(char *str, bool quote,
+				t_list **word_list, t_data *data)
 {
 	t_list	*node;
 	char	*var_name;
@@ -65,7 +67,7 @@ static char	*get_var_string(char *str, t_list **word_list, t_data *data)
 	var_name = ft_substr(str, 0, i);
 	if (!var_name)
 		return (NULL);
-	node = t_word_new_node(get_var_value(var_name, data->env), '$');
+	node = t_word_new_node(get_var_value(var_name, data->env), '$', quote);
 	free(var_name);
 	if (!node)
 		return (NULL);
@@ -80,11 +82,11 @@ static char	*get_var_string(char *str, t_list **word_list, t_data *data)
 /// @param word_list
 /// @return pointer toward next character or ```NULL``` if allocation
 /// error.
-static char	*get_wc_string(char *str, t_list **word_list)
+static char	*get_wc_string(char *str, bool quote, t_list **word_list)
 {
 	t_list	*node;
 
-	node = t_word_new_node(NULL, '*');
+	node = t_word_new_node(NULL, '*', quote);
 	if (!node)
 		return (NULL);
 	ft_lstadd_back(word_list, node);
@@ -114,7 +116,7 @@ static char	*get_word_string(char *str, t_list **word_list, bool quote)
 			|| (str[i] == '$' && (ft_isalnum(str[i + 1])
 					|| str[i + 1] == '?'))))
 		i++;
-	node = t_word_new_node(ft_substr(str, 0, i), 0);
+	node = t_word_new_node(ft_substr(str, 0, i), 0, quote);
 	if (!node)
 		return (NULL);
 	ft_lstadd_back(word_list, node);
@@ -134,18 +136,18 @@ char	*t_word_parse_next(char *str, t_list **word_list, bool *quote,
 			t_data *data)
 {
 	if (!*quote && *str == '\'')
-		str = get_simple_quote(++str, word_list);
+		str = get_simple_quote(++str, *quote, word_list);
 	else if (str && *str == '"')
 	{
 		*quote = !*quote;
 		return (++str);
 	}
 	else if (str && *str == '$' && ft_isalnum(*(str + 1)))
-		str = get_var_string(++str, word_list, data);
+		str = get_var_string(++str, *quote, word_list, data);
 	else if (str && *str == '$' && *(str + 1) == '?')
-		str = t_word_get_exit_status(++str, word_list, data);
+		str = t_word_get_exit_status(++str, *quote, word_list, data);
 	else if (str && *str == '*' && !*quote)
-		str = get_wc_string(str, word_list);
+		str = get_wc_string(str, *quote, word_list);
 	else
 		str = get_word_string(str, word_list, *quote);
 	return (str);

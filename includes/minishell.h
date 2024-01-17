@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 17:03:31 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 18:04:36 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_data {
 typedef struct s_word {
 	char		*content;
 	char		type;
+	bool		quote;
 }				t_word;
 
 /* ---------------------------------- ERROR --------------------------------- */
@@ -130,16 +131,16 @@ int			interpret_argv(t_list *argv, t_data *data);
 int			t_word_parse(char *str, t_list **word_list, t_data *data);
 char		*t_word_parse_next(char *str, t_list **word_list, bool *quote,
 				t_data *data);
-char		*t_word_get_exit_status(char *str, t_list **word_list,
-				t_data *data);
+char		*t_word_get_exit_status(char *str, bool quote,
+				t_list **word_list, t_data *data);
 int			t_word_concat_dup(t_list *word_list);
 int			t_word_interpret(t_list *words, t_list **results);
 bool		t_word_match(t_list *word_list, char *path);
 
 /* --------------------------- STRUCT T_WORD UTILS -------------------------- */
 
-t_list		*t_word_new_node(char *str, char type);
-void		t_word_init(t_word *word, char *str, char type);
+t_list		*t_word_new_node(char *str, char type, bool quote);
+void		t_word_init(t_word *word, char *str, char type, bool quote);
 void		t_word_free(void *word);
 void		t_word_print(void *content);
 char		*t_word_concat_str(t_list *word_list);

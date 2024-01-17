@@ -6,16 +6,29 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/11 09:48:41 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 18:44:12 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 
-int		t_word_parse(char *str, t_list **word_list, t_data *data);
-char	*t_word_get_exit_status(char *str, t_list **word_list, t_data *data);
-int		t_word_concat_dup(t_list *word_list);
+static int	is_void_var(void *word_list);
+int			t_word_parse(char *str, t_list **word_list, t_data *data);
+char		*t_word_get_exit_status(char *str, bool quote,
+				t_list **word_list, t_data *data);
+int			t_word_concat_dup(t_list *word_list);
+
+static int	is_void_var(void *word_list)
+{
+	t_word	*word;
+
+	word = (t_word *)(((t_list *)word_list)->content);
+	if (word->type == '$' && word->quote == false
+		&& (!word->content || !word->content[0]))
+		return (1);
+	return (0);
+}
 
 /// @brief Concatenate litteral word with var word and removing duplicate
 /// ```*``` in word_list, leaving only litterals with possible ```*```
@@ -55,14 +68,16 @@ int	t_word_concat_dup(t_list *word_list)
 /// @brief Add a new node to word_list for exit status as a string (case
 /// where ```$?``` was given.
 /// @param str
+/// @param bool
 /// @param word_list
 /// @param data
 /// @return Pointer toward the character following ```?```.
-char	*t_word_get_exit_status(char *str, t_list **word_list, t_data *data)
+char	*t_word_get_exit_status(char *str, bool quote,
+			t_list **word_list, t_data *data)
 {
 	t_list	*node;
 
-	node = t_word_new_node(ft_itoa(data->exit_status), '$');
+	node = t_word_new_node(ft_itoa(data->exit_status), '$', quote);
 	if (!node)
 		return (NULL);
 	ft_lstadd_back(word_list, node);
@@ -95,5 +110,9 @@ int	t_word_parse(char *str, t_list **word_list, t_data *data)
 			return (-1);
 		}
 	}
+	ft_lstprint(*word_list, t_word_print);
+	ft_lstdelif(word_list, is_void_var, t_word_free);
+	printf("\n");
+	ft_lstprint(*word_list, t_word_print);
 	return (0);
 }
