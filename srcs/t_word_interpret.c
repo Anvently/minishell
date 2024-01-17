@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 15:38:07 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:33:57 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ static int	add_default_result(t_list **results, t_list *word_list)
 }
 
 /// @brief Check if a hidden file (starting with a ```.```) need to be
-/// ignored or not0
+/// ignored or not
 /// @param word_list
 /// @param path
-/// @return
+/// @return ```true``` if path is ignored from match else ```false```.
 static bool	is_ignored(t_list *word_list, char *path)
 {
 	t_word	*word;
