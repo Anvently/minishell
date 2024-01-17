@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 15:13:56 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:03:31 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ char		*t_word_get_exit_status(char *str, t_list **word_list,
 				t_data *data);
 int			t_word_concat_dup(t_list *word_list);
 int			t_word_interpret(t_list *words, t_list **results);
+bool		t_word_match(t_list *word_list, char *path);
 
 /* --------------------------- STRUCT T_WORD UTILS -------------------------- */
 

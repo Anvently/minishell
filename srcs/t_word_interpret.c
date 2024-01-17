@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 15:33:57 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:24:51 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,43 +18,9 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-static bool	is_match(t_list *word_list, char *path);
 static int	add_default_result(t_list **results, t_list *word_list);
 static bool	is_ignored(t_list *word_list, char *path);
 int			t_word_interpret(t_list *words, t_list **results);
-
-/// @brief Check if given path match t_word list.
-/// @param words
-/// @param str
-/// @return ```true```if match else ```false```.
-static bool	is_match(t_list *word_list, char *path)
-{
-	t_word	*word;
-	t_word	*next_word;
-
-	while (word_list)
-	{
-		word = (t_word *)word_list->content;
-		if (word->type == '*' && word_list->next)
-		{
-			next_word = ((t_word *)word_list->next->content);
-			path = ft_strnstr(path, next_word->content, ft_strlen(path));
-			if (!path)
-				return (false);
-			path += ft_strlen(next_word->content);
-			word_list = word_list->next;
-			word = (t_word *)word_list->content;
-		}
-		else if (word->type != '*')
-		{
-			if (ft_strncmp(word->content, path, ft_strlen(word->content)))
-				return (false);
-			path += ft_strlen(word->content);
-		}
-		word_list = word_list->next;
-	}
-	return ((word->type != '*' && !*path) || word->type == '*');
-}
 
 static int	add_default_result(t_list **results, t_list *word_list)
 {
@@ -112,7 +78,7 @@ int	t_word_interpret(t_list *word_list, t_list **results)
 	while (d_file)
 	{
 		if (!is_ignored(word_list, d_file->d_name)
-			&& is_match(word_list, d_file->d_name)
+			&& t_word_match(word_list, d_file->d_name)
 			&& ft_lst_str_append(results, d_file->d_name))
 			return (closedir(wk_dir), error(errno, d_file->d_name));
 		d_file = readdir(wk_dir);

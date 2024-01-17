@@ -20,6 +20,7 @@ SRCS_FILES	=	parse_atom.c \
 				struct_make_files.c \
 				syntax_check.c \
 				syntax_parenthesis.c \
+				syntax_parenthesis2.c \
 				syntax_redirection.c \
 				syntax_separator.c \
 				error.c \
@@ -33,7 +34,7 @@ SRCS_FILES	=	parse_atom.c \
 				metachar_argv.c metachar_files.c metachar.c \
 				pipe.c execution.c \
 				t_word_interpret.c t_word_parsing.c t_word_parsing2.c \
-				t_word_util.c \
+				t_word_match.c t_word_util.c \
 				utils_files.c utils.c \
 				minishell.c \
 				data.c \
