@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:10:44 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 15:34:43 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/17 15:55:47 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ int	builtin_echo(char **argv)
 	newline = true;
 	if (!argv || ft_strslen(argv) < 2)
 		return (put_str("\n"));
-	while (argv[1] && !ft_strncmp("-n", argv[1], 2))
+	while (argv[1] && (!ft_strncmp("-n", argv[1], 2) || !argv[1][0]))
 	{
-		newline = false;
+		if (!ft_strncmp("-n", argv[1], 2))
+			newline = false;
 		argv ++;
 	}
 	while (argv[1])
