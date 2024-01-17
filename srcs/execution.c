@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 11:43:15 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 12:01:14 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,30 @@
 #include <sys/wait.h>
 
 extern int	g_mode;
+
+int	handle_exe_mode(int id, t_data *data);
+int	exec_prompt(t_list *pipe_list, t_data *data);
+
+int	handle_exe_mode(int id, t_data *data)
+{
+	int	status;
+
+	status = 0;
+	rec_signal();
+	waitpid(id, &status, 0);
+	data->exit_status = WEXITSTATUS(status);
+	while (wait(NULL) > 0)
+		continue ;
+	if (errno == 10)
+		errno = 0;
+	if (WIFSIGNALED(status) && WTERMSIG(status) == 2)
+		write(1, "\n", 1);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == 3)
+		ft_putstr_fd("Quit (core dumped)\n", 1);
+	g_mode = 0;
+	rec_signal();
+	return (0);
+}
 
 /// @brief Execute a list of ```t_pipe```. First pipe is always executed.
 /// Following ones are executed depending on the exit status of previous
@@ -28,7 +52,6 @@ extern int	g_mode;
 int	exec_prompt(t_list *pipe_list, t_data *data)
 {
 	int		id;
-	int		status;
 	t_pipe	*pipe;
 
 	while (pipe_list)
@@ -39,13 +62,7 @@ int	exec_prompt(t_list *pipe_list, t_data *data)
 		{
 			id = exec_pipe(pipe->commands, data, NULL);
 			if (id > 0)
-			{
-				waitpid(id, &status, 0);
-				data->exit_status = status / 256;
-				while (wait(NULL) > 0)
-					continue ;
-				g_mode = 0;
-			}
+				handle_exe_mode(id, data);
 			else
 				data->exit_status = -id;
 		}

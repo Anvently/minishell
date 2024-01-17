@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 16:03:26 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 12:10:54 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	handle_redirection(t_list *files, int *old_fd,
 
 	if (old_fd && dup_and_close(old_fd[0], STDIN_FILENO))
 		return (error(errno, NULL));
-	while (files)
+	while (files && !errno)
 	{
 		file = (t_file_rd *) files->content;
 		if (check_file_meta(file, data))
@@ -82,6 +82,7 @@ static int	handle_redirection(t_list *files, int *old_fd,
 			break ;
 		files = files->next;
 	}
+	errno = 0;
 	if (fd && (pipe(fd) < 0 || dup_and_close(fd[1], STDOUT_FILENO)))
 		return (error(errno, NULL));
 	return (0);
@@ -106,8 +107,7 @@ static int	handle_command(t_command *command, int *old_fd,
 	int		err;
 
 	id = 0;
-	if (handle_redirection(command->files, old_fd, fd, data)
-		|| (errno && errno != 10))
+	if (handle_redirection(command->files, old_fd, fd, data))
 		return (-1);
 	err = interpret_argv(command->argv, data);
 	argv = ft_lsttostrs(command->argv);

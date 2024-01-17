@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 14:09:32 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 11:48:52 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,9 +197,6 @@ char		*replace_with_tilde(char *path, t_data *data);
 /* -------------------------------------------------------------------------- */
 
 int			rec_signal(void);
-void		sigint_handler(int signo);
-void		sigquit_handler(int signo);
-void		signal_handler(int signo);
 int			rec_heredoc_signal(void);
 
 #endif
