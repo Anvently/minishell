@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:23:17 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:54:40 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/17 12:05:49 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,25 @@ t_atom	*find_first(t_atom *a1, t_atom *a2, t_atom *list)
 	return (list);
 }
 
-t_atom	*first_error(t_atom *pt, t_atom *start)
+t_atom	*first_error(t_atom *pt, t_atom *start, int reset)
 {
 	static t_atom	*error = NULL;
 
-	if (start && pt)
+	if (reset == 0)
 	{
-		if (error == NULL)
-			error = pt;
-		else if (pt->type != end_of_line)
-			error = find_first(error, pt, start);
+		if (start && pt)
+		{
+			if (error == NULL)
+				error = pt;
+			else if (pt->type != end_of_line)
+				error = find_first(error, pt, start);
+		}
 	}
+	if (reset == 1)
+		error = NULL;
 	return (error);
 }
+
 
 int	empty_line(t_atom *atom)
 {
@@ -51,17 +57,16 @@ int	syntax_check(t_atom *atom)
 	t_atom	*error;
 	t_atom	*newline;
 
-	if (empty_line(atom))
-		return (1);
 	newline = create_atom("newline", end_of_line, none);
 	if (!newline)
 		return (-1);
 	error = parenthesis_syntax(atom);
-	error = first_error(error, atom);
+	error = first_error(error, atom, 0);
 	error = redir_syntax(atom, newline);
-	error = first_error(error, atom);
+	error = first_error(error, atom, 0);
 	error = separator_syntax(atom, newline);
-	error = first_error(error, atom);
+	error = first_error(error, atom, 0);
+	first_error(atom, atom, 1);
 	if (error)
 	{
 		parse_error(1, error->content);

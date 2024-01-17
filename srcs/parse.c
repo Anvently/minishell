@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 15:11:46 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 12:07:36 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ int	parse_line(t_list **lst, char *line)
 	{
 		return (parse_free(atom, errno));
 	}
-	/* printf("LST DISPLAY:\n");
-	lst_display(*lst, pipe_display); */
 	free_atom_list(atom);
 	return (0);
 }
