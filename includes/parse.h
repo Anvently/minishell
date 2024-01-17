@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 13:37:30 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/17 15:17:41 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ t_atom	*parenthesis_syntax(t_atom *atom);
 t_atom	*redir_syntax(t_atom *atom, t_atom *newline);
 t_atom	*separator_syntax(t_atom *atom, t_atom *newline);
 t_atom	*parenth_close(t_atom *atom);
+t_atom	*void_parenthesis(t_atom *atom);
 
 /*-----------------BUILD STRUCT--------------------*/
 

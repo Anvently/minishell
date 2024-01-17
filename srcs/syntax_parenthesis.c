@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:35:23 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 09:07:32 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/17 15:17:18 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ t_atom	*parenthesis_right_neighbor(t_atom *atom)
 	return (error);
 }
 
+
 t_atom	*parenthesis_syntax(t_atom *atom)
 {
 	t_atom	*error;
@@ -115,6 +116,8 @@ t_atom	*parenthesis_syntax(t_atom *atom)
 	pt = parenthesis_left_neighbor(atom);
 	error = find_first(error, pt, atom);
 	pt = parenthesis_right_neighbor(atom);
+	error = find_first(error, pt, atom);
+	pt = void_parenthesis(atom);
 	error = find_first(error, pt, atom);
 	return (error);
 }
