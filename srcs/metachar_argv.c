@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:11:12 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/12 10:55:09 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 14:57:29 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ static int	expand_arg(t_list *arg, t_list **next, t_data *data)
 		return (error(errno, "concatenating word"));
 	}
 	results = NULL;
-	err = t_word_interpret(word_list, &results);
+	if (word_list)
+		err = t_word_interpret(word_list, &results);
+	else
+		err = ft_lst_str_append(&results, "");
 	if (!err)
 		*next = merge_results(arg, &results);
 	ft_lstclear(&results, free);

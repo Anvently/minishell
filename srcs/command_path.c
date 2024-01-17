@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 11:58:24 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:28:01 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,32 @@ static char	**split_path(char **env)
 /// Free command and return the full path if found.
 /// @param command
 /// @param env
-/// @return Path of the command to execute if correct. Command as such if
-/// PATH is unset or if command is a builtin.
-char	*command_find_path(char *command, char **env)
+/// @return ```0``` for success (if found, absolute path or builtin).
+/// ```1``` if command not found or allocation error
+int	command_find_path(char *command, char **path_dest, char **env)
 {
 	char		**path_strs;
 	char		*path;
 
 	if (is_abs_path(command) || command_is_builtin(command) || !env)
-		return (command);
+		return (0);
+	if (!command[0])
+	{
+		builtin_error(127, "''", NULL, "command not found");
+		return (1);
+	}
 	path_strs = split_path(env);
 	if (!path_strs)
-		return (command);
+		return (0);
 	path = build_path(command, path_strs);
 	if (!path && errno != ENOMEM)
 		builtin_error(127, command, NULL, "command not found");
-	free(command);
 	ft_free_strs(path_strs);
-	return (path);
+	if (path)
+	{
+		*path_dest = path;
+		free(command);
+		return (0);
+	}
+	return (1);
 }

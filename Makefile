@@ -94,7 +94,7 @@ fclean: clean
 	@echo "$(NAME) and object files have been removed."
 
 vallog:
-	valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all \
+	valgrind -s --leak-check=full --show-reachable=yes --show-leak-kinds=all \
 	--error-limit=no --suppressions=./minishell.supp --gen-suppressions=all \
 	--log-file=minishell.log --trace-children=yes --track-fds=yes ./minishell
 

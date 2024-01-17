@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 16:43:28 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:26:39 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 extern int	g_mode;
 
 static int	free_and_exit(int status, char **argv, t_data *data);
+static void	exec_command_child(char **arv, int *fd, int *old_fd, t_data *data);
 static int	command_check_fork(bool child, char *command);
 int			exec_builtin(char **argv, t_data *data);
 int			exec_command(char **argv, int *fd, int *old_fd, t_data *data);
@@ -27,6 +28,32 @@ static int	free_and_exit(int status, char **argv, t_data *data)
 	ft_free_strs(argv);
 	free_data(status, data);
 	exit(status);
+}
+
+static void	exec_command_child(char **argv, int *fd, int *old_fd, t_data *data)
+{
+	if (fd)
+		close(fd[0]);
+	close(data->stdin_copy);
+	close(data->stdout_copy);
+	if (!argv || !argv[0])
+	{
+		if (old_fd)
+			clear_pipe(0, 0);
+		free_and_exit(0, argv, data);
+	}
+	if (command_is_builtin(argv[0]))
+		free_and_exit(exec_builtin(argv, data), argv, data);
+	if (command_find_path(argv[0], &argv[0], data->env))
+	{
+		if (old_fd)
+			clear_pipe(0, 0);
+		free_and_exit(errno, argv, data);
+	}
+	execve(argv[0], argv, data->env);
+	if (old_fd)
+		clear_pipe(0, 0);
+	free_and_exit(error(errno, argv[0]), argv, data);
 }
 
 /// @brief Fork if child is ```false```.
@@ -102,22 +129,7 @@ int	exec_command(char **argv, int *fd, int *old_fd, t_data *data)
 	id = command_check_fork(!(!fd && !old_fd
 				&& command_is_builtin(argv[0])), argv[0]);
 	if (id == 0)
-	{
-		if (fd)
-			close(fd[0]);
-		close(data->stdin_copy);
-		close(data->stdout_copy);
-		if (command_is_builtin(argv[0]))
-			free_and_exit(exec_builtin(argv, data), argv, data);
-		argv[0] = command_find_path(argv[0], data->env);
-		if (argv[0])
-			execve(argv[0], argv, data->env);
-		if (old_fd)
-			clear_pipe(0, 0);
-		if (argv[0])
-			free_and_exit(error(errno, argv[0]), argv, data);
-		free_and_exit(errno, argv, data);
-	}
+		exec_command_child(argv, fd, old_fd, data);
 	else if (id == -2)
 		id = -exec_builtin(argv, data);
 	return (id);

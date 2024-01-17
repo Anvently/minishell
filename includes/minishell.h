@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 11:48:52 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:13:56 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int			exec_builtin(char **argv, t_data *data);
 int			clear_pipe(int err, int fd);
 int			dup_and_close(int file_fd, int std_fd);
 int			file_redirect(char *path, int fd_out, int o_flag);
-char		*command_find_path(char *command, char **env);
+int			command_find_path(char *command, char **path_dest, char **env);
 int			restore_std(t_data *data);
 
 /* ------------------------------ COMMAND CHECK ----------------------------- */
