@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:10:44 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 10:01:06 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:34:43 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ int	builtin_echo(char **argv)
 	newline = true;
 	if (!argv || ft_strslen(argv) < 2)
 		return (put_str("\n"));
-	if (!ft_strcmp("-n", argv[1]))
+	while (argv[1] && !ft_strncmp("-n", argv[1], 2))
 	{
 		newline = false;
-		argv++;
+		argv ++;
 	}
 	while (argv[1])
 	{
 		if (put_str(argv[1]))
 			return (errno);
-		if (argv[2])
+		if (argv[2] && argv[1][0] && argv[2][0])
 			if (put_str(" "))
 				return (errno);
 		argv++;
