@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 14:10:44 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 15:55:47 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/18 13:52:12 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,22 @@ static int	put_str(char *str)
 	return (0);
 }
 
+static int	is_flag(char *str)
+{
+	int	i;
+
+	if (ft_strncmp(str, "-n", 2))
+		return (0);
+	i = 1;
+	while (str[i] && !ft_isspace(str[i]))
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 /// @brief Print given arguments (separated with spaces) to stdout and followed
 /// by a newline (unless -n flag is given).
 /// @param argv Can be ```NULL``` or empty.
@@ -36,9 +52,9 @@ int	builtin_echo(char **argv)
 	newline = true;
 	if (!argv || ft_strslen(argv) < 2)
 		return (put_str("\n"));
-	while (argv[1] && (!ft_strncmp("-n", argv[1], 2) || !argv[1][0]))
+	while (argv[1] && (is_flag(argv[1]) || !argv[1][0]))
 	{
-		if (!ft_strncmp("-n", argv[1], 2))
+		if (is_flag(argv[1]))
 			newline = false;
 		argv ++;
 	}
