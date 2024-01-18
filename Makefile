@@ -31,7 +31,7 @@ SRCS_FILES	=	parse_atom.c \
 				builtin_exit.c builtin_export.c builtin_pwd.c builtin_unset.c \
 				command_check.c command_exec.c command_path.c \
 				env.c env2.c \
-				metachar_argv.c metachar_files.c metachar.c \
+				metachar_argv.c metachar_argv2.c metachar_files.c metachar.c \
 				pipe.c execution.c \
 				t_word_interpret.c t_word_parsing.c t_word_parsing2.c \
 				t_word_match.c t_word_util.c \

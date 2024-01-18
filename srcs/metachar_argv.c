@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:11:12 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 13:49:45 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:17:03 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static t_list	*merge_results(t_list *argv, t_list **results);
 static int		expand_arg(t_list *arg, t_list **next, t_data *data);
-static int		check_parenthesis(t_list *argv, t_data *data);
+static int		handle_parenthesis(t_list *argv, t_data *data);
 static int		is_null_node(void *ptr);
 int				interpret_argv(t_list **argv, t_data *data);
 
@@ -82,7 +82,7 @@ static int	expand_arg(t_list *arg, t_list **next, t_data *data)
 /// @param data
 /// @return ```0``` for success (no parenthesis found is a success).
 /// ```errno``` if error (allocation error).
-static int	check_parenthesis(t_list *argv, t_data *data)
+static int	handle_parenthesis(t_list *argv, t_data *data)
 {
 	char	*new_str;
 	char	*path_exe;
@@ -132,9 +132,9 @@ int	interpret_argv(t_list **argv, t_data *data)
 	t_list	*node;
 
 	node = *argv;
-	if (node && ((char *)node->content)[0] == '(')
+	if (node && is_inside_parenthesis((char *)node->content))
 	{
-		if (check_parenthesis(node, data))
+		if (handle_parenthesis(node, data))
 			return (error(errno, "interpreting parenthesis"));
 		return (0);
 	}
