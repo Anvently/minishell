@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 13:38:57 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:53:17 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:31:43 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,9 @@ char	*get_user(t_data *data)
 
 char	*get_pathname(t_data *data)
 {
-	char	*temp;
 	char	*path_name;
 
-	temp = getcwd(NULL, 0);
-	if (!temp)
-		return (NULL);
-	path_name = ft_strjoin(temp, "$  ");
-	free (temp);
+	path_name = getcwd(NULL, 0);
 	if (!path_name)
 		return (NULL);
 	path_name = replace_with_tilde(path_name, data);
@@ -81,27 +76,28 @@ char	*get_pathname(t_data *data)
 char	*make_prompt(t_data *data)
 {
 	char	*prompt;
-	char	*user_name;
-	char	*temp;
-	char	*hostname;
-	char	*path;
+	char	*temp1;
+	char	*temp2;
+	char	*temp3;
 
-	user_name = get_user(data);
-	if (!user_name)
+	temp1 = get_user(data);
+	if (!temp1)
 		prompt_error(-1, data, NULL);
-	hostname = get_hostname(data);
-	if (!hostname)
-		prompt_error(-1, data, user_name);
-	temp = ft_strjoin(user_name, hostname);
-	free(hostname);
-	if (!temp)
-		prompt_error(-1, data, user_name);
-	free(user_name);
-	path = get_pathname(data);
-	if (!path)
-		prompt_error(-1, data, temp);
-	prompt = ft_strjoin(temp, path);
-	free(temp);
-	free(path);
+	temp2 = get_hostname(data);
+	if (!temp2)
+		prompt_error(-1, data, temp1);
+	temp3 = ft_strjoin(temp1, temp2);
+	free(temp2);
+	if (!temp3)
+		prompt_error(-1, data, temp1);
+	free(temp1);
+	temp1 = get_pathname(data);
+	if (!temp1)
+		prompt_error(-1, data, temp3);
+	temp2 = ft_strjoin(temp3, temp1);
+	free(temp3);
+	free(temp1);
+	prompt = ft_strjoin(temp2, "$ ");
+	free(temp2);
 	return (prompt);
 }
