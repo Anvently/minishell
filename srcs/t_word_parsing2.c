@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 18:08:44 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:31:40 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*get_var_string(char *str, bool quote,
 	int		i;
 
 	i = 0;
-	while (str[i] && ft_isalnum(str[i]))
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	var_name = ft_substr(str, 0, i);
 	if (!var_name)
@@ -113,7 +113,7 @@ static char	*get_word_string(char *str, t_list **word_list, bool quote)
 	while (str[i]
 		&& !((quote == true && ft_strchr("\"", str[i]))
 			|| (quote == false && ft_strchr("'*\"", str[i]))
-			|| (str[i] == '$' && (ft_isalnum(str[i + 1])
+			|| (str[i] == '$' && ((ft_isalnum(str[i + 1]) || str[i + 1] == '_')
 					|| str[i + 1] == '?'))))
 		i++;
 	node = t_word_new_node(ft_substr(str, 0, i), 0, quote);
@@ -142,7 +142,8 @@ char	*t_word_parse_next(char *str, t_list **word_list, bool *quote,
 		*quote = !*quote;
 		return (++str);
 	}
-	else if (str && *str == '$' && ft_isalnum(*(str + 1)))
+	else if (str && *str == '$'
+		&& (ft_isalnum(*(str + 1)) || *(str + 1) == '_'))
 		str = get_var_string(++str, *quote, word_list, data);
 	else if (str && *str == '$' && *(str + 1) == '?')
 		str = t_word_get_exit_status(++str, *quote, word_list, data);
