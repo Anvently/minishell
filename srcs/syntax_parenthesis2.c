@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:14:43 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/17 15:17:59 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/18 14:29:49 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,24 @@ static int	only_space(char *str)
 	return (1);
 }
 
+int	only_void(t_atom *atom)
+{
+	int	is_void;
+
+	is_void = 1;
+	while (1)
+	{
+		if (atom->subtype == right_p)
+			break;
+		if (atom->type == litteral && !only_space(atom->content))
+			is_void = 0;
+		if (atom ->type != litteral && atom->type != space)
+			is_void = 0;
+		atom = atom->next;
+	}
+	return (is_void);
+}
+
 t_atom	*void_parenthesis(t_atom *atom)
 {
 	t_atom	*error;
@@ -46,8 +64,8 @@ t_atom	*void_parenthesis(t_atom *atom)
 		{
 			if (pt->next->subtype == right_p)
 				return (pt->next);
-			if (only_space(pt->next->content))
-				return (pt->next->next);
+			if (only_void(pt->next))
+				return (pt);
 		}
 		pt = pt->next;
 	}
