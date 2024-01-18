@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:11:12 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 14:57:29 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 13:49:45 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 static t_list	*merge_results(t_list *argv, t_list **results);
 static int		expand_arg(t_list *arg, t_list **next, t_data *data);
 static int		check_parenthesis(t_list *argv, t_data *data);
-int				interpret_argv(t_list *argv, t_data *data);
+static int		is_null_node(void *ptr);
+int				interpret_argv(t_list **argv, t_data *data);
 
 /// @brief Insert results list in place of argv node. Current argv content
-/// is replaced with the content of the first result.
+/// is replaced with the content of the first result. If results is ```NULL```
+/// Content of current argv if freed and replaced with ```NULL```.
 /// @param argv
 /// @param results Size is always >= 1.
 /// @param next Address of a pointer toward the next element in the list,
@@ -30,6 +32,11 @@ static t_list	*merge_results(t_list *argv, t_list **results)
 	t_list	*next_result;
 
 	free(argv->content);
+	if (!(*results))
+	{
+		argv->content = NULL;
+		return (argv->next);
+	}
 	argv->content = (*results)->content;
 	next_result = (*results)->next;
 	free(*results);
@@ -61,8 +68,6 @@ static int	expand_arg(t_list *arg, t_list **next, t_data *data)
 	results = NULL;
 	if (word_list)
 		err = t_word_interpret(word_list, &results);
-	else
-		err = ft_lst_str_append(&results, "");
 	if (!err)
 		*next = merge_results(arg, &results);
 	ft_lstclear(&results, free);
@@ -103,24 +108,41 @@ static int	check_parenthesis(t_list *argv, t_data *data)
 	return (0);
 }
 
+/// @brief Check if content of a node is ```NULL```
+/// @param ptr Address of a list node
+/// @return ```1``` if ```NULL``` else ```0```
+static int	is_null_node(void *ptr)
+{
+	t_list	*node;
+
+	node = (t_list *)ptr;
+	if (node->content == NULL)
+		return (1);
+	return (0);
+}
+
 /// @brief Check metacharacters for every node of argv list and insert
 /// all matches in the list.
 /// @param argv first element of argv (which is the name of the command)
 /// is not checked.
 /// @param data
 /// @return ```0``` for success. ```errno``` if error
-int	interpret_argv(t_list *argv, t_data *data)
+int	interpret_argv(t_list **argv, t_data *data)
 {
-	if (argv && ((char *)argv->content)[0] == '(')
+	t_list	*node;
+
+	node = *argv;
+	if (node && ((char *)node->content)[0] == '(')
 	{
-		if (check_parenthesis(argv, data))
+		if (check_parenthesis(node, data))
 			return (error(errno, "interpreting parenthesis"));
 		return (0);
 	}
-	while (argv)
+	while (node)
 	{
-		if (argv && expand_arg(argv, &argv, data))
+		if (node && expand_arg(node, &node, data))
 			return (errno);
 	}
+	ft_lstdelif(argv, is_null_node, free);
 	return (0);
 }

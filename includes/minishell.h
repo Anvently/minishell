@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 18:04:36 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 11:22:40 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ bool		command_is_builtin(char *command);
 
 int			interpret_metachar(char *str, t_list **results, t_data *data);
 int			check_file_meta(t_file_rd *file, t_data *data);
-int			interpret_argv(t_list *argv, t_data *data);
+int			interpret_argv(t_list **argv, t_data *data);
 int			t_word_parse(char *str, t_list **word_list, t_data *data);
 char		*t_word_parse_next(char *str, t_list **word_list, bool *quote,
 				t_data *data);

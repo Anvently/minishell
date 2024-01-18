@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 18:44:12 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 13:56:27 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,6 @@ int	t_word_parse(char *str, t_list **word_list, t_data *data)
 			return (-1);
 		}
 	}
-	ft_lstprint(*word_list, t_word_print);
 	ft_lstdelif(word_list, is_void_var, t_word_free);
-	printf("\n");
-	ft_lstprint(*word_list, t_word_print);
 	return (0);
 }
