@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:32:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 13:56:27 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 14:17:06 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 #include <libft.h>
 
 static int	is_void_var(void *word_list);
+static int	check_empty_list(t_list **word_list);
 int			t_word_parse(char *str, t_list **word_list, t_data *data);
 char		*t_word_get_exit_status(char *str, bool quote,
 				t_list **word_list, t_data *data);
 int			t_word_concat_dup(t_list *word_list);
 
+/// @brief Check if a list node is an empty string variable
+/// which was not in quote
+/// @param word_list
+/// @return
 static int	is_void_var(void *word_list)
 {
 	t_word	*word;
@@ -27,6 +32,31 @@ static int	is_void_var(void *word_list)
 	if (word->type == '$' && word->quote == false
 		&& (!word->content || !word->content[0]))
 		return (1);
+	return (0);
+}
+
+/// @brief Check if word list is empty and if so add an empty
+/// string. Only case where it can happen is "".
+/// @param word_list
+/// @return ```0``` for success. ```1``` if error (allocation error).
+static int	check_empty_list(t_list **word_list)
+{
+	t_list	*node;
+	char	*str;
+
+	if (!*word_list)
+	{
+		str = ft_strdup("");
+		if (!str)
+			return (errno);
+		node = t_word_new_node(str, 0, true);
+		if (!node)
+		{
+			free(str);
+			return (errno);
+		}
+		ft_lstadd_back(word_list, node);
+	}
 	return (0);
 }
 
@@ -110,6 +140,8 @@ int	t_word_parse(char *str, t_list **word_list, t_data *data)
 			return (-1);
 		}
 	}
+	if (check_empty_list(word_list))
+		return (errno);
 	ft_lstdelif(word_list, is_void_var, t_word_free);
 	return (0);
 }
