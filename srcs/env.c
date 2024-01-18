@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 16:06:33 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 16:08:48 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/18 16:27:30 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*get_var_value(char *var, char **env)
 	while (*env)
 	{
 		if (!ft_strncmp(*env, var, len_var))
-			if ((*env)[len_var])
+			if ((*env)[len_var] == '=')
 				break ;
 		env++;
 	}
