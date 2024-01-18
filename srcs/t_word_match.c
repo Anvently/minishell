@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 17:27:11 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:57:06 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	t_word_match(t_list *word_list, char *path)
 {
 	t_word	*word;
 
-	while (word_list && *path)
+	while (word_list)
 	{
 		word = (t_word *) word_list->content;
 		if (word->type != '*' && !check_word(&word_list, &path))
