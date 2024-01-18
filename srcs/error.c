@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/16 16:40:30 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:47:41 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,12 @@ int	parse_error(int err, char *str)
 	if (err == 1)
 		ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	else if (err == 2)
-		ft_putstr_fd("minishell: ambiguous redirect: ", 2);
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putendl_fd(": ambiguous redirect", 2);
+		return (2);
+	}
 	if (err == -1)
 	{
 		ft_putstr_fd("minishell: Allocation error", 2);
@@ -70,8 +75,9 @@ int	builtin_error(int err, char *builtin, char *value, char *context)
 	ft_putstr_fd(builtin, 2);
 	if (value)
 	{
-		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(": `", 2);
 		ft_putstr_fd(value, 2);
+		ft_putstr_fd("'", 2);
 	}
 	if (context)
 	{
