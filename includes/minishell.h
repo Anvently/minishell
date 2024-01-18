@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 15:43:31 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 14:31:13 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_word {
 int			error(int err, char *str);
 int			parse_error(int err, char *str);
 int			builtin_error(int err, char *builtin, char *value, char *context);
+int			free_data(int err, t_data *data);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
@@ -189,8 +190,7 @@ void		pipe_display(void *pip);
 /*                                    INIT MAIN                               */
 /* -------------------------------------------------------------------------- */
 
-int			init_data(t_data **data, char **argv, char **envp);
-int			free_data(int err, t_data *data);
+t_data		*init_data(void);
 char		*make_prompt(t_data *data);
 char		*colorize_prompt(char *prompt);
 char		*replace_with_tilde(char *path, t_data *data);
