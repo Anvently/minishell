@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/18 15:47:45 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/17 09:30:46 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,28 @@
 #include <signal.h>
 
 int	g_mode = 0;
+
+int	init_env(t_data **data, char **argv, char **envp)
+{
+	int		size;
+	char	*pwd;
+
+	*data = init_data();
+	if (!*data)
+		return (-1);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (free_data(-1, *data));
+	(*data)->exe_path = path_join(pwd, argv[0]);
+	free(pwd);
+	if (!(*data)->exe_path)
+		return (free_data(-1, *data));
+	size = ft_strslen(envp);
+	(*data)->env = env_copy(envp, size);
+	if (!(*data)->env && errno == ENOMEM)
+		return (free_data(-1, *data));
+	return (0);
+}
 
 int	exe_line(t_data *data, char *line)
 {
@@ -31,7 +53,7 @@ int	exe_line(t_data *data, char *line)
 static void	exit_minishell(t_data *data)
 {
 	ft_putendl_fd("exit", 1);
-	exit(free_data(data->exit_status, data));
+	exit(free_data(0, data));
 }
 
 int	miniline(t_data *data)
@@ -70,7 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	printf("PID=%d, g_mode = %d\n",getpid(), g_mode);
 	rec_signal();
-	if (init_data(&data, argv, envp) < 0)
+	if (init_env(&data, argv, envp) < 0)
 		parse_error(-1, NULL);
 	if (argc > 1 && printf("argv = %s\n", argv[1]) && exe_line(data, argv[1]))
 		return (free_data(-1, data));
