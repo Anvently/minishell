@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 17:49:42 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 15:26:25 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:50:24 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,13 @@ static int	check_word_list(t_list **results, t_list *word_list)
 	t_word	*word;
 
 	word = (t_word *)word_list->content;
-	if ((!word_list || !word_list->next)
+	if ((!word_list || !word_list->next) && word->type != '*'
 		&& word->content[0] == '\0')
 	{
 		ft_lst_str_append(results, "");
 		return (1);
 	}
-	else if (ft_lstsize(word_list) == 1
-		&& word->type != '*')
+	else if (ft_lstsize(word_list) == 1 && word->type != '*')
 	{
 		add_default_result(results, word_list);
 		return (1);
