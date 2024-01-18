@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_prompt2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 10:44:08 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 14:43:45 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:52:37 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*remove_home(char *path, char *home, char *find)
 		find[i + 1] = find[i + j];
 		i++;
 	}
-	find[i] = 0;
+	find[i + 1] = 0;
 	free(home);
 	return (path);
 }
