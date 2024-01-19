@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:05:11 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 14:59:50 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 12:21:30 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,46 @@ int	write_in_file(int fd, char *limiter)
 	}
 	return (0);
 }
+char	*get_limiter(char *str)
+{
+	int		len;
+	char	*lim;
+	int		i;
+
+	len = ft_strlen(str) - 2;
+	lim = malloc((len + 1) * sizeof(char));
+	if (!lim)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		lim[i] = str[i + 1];
+		i++;
+	}
+	lim[i] = 0;
+	return (lim);
+}
+
 
 int	inscribe_heredoc(char *file, char *limiter)
 {
 	int		fd;
 	int		fd_stdin;
 	int		res;
+	char	*real_limiter;
 
+	real_limiter = limiter;
+	if (limiter[0] == '\"' || limiter[0] == '\'')
+	{
+		real_limiter = get_limiter(limiter);
+		if (!real_limiter)
+			return (-1);
+	}
 	fd_stdin = dup(STDIN_FILENO);
 	fd = open(file, O_WRONLY | O_CREAT, 0777);
 	if (fd < 0)
 		return (-1);
-	res = write_in_file(fd, limiter);
+	res = write_in_file(fd, real_limiter);
 	close (fd);
 	if (res)
 		dup2(fd_stdin, STDIN_FILENO);
