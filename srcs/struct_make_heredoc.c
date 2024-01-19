@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:05:11 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/19 12:26:50 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 12:31:26 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	write_in_file(int fd, char *limiter)
 	}
 	return (0);
 }
+
 char	*get_limiter(char *str)
 {
 	int		len;
@@ -77,7 +78,6 @@ char	*get_limiter(char *str)
 	lim[i] = 0;
 	return (lim);
 }
-
 
 int	inscribe_heredoc(char *file, char *limiter)
 {
