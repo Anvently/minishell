@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/19 11:42:45 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 13:42:35 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ static void	exit_minishell(t_data *data)
 	exit(free_data(data->exit_status, data));
 }
 
+static void	check_ctrl_c(t_data *data)
+{
+	if (errno == 4)
+		data->exit_status = 130;
+	errno = 0;
+}
+
 int	miniline(t_data *data)
 {
 	char	*line;
@@ -50,7 +57,7 @@ int	miniline(t_data *data)
 		if (!data->prompt)
 			return (-1);
 		line = readline(data->prompt);
-		errno = 0;
+		check_ctrl_c(data);
 		if (line)
 			add_history(line);
 		else
