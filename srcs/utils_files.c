@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:27:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/15 13:07:26 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:11:39 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	clear_pipe(int err, int fd)
 	old_errno = errno;
 	while (read(fd, buffer, 100) > 0)
 		continue ;
-	errno = old_errno;
 	close(fd);
+	errno = old_errno;
 	return (err);
 }
 

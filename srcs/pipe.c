@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:17:15 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 13:52:27 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:14:08 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,22 @@ static int	handle_redirection(t_list *files, int *old_fd,
 			return (errno);
 		if (file->type <= 1)
 		{
-			if (old_fd)
-				clear_pipe(0, old_fd[0]);
+			if (old_fd && clear_pipe(1, 0)
+				&& dup2(data->stdin_copy, STDIN_FILENO) < 0)
+				return (errno);
 			old_fd = NULL;
 			if (redirection_in(file))
 				break ;
 		}
 		else if (file->type >= 2 && redirection_out(file))
+		{
+			if (old_fd)
+				clear_pipe(0, 0);
 			break ;
+		}
 		files = files->next;
 	}
-	return (0);
+	return (errno);
 }
 
 /// @brief A command is defined as such [(< file_in)*n][ cmd][(> file_out)*n]
@@ -139,6 +144,7 @@ int	exec_pipe(t_list *commands, t_data *data, int *old_fd)
 	int		fd[2];
 	int		id;
 
+	errno = 0;
 	if (commands->next)
 	{
 		handle_command((t_command *) commands->content, old_fd, fd, data);
