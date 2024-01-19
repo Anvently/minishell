@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/18 16:56:30 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:47:58 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@ int	g_mode = 0;
 
 int	exe_line(t_data *data, char *line)
 {
-	if (parse_line(&data->pipe_list, line) < 0)
+	int	err;
+
+	err = parse_line(&data->pipe_list, line);
+	if (err)
+		data->exit_status = err;
+	if (err < 0)
 		return (-1);
 	exec_prompt(data->pipe_list, data);
 	ft_lstclear(&data->pipe_list, free_t_pipe);

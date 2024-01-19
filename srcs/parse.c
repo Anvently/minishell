@@ -6,7 +6,7 @@
 /*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:38:51 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/17 12:07:36 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 10:36:21 by lmahe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,7 @@ int	parse_line(t_list **lst, char *line)
 	if (litteralize_parenthesis(atom) < 0)
 		return (parse_free(atom, -1));
 	if (build_struct(lst, &atom, 0))
-	{
 		return (parse_free(atom, errno));
-	}
 	free_atom_list(atom);
 	return (0);
 }
