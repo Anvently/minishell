@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 14:51:01 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 16:30:26 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:55:11 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,31 @@
 
 extern int	g_mode;
 
-int	handle_exe_mode(int id, t_data *data);
-int	exec_prompt(t_list *pipe_list, t_data *data);
+static void	handle_status(int status, int need_line, t_data *data);
+static int	handle_exe_mode(int id, t_data *data);
+int			exec_prompt(t_list *pipe_list, t_data *data);
 
-void	handle_status(int status, int need_line)
+static void	handle_status(int status, int need_line, t_data *data)
 {
 	if (WIFSIGNALED(status) && WTERMSIG(status) == 2)
 	{
+		data->exit_status = 130;
 		write(1, "\n", 1);
 		need_line = 0;
 	}
-	if (WIFSIGNALED(status) && WTERMSIG(status) == 3)
+	else if (WIFSIGNALED(status) && WTERMSIG(status) == 3)
 	{
+		data->exit_status = 131;
 		ft_putstr_fd("Quit (core dumped)\n", 1);
 		need_line = 0;
 	}
+	else
+		data->exit_status = WEXITSTATUS(status);
 	if (need_line)
 		write(1, "\n", 1);
 }
 
-int	handle_exe_mode(int id, t_data *data)
+static int	handle_exe_mode(int id, t_data *data)
 {
 	int	status;
 	int	status_other;
@@ -46,7 +51,6 @@ int	handle_exe_mode(int id, t_data *data)
 	need_line = 0;
 	rec_signal();
 	waitpid(id, &status, 0);
-	data->exit_status = WEXITSTATUS(status);
 	while (wait(&status_other) > 0)
 	{
 		if (WIFSIGNALED(status_other) && WTERMSIG(status_other) == 2)
@@ -56,7 +60,7 @@ int	handle_exe_mode(int id, t_data *data)
 	}
 	if (errno == 10)
 		errno = 0;
-	handle_status(status, need_line);
+	handle_status(status, need_line, data);
 	g_mode = 0;
 	rec_signal();
 	return (0);

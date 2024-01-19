@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:27:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/19 10:11:39 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 17:26:16 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	fd_to_fd(int fd_in, int fd_out)
 		}
 		byte_r = read(fd_in, buffer, BUFFER_SIZE);
 	}
-	if (byte_r < 0)
-		return (errno);
 	return (0);
 }
 
