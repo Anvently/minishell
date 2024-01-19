@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 15:28:01 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:41:49 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,15 @@ int	command_find_path(char *command, char **path_dest, char **env)
 		return (0);
 	if (!command[0])
 	{
-		builtin_error(127, "''", NULL, "command not found");
-		return (1);
+		builtin_error(errno, "''", NULL, "command not found");
+		return (errno);
 	}
 	path_strs = split_path(env);
 	if (!path_strs)
 		return (0);
 	path = build_path(command, path_strs);
 	if (!path && errno != ENOMEM)
-		builtin_error(127, command, NULL, "command not found");
+		builtin_error(errno, command, NULL, "command not found");
 	ft_free_strs(path_strs);
 	if (path)
 	{
@@ -93,5 +93,5 @@ int	command_find_path(char *command, char **path_dest, char **env)
 		free(command);
 		return (0);
 	}
-	return (1);
+	return (errno);
 }

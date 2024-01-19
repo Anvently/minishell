@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 15:26:39 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:52:09 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,15 @@ static void	exec_command_child(char **argv, int *fd, int *old_fd, t_data *data)
 	{
 		if (old_fd)
 			clear_pipe(0, 0);
-		free_and_exit(errno, argv, data);
+		free_and_exit(127, argv, data);
 	}
 	execve(argv[0], argv, data->env);
 	if (old_fd)
 		clear_pipe(0, 0);
-	free_and_exit(error(errno, argv[0]), argv, data);
+	error(errno, argv[0]);
+	if (errno == 2)
+		free_and_exit(127, argv, data);
+	free_and_exit(126, argv, data);
 }
 
 /// @brief Fork if child is ```false```.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:45:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/17 14:57:28 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:22:47 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_atom	*redir_syntax(t_atom *atom, t_atom *newline)
 	pt = redir_out(atom, newline);
 	if (!error && pt)
 		return (pt);
-	else if(error && !pt)
+	else if (error && !pt)
 		return (error);
 	else if (error == newline && pt)
 		return (pt);

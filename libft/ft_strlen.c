@@ -1,17 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_struct.c                                     :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 09:35:45 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/10 09:36:08 by lmahe            ###   ########.fr       */
+/*   Created: 2023/11/08 17:54:32 by npirard           #+#    #+#             */
+/*   Updated: 2023/12/01 16:56:36 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <minishell.h>
-#include <parse.h>
 
+/// @brief Return the number of non empty bytes in a string
+/// @param s Null terminated string
+/// @return Size if the given string, excluding the null terminating byte
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
 
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:54:59 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 09:54:41 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 11:17:15 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 static bool	check_filter(char *entry, char **filter);
 static char	**env_filter_copy(char **env, char **filter);
 int			builtin_unset(char **argv, char ***env);
-
 
 /// @brief Check filter list contains given entry's name.
 /// @param entry String in the format NAME=[VALUE]

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_parenthesis2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:14:43 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/18 14:29:49 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:34:16 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	only_void(t_atom *atom)
 	while (1)
 	{
 		if (atom->subtype == right_p)
-			break;
+			break ;
 		if (atom->type == litteral && !only_space(atom->content))
 			is_void = 0;
 		if (atom ->type != litteral && atom->type != space)

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 15:43:31 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 11:04:21 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int			exec_builtin(char **argv, t_data *data);
 
 /* ---------------------------------- UTILS --------------------------------- */
 
+int			handle_redirection(t_list *files, int *old_fd,
+				int *fd, t_data *data);
 int			clear_pipe(int err, int fd);
 int			dup_and_close(int file_fd, int std_fd);
 int			file_redirect(char *path, int fd_out, int o_flag);

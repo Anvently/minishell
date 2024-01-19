@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:53:50 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/10 16:57:01 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:52:18 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include <libft.h>
 #include <minishell.h>
+#include <errno.h>
 
 bool	is_abs_path(char *str);
 bool	is_directory(char *path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 13:53:07 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:16:19 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ t_list	*get_files(t_atom **start, t_atom *end)
 	t_list	*pt;
 	t_atom	*next_file;
 	t_atom	*file_name;
-
 
 	pt = NULL;
 	while (1)

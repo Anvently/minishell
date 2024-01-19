@@ -6,13 +6,14 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:31:05 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/18 15:43:56 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 12:13:50 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <parse.h>
 #include <libft.h>
+#include <readline/readline.h>
 #include <linux/limits.h>
 
 /// @brief Free all data and return given err code.
@@ -30,6 +31,7 @@ int	free_data(int err, t_data *data)
 	data->env = NULL;
 	close(data->stdin_copy);
 	close(data->stdout_copy);
+	rl_clear_history();
 	free(data);
 	return (err);
 }
@@ -40,7 +42,10 @@ static t_data	*allocate_data(void)
 
 	new = malloc(sizeof(t_data));
 	if (!new)
+	{
+		rl_clear_history();
 		return (NULL);
+	}
 	new->pipe_list = NULL;
 	new->env = NULL;
 	new->exe_path = NULL;
