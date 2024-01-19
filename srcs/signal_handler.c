@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/17 12:13:00 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 11:32:59 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,3 @@ int	rec_heredoc_signal(void)
 	sigaction(SIGINT, &action_sa, NULL);
 	return (0);
 }
-

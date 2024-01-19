@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 13:35:10 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/15 17:38:12 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 11:32:43 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	quote_error(char c)
 	write(1, "'\n", 2);
 	return (2);
 }
-
 
 int	quote_check(char *line)
 {
@@ -91,4 +90,3 @@ void	trim_quotes(t_atom *atom)
 		atom = atom->next;
 	}
 }
-

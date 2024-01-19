@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_parenthesis.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:35:23 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/17 15:17:18 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:32:10 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 t_atom	*parenthesis_order(t_atom *atom)
 {
-	int	count;
+	int		count;
 	t_atom	*pt;
 
 	count = 0;
@@ -24,7 +24,7 @@ t_atom	*parenthesis_order(t_atom *atom)
 	while (pt)
 	{
 		if (pt->subtype == right_p && !count)
-			break;
+			break ;
 		if (pt->subtype == right_p && count)
 			count--;
 		if (pt->subtype == left_p)
@@ -33,9 +33,10 @@ t_atom	*parenthesis_order(t_atom *atom)
 	}
 	return (pt);
 }
+
 t_atom	*parenth_close(t_atom *atom)
 {
-	int	count;
+	int		count;
 	t_atom	*pt;
 
 	pt = atom;
@@ -43,7 +44,7 @@ t_atom	*parenth_close(t_atom *atom)
 	while (pt)
 	{
 		if (pt->subtype == right_p && !count)
-			break;
+			break ;
 		if (pt->subtype == right_p && count)
 			count--;
 		if (pt->subtype == left_p)
@@ -67,7 +68,7 @@ t_atom	*parenthesis_left_neighbor(t_atom *atom)
 	{
 		pt = go_to(pt, NULL, parenth, left_p);
 		if (!pt)
-			break;
+			break ;
 		previous = go_to_previous(atom, pt);
 		next = skip_space(pt->next);
 		if (previous && previous->type == litteral)
@@ -87,25 +88,24 @@ t_atom	*parenthesis_right_neighbor(t_atom *atom)
 
 	error = NULL;
 	pt = atom;
-	while(1)
+	while (1)
 	{
 		pt = go_to(pt, NULL, parenth, right_p);
 		if (!pt)
-			break;
+			break ;
 		else
 		{
 			next = skip_space(pt->next);
-			if ( next && next->type == litteral)
+			if (next && next->type == litteral)
 			{
 				error = next;
-				break;
+				break ;
 			}
 		}
 		pt = pt->next;
 	}
 	return (error);
 }
-
 
 t_atom	*parenthesis_syntax(t_atom *atom)
 {

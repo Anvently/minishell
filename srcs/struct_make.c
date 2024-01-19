@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:12:24 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 14:00:09 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:15:49 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ t_list	*get_commands(t_list **lst, t_atom **atom, t_atom *end)
 		return (NULL);
 	next_pipe = find_next_pipe(*atom, end);
 	((t_command *)new->content)->files = get_files(atom, next_pipe);
-	if (!((t_command *)new->content)->files && (errno == ENOMEM || errno == 130))
+	if (!((t_command *)new->content)->files
+		&& (errno == ENOMEM || errno == 130))
 		return (NULL);
 	((t_command *)new->content)->argv = get_argv(atom, next_pipe);
 	if (!((t_command *)new->content)->argv && errno == ENOMEM)

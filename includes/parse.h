@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 10:41:46 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/17 15:17:41 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:34:37 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,6 @@ int		build_struct(t_list **lst, t_atom **atom, int condition);
 
 /*-------------------HEREDOC-------------------------*/
 
-int	get_heredoc(char *limiter, t_file_rd *pt);
+int		get_heredoc(char *limiter, t_file_rd *pt);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:23:17 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/19 10:36:07 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:33:10 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ t_atom	*first_error(t_atom *pt, t_atom *start, int reset)
 		error = NULL;
 	return (error);
 }
-
 
 int	empty_line(t_atom *atom)
 {

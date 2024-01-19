@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:37:35 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 16:47:41 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 11:33:41 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,3 @@ int	builtin_error(int err, char *builtin, char *value, char *context)
 	ft_putstr_fd("\n", 2);
 	return (err);
 }
-
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_fill_struct.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 16:41:32 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/09 16:44:08 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:33:23 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,3 @@ t_atom	*skip_space(t_atom *atom)
 		atom = atom->next;
 	return (atom);
 }
-
-

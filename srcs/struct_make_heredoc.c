@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_make_heredoc.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmahe <lmahe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:05:11 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/16 14:59:50 by lmahe            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:14:34 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ extern int	g_mode;
 
 int	heredoc_warning(char *limiter, int fd)
 {
-	static char	*str = "minishell: warning: here-doc delimited by end-of-file (wanted `";
+	static char	*str = "minishell: warning:"
+		"here-doc delimited by end-of-file (wanted `";
 
 	close (fd);
 	write (2, str, ft_strlen(str));
@@ -98,10 +99,9 @@ int	get_heredoc(char *limiter, t_file_rd *pt)
 		free(file);
 		pt->path = NULL;
 		errno = res;
-		return(res);
+		return (res);
 	}
 	count++;
 	pt->path = file;
 	return (0);
 }
-

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 16:06:33 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/18 16:27:30 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/19 11:33:48 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,4 +158,3 @@ int	set_var_value(char *var, char *value, char ***env)
 		return (-1);
 	return (0);
 }
-
