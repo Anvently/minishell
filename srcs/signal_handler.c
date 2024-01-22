@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:19:14 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/19 18:27:12 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/22 09:25:03 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,12 @@ static void	sigint_handler(int signo)
 
 static void	signal_handler(int signo)
 {
-	int	old_errno;
-
-	old_errno = errno;
 	if (signo == 2 && g_mode == 0)
 		sigint_handler(signo);
 	else if (signo == 2 && g_mode == 1)
 		write(1, "\n", 1);
 	else if (signo == 3 && g_mode == 1)
 		ft_putendl_fd("Quit (core dumped)", 1);
-	errno = old_errno;
 }
 
 int	rec_signal(void)
