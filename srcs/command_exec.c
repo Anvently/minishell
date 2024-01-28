@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 11:48:41 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/19 10:52:09 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/28 19:05:17 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	exec_command_child(char **argv, int *fd, int *old_fd, t_data *data)
 	if (!argv || !argv[0])
 	{
 		if (old_fd)
-			clear_pipe(0, 0);
+			close(STDIN_FILENO);
 		free_and_exit(0, argv, data);
 	}
 	if (command_is_builtin(argv[0]))
@@ -47,12 +47,12 @@ static void	exec_command_child(char **argv, int *fd, int *old_fd, t_data *data)
 	if (command_find_path(argv[0], &argv[0], data->env))
 	{
 		if (old_fd)
-			clear_pipe(0, 0);
+			close(STDIN_FILENO);
 		free_and_exit(127, argv, data);
 	}
 	execve(argv[0], argv, data->env);
 	if (old_fd)
-		clear_pipe(0, 0);
+		close(STDIN_FILENO);
 	error(errno, argv[0]);
 	if (errno == 2)
 		free_and_exit(127, argv, data);
