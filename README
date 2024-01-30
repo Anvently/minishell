@@ -1,0 +1,22 @@
+Builtin specificities :
+	- CD
+		- OLDPWD and PWD are only updated if the were declared before executing cd.
+		- CDPATH : matching folder in the working directory have the priority over
+			matching folders in CDPATH variable.
+	- EXIT
+		- exit command will ALWAYS exit, even if incorrect argument are given (exit status
+			will be set accordingly).
+
+Handled
+	- && and || sign with parenthesis interpreted as subshell execution.
+	- wildcards (*)
+
+Not handled
+	- cd with '-' argument
+	- shlvl
+	- export with '+=' sign.
+
+ISSUE
+	- Ctrl-\ in interactive mode updates error status to 130
+		(because readline() keeps setting errno to
+		something when catching the signal)

@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 11:48:28 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/19 11:04:21 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:34:58 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void		pipe_display(void *pip);
 
 int			init_data(t_data **data, char **argv, char **envp);
 int			free_data(int err, t_data *data);
-char		*make_prompt(t_data *data);
+void		make_prompt(t_data *data);
 char		*colorize_prompt(char *prompt);
 char		*replace_with_tilde(char *path, t_data *data);
 
