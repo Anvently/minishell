@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 13:38:57 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/30 11:38:47 by npirard          ###   ########.fr       */
+/*   Updated: 2024/02/02 11:32:00 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool	is_separator(char c)
 {
 	if (ft_isalnum(c) || ft_strchr("_-", c))
 		return (false);
-	return  (true);
+	return (true);
 }
 
 char	*get_hostname(t_data *data)
