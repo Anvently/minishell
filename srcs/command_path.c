@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 14:09:32 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/19 10:41:49 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/30 10:30:26 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /// @param command
 /// @param path_strs
 /// @return Path of given command, ```NULL``` if allocation error
-/// (error is printed) or path not found.
+/// or path not found.
 static char	*build_path(char *command, char **path_strs)
 {
 	char	*path;
@@ -84,14 +84,14 @@ int	command_find_path(char *command, char **path_dest, char **env)
 	if (!path_strs)
 		return (0);
 	path = build_path(command, path_strs);
+	ft_free_strs(path_strs);
 	if (!path && errno != ENOMEM)
 		builtin_error(errno, command, NULL, "command not found");
-	ft_free_strs(path_strs);
 	if (path)
 	{
-		*path_dest = path;
 		free(command);
+		*path_dest = path;
 		return (0);
 	}
-	return (errno);
+	return (127);
 }

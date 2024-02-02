@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:22:48 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/22 09:25:17 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:35:22 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	miniline(t_data *data)
 
 	while (1)
 	{
-		data->prompt = make_prompt(data);
+		make_prompt(data);
 		data->prompt = colorize_prompt(data->prompt);
 		if (!data->prompt)
 			return (-1);

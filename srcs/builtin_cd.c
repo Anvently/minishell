@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 16:49:58 by npirard           #+#    #+#             */
-/*   Updated: 2024/01/09 15:35:35 by npirard          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:49:01 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,6 @@ static int	update_pwd(char *pwd, char *name, char **env)
 	return (0);
 }
 
-/// TODO: only update PWD and OLDPWD if there were declared.
-/// TODO: Handle HOME and CDPATH
-/// TODO: Check valgrind
 /// @brief Change current working directory
 /// @param argv Accept only 0 (path=HOME) or 1 (relative or absolute path)
 ///  argument.
