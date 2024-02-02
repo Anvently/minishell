@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:12:24 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/19 11:15:49 by npirard          ###   ########.fr       */
+/*   Updated: 2024/02/02 11:27:16 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ t_list	*get_commands(t_list **lst, t_atom **atom, t_atom *end)
 	new = new_cmd_node();
 	if (!new)
 		return (NULL);
+	ft_lstadd_back(lst, new);
 	next_pipe = find_next_pipe(*atom, end);
 	((t_command *)new->content)->files = get_files(atom, next_pipe);
 	if (!((t_command *)new->content)->files
 		&& (errno == ENOMEM || errno == 130))
-		return (NULL);
+		return (ft_lstclear(lst, free_t_command), NULL);
 	((t_command *)new->content)->argv = get_argv(atom, next_pipe);
 	if (!((t_command *)new->content)->argv && errno == ENOMEM)
-		return (NULL);
-	ft_lstadd_back(lst, new);
+		return (ft_lstclear(lst, free_t_command), NULL);
 	if (next_pipe == end)
 		return (*lst);
 	return (get_commands(lst, &next_pipe->next, end));

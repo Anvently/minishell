@@ -6,7 +6,7 @@
 /*   By: npirard <npirard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 08:48:33 by lmahe             #+#    #+#             */
-/*   Updated: 2024/01/19 11:16:19 by npirard          ###   ########.fr       */
+/*   Updated: 2024/02/02 11:25:12 by npirard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ t_list	*get_files(t_atom **start, t_atom *end)
 			break ;
 		new = new_file_node();
 		if (!new)
-			return (NULL);
+			return (ft_lstclear(&pt, free_t_file), NULL);
+		ft_lstadd_back(&pt, new);
 		file_name = skip_space(next_file->next);
 		if (inscribe_file(&new, next_file, file_name))
-			return (NULL);
+			return (ft_lstclear(&pt, free_t_file), NULL);
 		*start = remove_file_from_atom(*start, next_file);
-		ft_lstadd_back(&pt, new);
 	}
 	return (pt);
 }
