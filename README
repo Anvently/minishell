@@ -20,3 +20,5 @@ ISSUE
 	- Ctrl-\ in interactive mode updates error status to 130
 		(because readline() keeps setting errno to
 		something when catching the signal)
+	- if a prompt use here_doc (<<) within parenthesis and outside parenthesis at the same time, the order of different calls to here_doc will not follow left to right.
+		- the final order depends of how the parenthesis are nested within each other
